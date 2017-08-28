@@ -22691,7 +22691,8 @@ var style = {
     },
     link: {
         textDecoration: 'none',
-        marginLeft: 95
+        marginLeft: 95,
+        color: _colors.teal800
     },
     list: {
         display: 'flex',

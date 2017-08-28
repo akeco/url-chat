@@ -102,7 +102,8 @@ var style = {
     },
     link: {
         textDecoration:'none',
-        marginLeft:95
+        marginLeft:95,
+        color: teal800
     },
     list:{
         display:'flex',
