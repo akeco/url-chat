@@ -23796,7 +23796,9 @@ var ContentHeader = function (_Component) {
                         tooltip: 'Close active chat',
                         tooltipPosition: 'top-center'
                     },
-                    _react2.default.createElement(_close2.default, null)
+                    _react2.default.createElement(_close2.default, {
+                        hoverColor: 'white'
+                    })
                 ),
                 _react2.default.createElement(
                     _IconButton2.default,
@@ -23820,7 +23822,7 @@ var ContentHeader = function (_Component) {
                             _this2.changeIconsState('notification');
                         }
                     },
-                    this.toggIconChange('notification', _react2.default.createElement(_notificationsNone2.default, null), _react2.default.createElement(_notifications2.default, null))
+                    this.toggIconChange('notification', _react2.default.createElement(_notificationsNone2.default, { hoverColor: 'white' }), _react2.default.createElement(_notifications2.default, { hoverColor: 'white' }))
                 ),
                 _react2.default.createElement(
                     _IconButton2.default,
@@ -23831,7 +23833,9 @@ var ContentHeader = function (_Component) {
                         tooltipPosition: 'top-center',
                         onTouchTap: this.toggleUserMenu
                     },
-                    _react2.default.createElement(_menu2.default, null)
+                    _react2.default.createElement(_menu2.default, {
+                        hoverColor: 'white'
+                    })
                 )
             );
         }

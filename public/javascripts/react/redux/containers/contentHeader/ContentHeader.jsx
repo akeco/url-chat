@@ -49,7 +49,9 @@ class ContentHeader extends Component{
                     tooltip="Close active chat"
                     tooltipPosition="top-center"
                 >
-                    <Close/>
+                    <Close
+                        hoverColor="white"
+                    />
                 </IconButton>
                 <IconButton
                     iconStyle={style.icons}
@@ -71,7 +73,7 @@ class ContentHeader extends Component{
                         }
                     }
                 >
-                    {this.toggIconChange('notification', <NotificationsNone/>, <Notifications/>)}
+                    {this.toggIconChange('notification', <NotificationsNone hoverColor="white" />, <Notifications hoverColor="white" />)}
                 </IconButton>
                 <IconButton
                     iconStyle={style.icons}
@@ -80,7 +82,9 @@ class ContentHeader extends Component{
                     tooltipPosition="top-center"
                     onTouchTap={this.toggleUserMenu}
                 >
-                    <Menu/>
+                    <Menu
+                        hoverColor="white"
+                    />
                 </IconButton>
             </div>
         );
