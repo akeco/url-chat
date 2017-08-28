@@ -12,7 +12,7 @@ import NotificationsNone from 'material-ui/svg-icons/Social/notifications-none';
 import Menu from 'material-ui/svg-icons/Navigation/menu';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {toggleUsersMenu, swipePage} from '../../actions/index';
+import {toggleUsersMenu, swipePage, showHeaderSubmenu} from '../../actions/index';
 
 class ContentHeader extends Component{
     constructor(props){
@@ -66,75 +66,97 @@ class ContentHeader extends Component{
                 </IconButton>
                 <Avatar className="headerAvatar" src="https://www.sketchappsources.com/resources/source-image/twitterlogo_1x.png" style={style.avatar} />
                 <h4 style={style.title}>{'Twitter.com'}</h4>
-                <IconButton
-                    style={Object.assign({},style.iconExtend, style.closeIcon)}
-                    iconStyle={style.icons}
-                    tooltip="Close active chat"
-                    tooltipPosition="top-center"
-                >
-                    <Close
-                        hoverColor="white"
-                    />
-                </IconButton>
-                <IconButton
-                    style={style.iconExtend}
-                    iconStyle={{
-                        color: starState
-                    }}
-                    tooltip="Add to favourites"
-                    tooltipPosition="top-center"
-                    onTouchTap={()=>{
-                        this.changeIconsState('star')
-                        }
-                    }
-                >
-                    {this.toggIconChange('star', <StarBorder/>, <Star/>)}
-                </IconButton>
-                <IconButton
-                    style={style.iconExtend}
-                    iconStyle={{
-                        color: notificationState
-                    }}
-                    tooltip="Set notification"
-                    tooltipPosition="top-center"
-                    onTouchTap={()=>{
-                        this.changeIconsState('notification')
-                        }
-                    }
-                >
-                    {this.toggIconChange('notification', <NotificationsNone hoverColor="white" />, <Notifications hoverColor="white" />)}
-                </IconButton>
-                <IconButton
-                    style={style.iconExtend}
-                    className="lastHeaderIcon"
-                    iconStyle={style.icons}
-                    tooltip="Show users"
-                    tooltipPosition="top-center"
-                    onTouchTap={this.toggleUserMenu}
-                >
-                    <Menu
-                        hoverColor="white"
-                    />
-                </IconButton>
-                <IconButton
-                    iconStyle={style.icons}
-                    onTouchTap={this.goBack}
-                    style={style.arrowIcon}
-                    className="messagesForward"
-                >
-                    <ArrowForward
-                        hoverColor="white"
+               <div className="iconsWrapper" style={style.iconsWrapper}>
+                   <IconButton
+                       style={Object.assign({},style.iconExtend, style.closeIcon)}
+                       iconStyle={style.icons}
+                       tooltip="Close active chat"
+                       tooltipPosition="top-center"
+                   >
+                       <Close
+                           hoverColor="white"
+                       />
+                   </IconButton>
+                   <IconButton
+                       style={style.iconExtend}
+                       iconStyle={{
+                           color: starState
+                       }}
+                       tooltip="Add to favourites"
+                       tooltipPosition="top-center"
+                       onTouchTap={()=>{
+                           this.changeIconsState('star')
+                       }}
+                   >
+                       {this.toggIconChange('star', <StarBorder/>, <Star/>)}
+                   </IconButton>
+                   <IconButton
+                       style={style.iconExtend}
+                       iconStyle={{
+                           color: notificationState
+                       }}
+                       tooltip="Set notification"
+                       tooltipPosition="top-center"
+                       onTouchTap={()=>{
+                           this.changeIconsState('notification')
+                       }}
+                   >
+                       {this.toggIconChange('notification', <NotificationsNone hoverColor="white" />, <Notifications hoverColor="white" />)}
+                   </IconButton>
+                   <IconButton
+                       style={style.iconExtend}
+                       className="lastHeaderIcon"
+                       iconStyle={style.icons}
+                       tooltip="Show users"
+                       tooltipPosition="top-center"
+                       onTouchTap={this.toggleUserMenu}
+                   >
+                       <Menu
+                           hoverColor="white"
+                       />
+                   </IconButton>
+                </div>
+                <div className="mobileHeadIcons" style={style.mobileHeadIcons}>
+                    <IconButton
+                        style={style.iconExtend}
+                        iconStyle={style.icons}
                         onTouchTap={()=>{
-                            this.swipeView(2);
+                            this.props.showHeaderSubmenu(!this.props.headerSubmenuState);
                         }}
-                    />
-                </IconButton>
+                    >
+                        <Menu
+                            hoverColor="white"
+                        />
+                    </IconButton>
+                    <IconButton
+                        iconStyle={style.icons}
+                        onTouchTap={this.goBack}
+                        style={style.arrowIcon}
+                        className="messagesForward"
+                    >
+                        <ArrowForward
+                            hoverColor="white"
+                            onTouchTap={()=>{
+                                this.swipeView(2);
+                            }}
+                        />
+                    </IconButton>
+                </div>
             </div>
         );
     }
 }
 
 var style = {
+    mobileHeadIcons:{
+        display: 'flex',
+        alignItems: 'center',
+        marginLeft: 'auto'
+    },
+    iconsWrapper:{
+        display: 'flex',
+        marginLeft: 'auto'
+    },
     topHeader: {
         backgroundColor: teal800,
         width:'100%',
@@ -177,14 +199,16 @@ var style = {
 function matchDispatchToProps(dispatch) {
     return bindActionCreators({
         swipePage: swipePage,
-        toggleUsersMenu: toggleUsersMenu
+        toggleUsersMenu: toggleUsersMenu,
+        showHeaderSubmenu: showHeaderSubmenu
     }, dispatch);
 }
 
 function mapStateToProps(state) {
     return ({
         pageIndex: state.pageIndex,
-        showUserMenuValue: state.toggleUserMenu
+        showUserMenuValue: state.toggleUserMenu,
+        headerSubmenuState: state.headerSubmenuState
     });
 }
 

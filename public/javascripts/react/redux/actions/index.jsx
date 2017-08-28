@@ -12,6 +12,13 @@ export const swipePage = data => {
     }
 }
 
+export const showHeaderSubmenu = data => {
+    return {
+        type: 'HEADER_SUBMENU',
+        data
+    }
+}
+
 export const addUser = data => {
     return {
         type: 'ADD_USER',

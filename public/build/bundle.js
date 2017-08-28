@@ -5587,6 +5587,13 @@ var swipePage = exports.swipePage = function swipePage(data) {
     };
 };
 
+var showHeaderSubmenu = exports.showHeaderSubmenu = function showHeaderSubmenu(data) {
+    return {
+        type: 'HEADER_SUBMENU',
+        data: data
+    };
+};
+
 var addUser = exports.addUser = function addUser(data) {
     return {
         type: 'ADD_USER',
@@ -23593,75 +23600,96 @@ var ContentHeader = function (_Component) {
                     'Twitter.com'
                 ),
                 _react2.default.createElement(
-                    _IconButton2.default,
-                    {
-                        style: Object.assign({}, style.iconExtend, style.closeIcon),
-                        iconStyle: style.icons,
-                        tooltip: 'Close active chat',
-                        tooltipPosition: 'top-center'
-                    },
-                    _react2.default.createElement(_close2.default, {
-                        hoverColor: 'white'
-                    })
-                ),
-                _react2.default.createElement(
-                    _IconButton2.default,
-                    {
-                        style: style.iconExtend,
-                        iconStyle: {
-                            color: starState
+                    'div',
+                    { className: 'iconsWrapper', style: style.iconsWrapper },
+                    _react2.default.createElement(
+                        _IconButton2.default,
+                        {
+                            style: Object.assign({}, style.iconExtend, style.closeIcon),
+                            iconStyle: style.icons,
+                            tooltip: 'Close active chat',
+                            tooltipPosition: 'top-center'
                         },
-                        tooltip: 'Add to favourites',
-                        tooltipPosition: 'top-center',
-                        onTouchTap: function onTouchTap() {
-                            _this2.changeIconsState('star');
-                        }
-                    },
-                    this.toggIconChange('star', _react2.default.createElement(_starBorder2.default, null), _react2.default.createElement(_star2.default, null))
-                ),
-                _react2.default.createElement(
-                    _IconButton2.default,
-                    {
-                        style: style.iconExtend,
-                        iconStyle: {
-                            color: notificationState
+                        _react2.default.createElement(_close2.default, {
+                            hoverColor: 'white'
+                        })
+                    ),
+                    _react2.default.createElement(
+                        _IconButton2.default,
+                        {
+                            style: style.iconExtend,
+                            iconStyle: {
+                                color: starState
+                            },
+                            tooltip: 'Add to favourites',
+                            tooltipPosition: 'top-center',
+                            onTouchTap: function onTouchTap() {
+                                _this2.changeIconsState('star');
+                            }
                         },
-                        tooltip: 'Set notification',
-                        tooltipPosition: 'top-center',
-                        onTouchTap: function onTouchTap() {
-                            _this2.changeIconsState('notification');
-                        }
-                    },
-                    this.toggIconChange('notification', _react2.default.createElement(_notificationsNone2.default, { hoverColor: 'white' }), _react2.default.createElement(_notifications2.default, { hoverColor: 'white' }))
+                        this.toggIconChange('star', _react2.default.createElement(_starBorder2.default, null), _react2.default.createElement(_star2.default, null))
+                    ),
+                    _react2.default.createElement(
+                        _IconButton2.default,
+                        {
+                            style: style.iconExtend,
+                            iconStyle: {
+                                color: notificationState
+                            },
+                            tooltip: 'Set notification',
+                            tooltipPosition: 'top-center',
+                            onTouchTap: function onTouchTap() {
+                                _this2.changeIconsState('notification');
+                            }
+                        },
+                        this.toggIconChange('notification', _react2.default.createElement(_notificationsNone2.default, { hoverColor: 'white' }), _react2.default.createElement(_notifications2.default, { hoverColor: 'white' }))
+                    ),
+                    _react2.default.createElement(
+                        _IconButton2.default,
+                        {
+                            style: style.iconExtend,
+                            className: 'lastHeaderIcon',
+                            iconStyle: style.icons,
+                            tooltip: 'Show users',
+                            tooltipPosition: 'top-center',
+                            onTouchTap: this.toggleUserMenu
+                        },
+                        _react2.default.createElement(_menu2.default, {
+                            hoverColor: 'white'
+                        })
+                    )
                 ),
                 _react2.default.createElement(
-                    _IconButton2.default,
-                    {
-                        style: style.iconExtend,
-                        className: 'lastHeaderIcon',
-                        iconStyle: style.icons,
-                        tooltip: 'Show users',
-                        tooltipPosition: 'top-center',
-                        onTouchTap: this.toggleUserMenu
-                    },
-                    _react2.default.createElement(_menu2.default, {
-                        hoverColor: 'white'
-                    })
-                ),
-                _react2.default.createElement(
-                    _IconButton2.default,
-                    {
-                        iconStyle: style.icons,
-                        onTouchTap: this.goBack,
-                        style: style.arrowIcon,
-                        className: 'messagesForward'
-                    },
-                    _react2.default.createElement(_arrowForward2.default, {
-                        hoverColor: 'white',
-                        onTouchTap: function onTouchTap() {
-                            _this2.swipeView(2);
-                        }
-                    })
+                    'div',
+                    { className: 'mobileHeadIcons', style: style.mobileHeadIcons },
+                    _react2.default.createElement(
+                        _IconButton2.default,
+                        {
+                            style: style.iconExtend,
+                            iconStyle: style.icons,
+                            onTouchTap: function onTouchTap() {
+                                _this2.props.showHeaderSubmenu(!_this2.props.headerSubmenuState);
+                            }
+                        },
+                        _react2.default.createElement(_menu2.default, {
+                            hoverColor: 'white'
+                        })
+                    ),
+                    _react2.default.createElement(
+                        _IconButton2.default,
+                        {
+                            iconStyle: style.icons,
+                            onTouchTap: this.goBack,
+                            style: style.arrowIcon,
+                            className: 'messagesForward'
+                        },
+                        _react2.default.createElement(_arrowForward2.default, {
+                            hoverColor: 'white',
+                            onTouchTap: function onTouchTap() {
+                                _this2.swipeView(2);
+                            }
+                        })
+                    )
                 )
             );
         }
@@ -23671,6 +23699,15 @@ var ContentHeader = function (_Component) {
 }(_react.Component);
 
 var style = {
+    mobileHeadIcons: {
+        display: 'flex',
+        alignItems: 'center',
+        marginLeft: 'auto'
+    },
+    iconsWrapper: {
+        display: 'flex',
+        marginLeft: 'auto'
+    },
     topHeader: {
         backgroundColor: _colors.teal800,
         width: '100%',
@@ -23713,14 +23750,16 @@ var style = {
 function matchDispatchToProps(dispatch) {
     return (0, _redux.bindActionCreators)({
         swipePage: _index.swipePage,
-        toggleUsersMenu: _index.toggleUsersMenu
+        toggleUsersMenu: _index.toggleUsersMenu,
+        showHeaderSubmenu: _index.showHeaderSubmenu
     }, dispatch);
 }
 
 function mapStateToProps(state) {
     return {
         pageIndex: state.pageIndex,
-        showUserMenuValue: state.toggleUserMenu
+        showUserMenuValue: state.toggleUserMenu,
+        headerSubmenuState: state.headerSubmenuState
     };
 }
 
@@ -23743,6 +23782,14 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
+var _reactRedux = __webpack_require__(58);
+
+var _redux = __webpack_require__(38);
+
+var _index = __webpack_require__(62);
+
+__webpack_require__(602);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -23763,7 +23810,10 @@ var SubHeader = function (_Component) {
     _createClass(SubHeader, [{
         key: 'render',
         value: function render() {
-            return _react2.default.createElement('div', { style: style.outer });
+            var toggleBlock = this.props.headerSubmenuState ? 48 : 0;
+            return _react2.default.createElement('div', { className: 'subHeader', style: Object.assign({
+                    height: toggleBlock
+                }, style.outer) });
         }
     }]);
 
@@ -23772,14 +23822,25 @@ var SubHeader = function (_Component) {
 
 var style = {
     outer: {
-        height: 48,
         backgroundColor: '#D8D8D8',
         borderBottom: '1px solid #CDC9C9',
         boxSizing: 'border-box'
     }
 };
 
-exports.default = SubHeader;
+function matchDispatchToProps(dispatch) {
+    return (0, _redux.bindActionCreators)({
+        showHeaderSubmenu: _index.showHeaderSubmenu
+    }, dispatch);
+}
+
+function mapStateToProps(state) {
+    return {
+        headerSubmenuState: state.headerSubmenuState
+    };
+}
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, matchDispatchToProps)(SubHeader);
 
 /***/ }),
 /* 248 */
@@ -24153,7 +24214,7 @@ var style = {
         fontSize: 16,
         boxSizing: 'border-box',
         flexGrow: 1
-    }, _defineProperty(_inputText, 'fontSize', 14), _defineProperty(_inputText, 'color', _colors.teal700), _defineProperty(_inputText, 'resize', 'none'), _defineProperty(_inputText, 'padding', '10px 20px'), _inputText),
+    }, _defineProperty(_inputText, 'fontSize', 14), _defineProperty(_inputText, 'color', _colors.teal700), _defineProperty(_inputText, 'resize', 'none'), _defineProperty(_inputText, 'padding', '10px 20px'), _defineProperty(_inputText, 'lineHeight', '20px'), _inputText),
     addIcon: {
         fill: 'white'
     },
@@ -24390,6 +24451,10 @@ var _swipepage = __webpack_require__(257);
 
 var _swipepage2 = _interopRequireDefault(_swipepage);
 
+var _headersubmenu = __webpack_require__(600);
+
+var _headersubmenu2 = _interopRequireDefault(_headersubmenu);
+
 var _toggleUsersMenu = __webpack_require__(258);
 
 var _toggleUsersMenu2 = _interopRequireDefault(_toggleUsersMenu);
@@ -24399,6 +24464,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var reducers = (0, _redux.combineReducers)({
     toggleUserMenu: _toggleUsersMenu2.default,
     pageIndex: _swipepage2.default,
+    headerSubmenuState: _headersubmenu2.default,
 
     users: _users2.default,
     activeuser: _activeuser2.default,
@@ -27403,7 +27469,7 @@ exports = module.exports = __webpack_require__(67)();
 
 
 // module
-exports.push([module.i, "* {\n  font-family: 'Open Sans', sans-serif;\n}\nhtml,\nbody,\n#reactApp {\n  width: 100%;\n  height: 100%;\n  margin: 0px;\n}\nbody {\n  overflow: hidden;\n}\n#reactApp > div {\n  width: 100%;\n  height: 100%;\n}\n.headerAvatar {\n  margin-left: 10px;\n}\n.homepageWrapper .react-swipeable-view-container {\n  height: 100%;\n}\n.homepageWrapper .react-swipeable-view-container > div > div {\n  height: 100%;\n}\n@media (max-width: 575px) {\n  .mainHeader > a {\n    margin-left: 20px !important;\n  }\n  .mainHeader .userBlock {\n    margin-right: 0px !important;\n  }\n  .lastHeaderIcon {\n    margin-right: 10px !important;\n    display: none !important;\n  }\n  .messagingContent > div:first-child {\n    overflow: hidden !important;\n  }\n}\n@media (min-width: 576px) {\n  .homepageWrapper > div {\n    overflow-x: visible !important;\n    width: 100% !important;\n  }\n  .homepageWrapper > div > div.react-swipeable-view-container {\n    height: 100% !important;\n  }\n  .homepageWrapper > div > div.react-swipeable-view-container > div {\n    width: auto !important;\n    overflow: visible !important;\n  }\n  .homepageWrapper > div > div.react-swipeable-view-container > div:nth-child(2) {\n    flex-grow: 1 !important;\n  }\n  .homepageWrapper > div > div.react-swipeable-view-container > div > div {\n    height: 100% !important;\n  }\n  .lastHeaderIcon {\n    margin-right: 35px !important;\n  }\n  .messagesBack {\n    display: none !important;\n  }\n  .headerAvatar {\n    margin-left: 20px !important;\n  }\n}\n", ""]);
+exports.push([module.i, "* {\n  font-family: 'Open Sans', sans-serif;\n}\nhtml,\nbody,\n#reactApp {\n  width: 100%;\n  height: 100%;\n  margin: 0px;\n}\nhtml,\nbody {\n  overflow: hidden;\n}\n#reactApp > div {\n  width: 100%;\n  height: 100%;\n}\n.headerAvatar {\n  margin-left: 10px;\n}\n.homepageWrapper .react-swipeable-view-container {\n  height: 100%;\n}\n.homepageWrapper .react-swipeable-view-container > div > div {\n  height: 100%;\n}\n@media (max-width: 575px) {\n  .mainHeader > a {\n    margin-left: 20px !important;\n  }\n  .mainHeader .userBlock {\n    margin-right: 0px !important;\n  }\n  .lastHeaderIcon {\n    margin-right: 10px !important;\n    display: none !important;\n  }\n  .messagingContent > div:first-child {\n    overflow: hidden !important;\n  }\n  .iconsWrapper {\n    display: none !important;\n  }\n}\n@media (min-width: 576px) {\n  .homepageWrapper > div {\n    overflow-x: visible !important;\n    width: 100% !important;\n  }\n  .homepageWrapper > div > div.react-swipeable-view-container {\n    height: 100% !important;\n  }\n  .homepageWrapper > div > div.react-swipeable-view-container > div {\n    width: auto !important;\n    overflow: visible !important;\n  }\n  .homepageWrapper > div > div.react-swipeable-view-container > div:nth-child(2) {\n    flex-grow: 1 !important;\n  }\n  .homepageWrapper > div > div.react-swipeable-view-container > div > div {\n    height: 100% !important;\n  }\n  .lastHeaderIcon {\n    margin-right: 35px !important;\n  }\n  .messagesBack {\n    display: none !important;\n  }\n  .headerAvatar {\n    margin-left: 20px !important;\n  }\n  .mobileHeadIcons {\n    display: none !important;\n  }\n}\n", ""]);
 
 // exports
 
@@ -74449,6 +74515,76 @@ module.exports = function() {
 /***/ (function(module, exports) {
 
 /* (ignored) */
+
+/***/ }),
+/* 594 */,
+/* 595 */,
+/* 596 */,
+/* 597 */,
+/* 598 */,
+/* 599 */,
+/* 600 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var headersubmenu = function headersubmenu() {
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+    var action = arguments[1];
+
+    switch (action.type) {
+        case 'HEADER_SUBMENU':
+            return action.data;
+        default:
+            return state;
+    }
+};
+
+exports.default = headersubmenu;
+
+/***/ }),
+/* 601 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(67)();
+// imports
+
+
+// module
+exports.push([module.i, ".subHeader {\n  transition: height 250ms cubic-bezier(0.4, 0, 0.2, 1);\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 602 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(601);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(73)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/less-loader/dist/cjs.js!./subheader.less", function() {
+			var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/less-loader/dist/cjs.js!./subheader.less");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
 
 /***/ })
 /******/ ]);

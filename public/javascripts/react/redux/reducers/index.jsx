@@ -5,12 +5,14 @@ import profileuser from './profileuser';
 import socketobject from './socketobject';
 import chatmessages from './chatmessages';
 import swipepage from './swipepage';
+import headersubmenu from './headersubmenu';
 
 import toggleUsersMenu from './toggleUsersMenu';
 
 const reducers = combineReducers({
     toggleUserMenu: toggleUsersMenu,
     pageIndex: swipepage,
+    headerSubmenuState: headersubmenu,
 
     users: users,
     activeuser: activeuser,

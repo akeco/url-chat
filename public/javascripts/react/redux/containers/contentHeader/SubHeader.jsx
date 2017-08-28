@@ -1,4 +1,8 @@
 import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import {showHeaderSubmenu} from '../../actions/index';
+import '../../../../../stylesheets/less/subheader.less';
 
 class SubHeader extends Component{
     constructor(props){
@@ -6,8 +10,11 @@ class SubHeader extends Component{
     }
 
     render(){
+        var toggleBlock = (this.props.headerSubmenuState) ? 48 : 0;
         return(
-          <div style={style.outer}>
+          <div className="subHeader" style={Object.assign({
+              height: toggleBlock
+          }, style.outer)}>
 
           </div>
         );
@@ -16,11 +23,22 @@ class SubHeader extends Component{
 
 var style = {
     outer: {
-        height: 48,
         backgroundColor: '#D8D8D8',
         borderBottom: '1px solid #CDC9C9',
         boxSizing: 'border-box'
     }
 };
 
-export default SubHeader;
+function matchDispatchToProps(dispatch) {
+    return bindActionCreators({
+        showHeaderSubmenu: showHeaderSubmenu
+    }, dispatch);
+}
+
+function mapStateToProps(state) {
+    return ({
+        headerSubmenuState: state.headerSubmenuState
+    });
+}
+
+export default connect(mapStateToProps, matchDispatchToProps)(SubHeader);

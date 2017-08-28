@@ -76,7 +76,8 @@ var style = {
         fontSize: 14,
         color: teal700,
         resize: 'none',
-        padding: '10px 20px'
+        padding: '10px 20px',
+        lineHeight: '20px'
     },
     addIcon: {
         fill: 'white'
