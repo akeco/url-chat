@@ -5,6 +5,13 @@ export const toggleUsersMenu = data => {
     }
 }
 
+export const swipePage = data => {
+    return {
+        type: 'SWIPE_PAGE',
+        data
+    }
+}
+
 export const addUser = data => {
     return {
         type: 'ADD_USER',

@@ -11,7 +11,7 @@ class Content extends Component{
 
     render(){
         return(
-            <div style={style.mainWrap}>
+            <div className="messagingContent" style={style.mainWrap}>
                 <ContentHeader/>
                 <SubHeader/>
                 <MessagesContainer/>

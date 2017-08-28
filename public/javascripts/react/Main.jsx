@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import reducers from './redux/reducers/index';
 import Wrapper from '../react/redux/containers/componentWrapper/Wrapper';
-import Homepage from './components/homepage/Homepage';
+import Homepage from './redux/containers/homepage/HomepageContainer';
 import 'normalize.css/normalize.css';
 import '../../stylesheets/less/main.less';
 

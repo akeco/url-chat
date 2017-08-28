@@ -18,12 +18,10 @@ class LeftURLSidebar extends Component{
 
     render(){
         return(
-            <MuiThemeProvider>
-                <div style={style.wrapper}>
-                    <URLFormContainer/>
-                    <ListURLContainer/>
-                </div>
-            </MuiThemeProvider>
+            <div className="leftSidebar" style={style.wrapper}>
+                <URLFormContainer/>
+                <ListURLContainer/>
+            </div>
         );
     }
 }

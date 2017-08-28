@@ -24,7 +24,7 @@ class Header extends Component{
 
     render(){
         return(
-            <div style={style.outer}>
+            <div className="mainHeader" style={style.outer}>
                 <Link to="/" style={style.link}>
                     <h4 style={style.logo}>
                         Website<span style={{fontWeight:400}}>Logo</span>

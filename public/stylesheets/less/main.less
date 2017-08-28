@@ -17,3 +17,72 @@ body{
     height:100%;
   }
 }
+
+.headerAvatar{
+  margin-left: 10px;
+}
+
+.homepageWrapper{
+  .react-swipeable-view-container{
+    height: 100%;
+    & > div{
+      & > div{
+        height: 100%;
+      }
+    }
+  }
+}
+
+
+@media (max-width: 575px){
+  .mainHeader{
+    & > a{
+      margin-left:20px !important;
+    }
+    .userBlock{
+      margin-right: 0px !important;
+    }
+  }
+  .lastHeaderIcon{
+    margin-right: 10px !important;
+    display: none !important;
+  }
+  .messagingContent{
+    & > div:first-child{
+      overflow: hidden !important;
+    }
+  }
+}
+
+@media (min-width: 576px){
+ .homepageWrapper{
+   & > div{
+     overflow-x: visible !important;
+     width: 100% !important;
+     & > div.react-swipeable-view-container{
+       height: 100% !important;
+       & > div{
+         width: auto !important;
+         overflow: visible !important;
+         &:nth-child(2){
+           flex-grow:1 !important;
+         }
+         & > div{
+           height: 100% !important;
+         }
+       }
+     }
+   }
+ }
+  .lastHeaderIcon{
+    margin-right: 35px !important;
+  }
+
+  .messagesBack{
+    display: none !important;
+  }
+
+  .headerAvatar{
+    margin-left: 20px !important;
+  }
+}

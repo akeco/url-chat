@@ -12,7 +12,7 @@ class RightUserSidebar extends Component{
     render(){
         var toggleMenuStyle = (this.props.showUserMenuValue) ? 300 : 0;
         return(
-            <div className="userSidebarMenu" style={{
+            <div className="rightUserMenu" style={{
                 width: 0,
                 minWidth: toggleMenuStyle,
                 borderLeft: '1px solid rgb(231, 228, 228)'
