@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import LeftURLSidebar from '../../../components/homepage/LeftURLSidebar';
-import RightUserSidebar from '../../../components/homepage/RightUserSidebar';
+import RightUserSidebar from './RightUserSidebar';
 import Content from '../../../components/homepage/Content';
 import Header from '../../../components/header/Header';
 import SwipeableViews from 'react-swipeable-views';
