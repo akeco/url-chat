@@ -7,15 +7,41 @@ import SwipeableViews from 'react-swipeable-views';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {swipePage} from '../../actions/index';
+import {Observable} from 'rxjs';
+import $ from 'jquery';
 
 class Homepage extends Component{
     constructor(props){
         super(props);
+        this.state = {
+            swipeable: true
+        };
         this.handleSwipe = this.handleSwipe.bind(this);
     }
 
+    componentDidMount(){
+        Observable.fromEvent(window, 'resize').subscribe((observer)=>{
+            if($(document).innerWidth() >= 576 && this.state.swipeable){
+                this.props.swipePage(0);
+                this.setState({
+                    swipeable: false
+                });
+            }
+            else if(!this.state.swipeable){
+                this.setState({
+                    swipeable: true
+                });
+            }
+        });
+
+        if($(document).innerWidth() >= 576 && this.state.swipeable){
+            this.setState({
+                swipeable: false
+            });
+        }
+    }
+
     handleSwipe(index){
-        console.info(index);
         this.props.swipePage(index);
     }
 
@@ -27,7 +53,8 @@ class Homepage extends Component{
                   <SwipeableViews
                       enableMouseEvents={true}
                       index={this.props.pageIndex}
-                      onTransitionEnd={this.handleSwipe}
+                      onChangeIndex={this.handleSwipe}
+                      disabled={(this.state.swipeable) ? false : true}
                   >
                       <LeftURLSidebar/>
                       <Content/>

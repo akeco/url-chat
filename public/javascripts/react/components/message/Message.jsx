@@ -31,12 +31,6 @@ class Message extends Component{
                           hover: false
                       });
                   }}
-                  onTouchTap={()=>{
-                      var currentState = !this.state.hover;
-                      this.setState({
-                          hover: currentState
-                      });
-                  }}
         >
             <li style={style.li}>
                 <div

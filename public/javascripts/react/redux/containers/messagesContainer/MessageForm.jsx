@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import FlatButton from 'material-ui/FlatButton';
 import Add from 'material-ui/svg-icons/Content/add';
 import Send from 'material-ui/svg-icons/Content/send';
-import {teal700, teal50} from 'material-ui/styles/colors';
+import {teal700, teal100, teal50} from 'material-ui/styles/colors';
 import '../../../../../stylesheets/less/messageForm.less';
 
 class MessageForm extends Component{
@@ -15,10 +15,13 @@ class MessageForm extends Component{
             <div style={style.wrapper}>
                 <form action="javascript:void(0)" style={style.form}>
                     <FlatButton
+                        className="addButton"
                         style={style.buttonStyle}
-                        icon={<Add
-                            style={style.addIcon}
-                        />}
+                        icon={
+                            <Add
+                                style={style.addIcon}
+                            />
+                        }
                     >
                         <input type="file" style={style.uploadInput} />
                     </FlatButton>
@@ -41,7 +44,8 @@ var style = {
     wrapper: {
        // position: 'absolute',
        // bottom: 41,
-        backgroundColor: '#D8D8D8',
+        //backgroundColor: '#D8D8D8',
+        backgroundColor: teal100,
         height: 90,
         width: '100%',
         marginBottom: 41
