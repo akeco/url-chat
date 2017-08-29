@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import IconButton from 'material-ui/IconButton';
-import {teal700, teal50} from 'material-ui/styles/colors';
+import {teal700, teal600, teal50} from 'material-ui/styles/colors';
 import Close from 'material-ui/svg-icons/Navigation/close';
 import StarBorder from 'material-ui/svg-icons/Toggle/star-border';
 import Star from 'material-ui/svg-icons/Toggle/star';
@@ -88,14 +88,18 @@ var style = {
         marginRight: 10
     },
     outer: {
-        backgroundColor: '#D8D8D8',
+        //backgroundColor: '#D8D8D8',
+        //backgroundColor: 'white',
+        backgroundColor: teal50,
         borderBottom: '1px solid #CDC9C9',
         boxSizing: 'border-box',
         display: 'flex',
-        alignItems: 'center'
+        alignItems: 'center',
+        boxShadow: '0px 2px 2px 0px rgba(0,0,0,0.2)'
     },
     icons:{
-        color: 'white',
+        //color: 'white',
+        color: teal600
     },
     iconExtend: {
         width:35,

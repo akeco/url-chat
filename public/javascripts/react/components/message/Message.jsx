@@ -24,12 +24,18 @@ class Message extends Component{
                   onMouseEnter={()=>{
                       this.setState({
                           hover: true
-                      })
+                      });
                   }}
                   onMouseLeave={()=>{
                       this.setState({
                           hover: false
-                      })
+                      });
+                  }}
+                  onTouchTap={()=>{
+                      var currentState = !this.state.hover;
+                      this.setState({
+                          hover: currentState
+                      });
                   }}
         >
             <li style={style.li}>
