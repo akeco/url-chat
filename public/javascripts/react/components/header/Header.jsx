@@ -39,6 +39,7 @@ class Header extends Component{
                               style={style.userList}
                               rightIconButton={
                                   <IconMenu
+                                      className="headerRightIcons"
                                       iconButtonElement={
                                           <IconButton
                                               style={{
@@ -62,6 +63,7 @@ class Header extends Component{
                               style={style.settingsList}
                               rightIconButton={
                                   <IconMenu
+                                      className="headerRightIcons"
                                       iconButtonElement={
                                            <IconButton>
                                              <Settings/>
@@ -87,7 +89,7 @@ class Header extends Component{
 
 var style = {
     outer: {
-        height:50,
+        height:40,
         overflow:'hidden',
         display:'flex',
         borderBottom:'1px solid #E7E4E4',

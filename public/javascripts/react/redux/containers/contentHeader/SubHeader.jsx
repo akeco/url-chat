@@ -33,7 +33,7 @@ class SubHeader extends Component{
     }
 
     render(){
-        var toggleBlock = (this.props.headerSubmenuState) ? 48 : 0;
+        var toggleBlock = (this.props.headerSubmenuState) ? 45 : 0;
         var toggleIcons = (this.props.headerSubmenuState) ? 1 : 0;
 
         return(

@@ -39,11 +39,12 @@ class MessageForm extends Component{
 
 var style = {
     wrapper: {
-        position: 'absolute',
-        bottom: 53,
+       // position: 'absolute',
+       // bottom: 41,
         backgroundColor: '#D8D8D8',
         height: 90,
-        width: '100%'
+        width: '100%',
+        marginBottom: 41
     },
     uploadButton: {
         verticalAlign: 'middle',

@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import Messages from '../messages/Messages';
+import '../../../../../stylesheets/less/messages.less';
 
 class MessagesContainer extends Component{
     constructor(props){
@@ -7,8 +9,8 @@ class MessagesContainer extends Component{
 
     render(){
         return(
-            <div style={style.wrapper}>
-               Messages Container
+            <div className="messagesContainer" style={style.wrapper}>
+               <Messages/>
             </div>
         );
     }
