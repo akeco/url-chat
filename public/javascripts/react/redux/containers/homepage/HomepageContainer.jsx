@@ -15,6 +15,7 @@ class Homepage extends Component{
     }
 
     handleSwipe(index){
+        console.info(index);
         this.props.swipePage(index);
     }
 
@@ -26,7 +27,7 @@ class Homepage extends Component{
                   <SwipeableViews
                       enableMouseEvents={true}
                       index={this.props.pageIndex}
-                      onChangeIndex={this.handleSwipe}
+                      onTransitionEnd={this.handleSwipe}
                   >
                       <LeftURLSidebar/>
                       <Content/>
