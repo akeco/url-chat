@@ -14,6 +14,7 @@ class Wrapper extends Component{
         this.setTempUser = this.setTempUser.bind(this);
     }
 
+    /**
     componentWillMount(){
         this.socket = io(document.location.hostname);
         this.props.setSocketObject(this.socket);
@@ -50,7 +51,9 @@ class Wrapper extends Component{
         }
         else this.props.history.push("/register");
         */
-    }
+    //}
+
+
 
     setTempUser(data){
         this.props.setTemporaryUser(data);
