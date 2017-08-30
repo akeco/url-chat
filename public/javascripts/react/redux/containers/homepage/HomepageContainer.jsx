@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import { withRouter } from 'react-router-dom';
 import LeftURLSidebar from '../../../components/homepage/LeftURLSidebar';
 import RightUserSidebar from './RightUserSidebar';
 import Content from '../../../components/homepage/Content';
@@ -20,24 +21,26 @@ class Homepage extends Component{
     }
 
     componentDidMount(){
-        Observable.fromEvent(window, 'resize').subscribe((observer)=>{
+        if(this.props.history.location.pathname == '/'){
+            Observable.fromEvent(window, 'resize').subscribe((observer)=>{
+                if($(document).innerWidth() >= 576 && this.state.swipeable){
+                    this.props.swipePage(0);
+                    this.setState({
+                        swipeable: false
+                    });
+                }
+                else if(!this.state.swipeable){
+                    this.setState({
+                        swipeable: true
+                    });
+                }
+            });
+
             if($(document).innerWidth() >= 576 && this.state.swipeable){
-                this.props.swipePage(0);
                 this.setState({
                     swipeable: false
                 });
             }
-            else if(!this.state.swipeable){
-                this.setState({
-                    swipeable: true
-                });
-            }
-        });
-
-        if($(document).innerWidth() >= 576 && this.state.swipeable){
-            this.setState({
-                swipeable: false
-            });
         }
     }
 
@@ -91,4 +94,4 @@ var style = {
     }
 };
 
-export default connect(mapStateToProps, matchDispatchToProps)(Homepage);
+export default withRouter(connect(mapStateToProps, matchDispatchToProps)(Homepage));

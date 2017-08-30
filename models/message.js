@@ -9,7 +9,7 @@ const messageSchema = new Schema({
     receiver: {
         type: Object
     },
-    roomID: {
+    roomSocketID: {
       type: String
     },
     message: {
@@ -17,8 +17,12 @@ const messageSchema = new Schema({
         required: true
     },
     created: {
-        type: Date,
+        type: String,
         default: Date.now
+    },
+    rating: {
+        type: Number,
+        default: 0
     }
 });
 

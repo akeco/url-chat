@@ -1,14 +1,31 @@
 var server = require('../../bin/www');
 var io = require('socket.io').listen(server);
-var user = require('../../models/user');
+var {registration} = require('../../services/registration');
+var randomstring = require('randomstring');
 
-var users = new Set();
+//var users = new Set();
 
 io.sockets.on('connection', function (socket) {
     console.info("CONNECTED",socket.id);
-    io.sockets.to(socket.id).emit("updateSocketID", socket.id);
+
+    //io.sockets.to(socket.id).emit("updateSocketID", socket.id);
+
+    io.sockets.to(socket.id).emit("temporaryUser", {
+        socketID: socket.id,
+        username: `Guest-${ randomstring.generate(5) }`
+    });
+
+    var handleRegistration = async (data)=>{
+        var profile = await registration(data);
+        io.sockets.to(socket.id).emit("profileUpdate", profile);
+    };
+
+    socket.on("saveTempUser", (data)=>{
+        handleRegistration(data);
+    });
 
     socket.on('updateID', function (loggedUser) {
+        /*
         user.update({_id: loggedUser._id},{socketID: socket.id}, function (err) {
             if (err) return handleError(err);
             loggedUser.socketID = socket.id;
@@ -21,12 +38,13 @@ io.sockets.on('connection', function (socket) {
 
             io.sockets.emit("profileUpdated", userObj);
         });
+        */
     });
 
 
     socket.once('disconnect', function () {
-        users.delete(socket.id);
-        io.sockets.emit("updateList", Array.from(users));
+        //users.delete(socket.id);
+        //io.sockets.emit("updateList", Array.from(users));
         socket.disconnect();
     });
 
@@ -48,14 +66,6 @@ io.sockets.on('connection', function (socket) {
             sender: data.sender,
             message: data.message
         });
-    });
-
-
-    socket.on("disconnect", function () {
-        console.info(users);
-        users.delete(socket.id);
-        io.sockets.emit("updateList", Array.from(users));
-        socket.disconnect();
     });
 
 });

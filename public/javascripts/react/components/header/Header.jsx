@@ -10,6 +10,8 @@ import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import Account from 'material-ui/svg-icons/Action/account-circle';
 import Settings from 'material-ui/svg-icons/Action/settings';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 
 const muiTheme = getMuiTheme({
     palette: {
@@ -35,11 +37,12 @@ class Header extends Component{
                       <List style={style.list}>
                           <ListItem
                               disabled={true}
-                              primaryText={'myUsername'}
+                              primaryText={this.props.profiluser && this.props.profiluser.username}
                               style={style.userList}
                               rightIconButton={
                                   <IconMenu
                                       className="headerRightIcons"
+                                      style={style.headerRightIcons}
                                       iconButtonElement={
                                           <IconButton
                                               style={{
@@ -64,6 +67,7 @@ class Header extends Component{
                               rightIconButton={
                                   <IconMenu
                                       className="headerRightIcons"
+                                      style={style.headerRightIcons}
                                       iconButtonElement={
                                            <IconButton>
                                              <Settings/>
@@ -88,6 +92,9 @@ class Header extends Component{
 }
 
 var style = {
+    headerRightIcons:{
+      //top: -7
+    },
     outer: {
         height:40,
         overflow:'hidden',
@@ -120,4 +127,21 @@ var style = {
     }
 };
 
-export default Header;
+/*
+function matchDispatchToProps(dispatch) {
+    return bindActionCreators({
+        updateProfileSocket: updateProfileSocket,
+        setProfileUser: setProfileUser,
+        setSocketObject: setSocketObject
+    }, dispatch);
+}
+*/
+
+function mapStateToProps(state) {
+    return ({
+        profiluser: state.profileuser,
+        socketIO: state.socketobject
+    });
+}
+
+export default connect(mapStateToProps)(Header);

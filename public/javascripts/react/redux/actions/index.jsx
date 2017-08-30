@@ -26,6 +26,13 @@ export const addUser = data => {
     }
 }
 
+export const setTemporaryUser = data => {
+    return {
+        type: 'ADD_TEMP_USER',
+        data
+    }
+}
+
 export const setProfileUser = data => {
     return{
         type: 'PROFILE_USER',

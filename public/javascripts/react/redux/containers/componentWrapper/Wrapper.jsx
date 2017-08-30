@@ -3,17 +3,41 @@ import io from 'socket.io-client';
 import {withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {updateProfileSocket, setProfileUser, setSocketObject} from '../../actions/index';
+import {updateProfileSocket, setProfileUser, setSocketObject, setTemporaryUser} from '../../actions/index';
+import axios from 'axios';
 
 class Wrapper extends Component{
     constructor(props){
         super(props);
         this.sendMessage = this.sendMessage.bind(this);
         this.updateSocketID = this.updateSocketID.bind(this);
-        this.socket = '';
+        this.setTempUser = this.setTempUser.bind(this);
     }
 
     componentWillMount(){
+        this.socket = io('localhost:3000');
+        this.props.setSocketObject(this.socket);
+        this.socket.on('temporaryUser', this.setTempUser);
+
+        if(!window.localStorage.getItem("currentUser")){
+            this.props.history.push("/login");
+            return;
+        }
+        else{
+            var user = JSON.parse(window.localStorage.getItem("currentUser"));
+            axios.get("/user",{
+                params: {
+                    username: user.username
+                }
+            }).then((response)=>{
+                console.info(response);
+                this.props.setProfileUser(response.data);
+            }).catch((err)=>{
+                console.info(err);
+            })
+        }
+
+
         /*
         const loggedUser = JSON.parse(window.localStorage.getItem('loggeduser'));
         if(loggedUser){
@@ -26,6 +50,10 @@ class Wrapper extends Component{
         }
         else this.props.history.push("/register");
         */
+    }
+
+    setTempUser(data){
+        this.props.setTemporaryUser(data);
     }
 
     updateSocketID(data){
@@ -61,15 +89,16 @@ function matchDispatchToProps(dispatch) {
     return bindActionCreators({
         updateProfileSocket: updateProfileSocket,
         setProfileUser: setProfileUser,
-        setSocketObject: setSocketObject
+        setSocketObject: setSocketObject,
+        setTemporaryUser: setTemporaryUser
     }, dispatch);
 }
 
 function mapStateToProps(state) {
     return ({
-        profileuser: state.profileuser,
+        profiluser: state.profileuser,
         socketIO: state.socketobject
     });
 }
 
-export default connect(mapStateToProps, matchDispatchToProps)(withRouter(Wrapper));
+export default withRouter(connect(mapStateToProps, matchDispatchToProps)(Wrapper));

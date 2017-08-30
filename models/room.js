@@ -9,6 +9,9 @@ const roomSchema = new Schema({
     members: {
         type: Array,
         required: true
+    },
+    messages: {
+        type: Array
     }
 });
 

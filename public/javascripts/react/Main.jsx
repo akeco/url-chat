@@ -7,6 +7,7 @@ import { createStore } from 'redux';
 import reducers from './redux/reducers/index';
 import Wrapper from '../react/redux/containers/componentWrapper/Wrapper';
 import Homepage from './redux/containers/homepage/HomepageContainer';
+import Loginpage from './redux/containers/login/Loginpage';
 import 'normalize.css/normalize.css';
 import '../../stylesheets/less/main.less';
 
@@ -25,6 +26,7 @@ class Main extends Component{
                     <Router>
                         <Wrapper>
                             <Route exact path="/" component={Homepage}></Route>
+                            <Route path="/login" component={Loginpage}></Route>
                         </Wrapper>
                     </Router>
                 </MuiThemeProvider>
