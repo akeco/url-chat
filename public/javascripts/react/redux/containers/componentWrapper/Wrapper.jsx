@@ -14,9 +14,11 @@ class Wrapper extends Component{
         this.setTempUser = this.setTempUser.bind(this);
     }
 
-    /*
+
     componentWillMount(){
-        this.socket = io(document.location.hostname);
+        this.socket = io(document.location.host);
+        //this.socket = io('localhost:3000');
+
         this.props.setSocketObject(this.socket);
         this.socket.on('temporaryUser', this.setTempUser);
 
@@ -28,7 +30,7 @@ class Wrapper extends Component{
             var user = JSON.parse(window.localStorage.getItem("currentUser"));
             axios.get("/user",{
                 params: {
-                    username: user.username
+                    username: user && user.username
                 }
             }).then((response)=>{
                 console.info(response);
@@ -39,19 +41,18 @@ class Wrapper extends Component{
         }
 
 
-
-           // const loggedUser = JSON.parse(window.localStorage.getItem('loggeduser'));
-           // if(loggedUser){
-     //     this.props.setProfileUser(loggedUser);
-     //         this.socket = io('localhost:4000/');
-     //         //this.socket = io('192.168.43.31:4000/');
-     //         this.socket.emit('updateID', loggedUser);
-     //         this.socket.on('updateSocketID', this.updateSocketID);
-     //         this.props.setSocketObject(this.socket);
-     //     }
-     //     else this.props.history.push("/register");
-
-    }*/
+/*
+            const loggedUser = JSON.parse(window.localStorage.getItem('loggeduser'));
+            if(loggedUser){
+                this.props.setProfileUser(loggedUser);
+                this.socket = io('localhost:4000/');
+                this.socket.emit('updateID', loggedUser);
+                this.socket.on('updateSocketID', this.updateSocketID);
+                this.props.setSocketObject(this.socket);
+            }
+            else this.props.history.push("/register");
+*/
+    }
 
 
 
