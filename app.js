@@ -4,14 +4,14 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var mongoose = require('mongoose');
-require('dotenv').config();
+//var mongoose = require('mongoose');
+//require('dotenv').config();
 
 var index = require('./routes/index');
 
 var app = express();
 
-mongoose.Promise = global.Promise;
+//mongoose.Promise = global.Promise;
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -30,10 +30,12 @@ app.use('/static', express.static('public'));
 
 app.use('/', index);
 
+/*
 mongoose.connect(process.env.MONGODB);
 require('./models/message');
 require('./models/room');
 require('./models/user');
+*/
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
