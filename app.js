@@ -31,7 +31,13 @@ app.use('/static', express.static('public'));
 app.use('/', index);
 
 
-mongoose.connect(process.env.MONGODB);
+try{
+  mongoose.connect(process.env.MONGODB);
+}
+catch(err){
+  console.info("Mongo db connection error");
+}
+
 require('./models/message');
 require('./models/room');
 require('./models/user');
