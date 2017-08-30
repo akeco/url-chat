@@ -35,9 +35,9 @@ class Header extends Component{
                 <div className="userBlock" style={style.userBlock}>
                     <MuiThemeProvider muiTheme={muiTheme}>
                       <List style={style.list}>
+                          <p style={style.username}>{this.props.profiluser && this.props.profiluser.username}</p>
                           <ListItem
                               disabled={true}
-                              primaryText={this.props.profiluser && this.props.profiluser.username}
                               style={style.userList}
                               rightIconButton={
                                   <IconMenu
@@ -92,8 +92,12 @@ class Header extends Component{
 }
 
 var style = {
+    username:{
+        marginRight: -10,
+        cursor: 'default'
+    },
     headerRightIcons:{
-      //top: -7
+      top: -7
     },
     outer: {
         height:40,
@@ -116,7 +120,8 @@ var style = {
     },
     list:{
         display:'flex',
-        padding:0
+        padding:0,
+        alignItems: 'center'
     },
     settingsList:{
         paddingLeft:0
