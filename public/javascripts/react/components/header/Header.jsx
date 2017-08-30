@@ -94,7 +94,8 @@ class Header extends Component{
 var style = {
     username:{
         marginRight: -10,
-        cursor: 'default'
+        cursor: 'default',
+        fontSize: 14
     },
     headerRightIcons:{
       top: -7

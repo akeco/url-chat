@@ -15,7 +15,7 @@ class Wrapper extends Component{
     }
 
     componentWillMount(){
-        this.socket = io('localhost:3000');
+        this.socket = io(document.location.hostname);
         this.props.setSocketObject(this.socket);
         this.socket.on('temporaryUser', this.setTempUser);
 
