@@ -14,7 +14,7 @@ class Wrapper extends Component{
         this.setTempUser = this.setTempUser.bind(this);
     }
 
-    /**
+    /*
     componentWillMount(){
         this.socket = io(document.location.hostname);
         this.props.setSocketObject(this.socket);
@@ -39,19 +39,19 @@ class Wrapper extends Component{
         }
 
 
-        /*
-        const loggedUser = JSON.parse(window.localStorage.getItem('loggeduser'));
-        if(loggedUser){
-            this.props.setProfileUser(loggedUser);
-            this.socket = io('localhost:4000/');
-            //this.socket = io('192.168.43.31:4000/');
-            this.socket.emit('updateID', loggedUser);
-            this.socket.on('updateSocketID', this.updateSocketID);
-            this.props.setSocketObject(this.socket);
-        }
-        else this.props.history.push("/register");
-        */
-    //}
+
+           // const loggedUser = JSON.parse(window.localStorage.getItem('loggeduser'));
+           // if(loggedUser){
+     //     this.props.setProfileUser(loggedUser);
+     //         this.socket = io('localhost:4000/');
+     //         //this.socket = io('192.168.43.31:4000/');
+     //         this.socket.emit('updateID', loggedUser);
+     //         this.socket.on('updateSocketID', this.updateSocketID);
+     //         this.props.setSocketObject(this.socket);
+     //     }
+     //     else this.props.history.push("/register");
+
+    }*/
 
 
 
