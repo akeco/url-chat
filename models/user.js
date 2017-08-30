@@ -31,15 +31,6 @@ const userSchema = new Schema({
 });
 
 
-userSchema.pre('save', function(next) {
-    /*
-    mongoose.find({username: this.username}).then((err, response)=>{
-
-    });
-    */
-    next();
-});
-
 var userModel = mongoose.model('users', userSchema);
 
 module.exports = userModel;
