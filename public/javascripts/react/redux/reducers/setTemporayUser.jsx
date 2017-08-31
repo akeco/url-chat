@@ -1,4 +1,4 @@
-const temporaryUser = (state = null, action) => {
+const setTemporaryUser = (state = null, action) => {
     switch (action.type) {
         case 'ADD_TEMP_USER':
             return action.data;
@@ -7,4 +7,4 @@ const temporaryUser = (state = null, action) => {
     }
 }
 
-export default temporaryUser;
+export default setTemporaryUser;

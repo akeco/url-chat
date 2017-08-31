@@ -5,27 +5,30 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {teal700, teal50} from 'material-ui/styles/colors';
 import { setProfileUser } from '../../actions/index';
+import axios from 'axios';
 
 class Loginpage extends Component{
     constructor(props){
         super(props);
         this.homepageRedirect = this.homepageRedirect.bind(this);
-        this.updateProfile = this.updateProfile.bind(this);
     }
 
-    componentWillMount(){
-        this.props.socketIO.on('profileUpdate', this.updateProfile);
-    }
 
     homepageRedirect(){
-        window.localStorage.setItem("currentUser", JSON.stringify(this.props.temporaryUser));
-        this.props.socketIO.emit("saveTempUser", this.props.temporaryUser);
-        this.props.history.push("/");
+        axios.post("/api/user/save", {
+            data:{
+                user: this.props.temporaryUser
+            }
+        }).then((response)=>{
+            this.props.setProfileUser(response.data);
+            window.localStorage.setItem("currentUser", JSON.stringify(response.data));
+            this.props.history.push("/");
+        }).catch((err)=>{
+            console.info(err);
+        });
+
     }
 
-    updateProfile(data){
-        this.props.setProfileUser(data);
-    }
 
     render(){
         return(
@@ -71,6 +74,7 @@ function matchDispatchToProps(dispatch) {
 function mapStateToProps(state) {
     return ({
         temporaryUser: state.temporaryUser,
+        profileuser: state.profileuser,
         socketIO: state.socketobject
     });
 }

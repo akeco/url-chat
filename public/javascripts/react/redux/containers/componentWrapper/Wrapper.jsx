@@ -1,26 +1,29 @@
 import React, {Component} from 'react';
 import io from 'socket.io-client';
+import randomstring from'randomstring';
+import axios from 'axios';
 import {withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {updateProfileSocket, setProfileUser, setSocketObject, setTemporaryUser} from '../../actions/index';
-import axios from 'axios';
 
 class Wrapper extends Component{
     constructor(props){
         super(props);
         this.sendMessage = this.sendMessage.bind(this);
         this.updateSocketID = this.updateSocketID.bind(this);
-        this.setTempUser = this.setTempUser.bind(this);
     }
-
 
     componentWillMount(){
         this.socket = io(document.location.host);
-        //this.socket = io('localhost:3000');
-
         this.props.setSocketObject(this.socket);
-        this.socket.on('temporaryUser', this.setTempUser);
+
+        this.socket.on('connect', ()=>{
+            this.props.setTemporaryUser({
+                socketID: this.socket.id,
+                username: `Guest-${ randomstring.generate(5) }`
+            });
+        });
 
         if(!window.localStorage.getItem("currentUser")){
             this.props.history.push("/login");
@@ -33,7 +36,7 @@ class Wrapper extends Component{
                     username: user && user.username
                 }
             }).then((response)=>{
-                console.info(response);
+                // RETURNED CURRENTLY LOGGED USER
                 this.props.setProfileUser(response.data);
             }).catch((err)=>{
                 console.info(err);
@@ -55,10 +58,6 @@ class Wrapper extends Component{
     }
 
 
-
-    setTempUser(data){
-        this.props.setTemporaryUser(data);
-    }
 
     updateSocketID(data){
         this.props.updateProfileSocket(data);

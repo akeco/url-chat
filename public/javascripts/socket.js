@@ -2,7 +2,8 @@ var server = require('../../bin/www');
 var io = require('socket.io').listen(server);
 var {registration} = require('../../services/registration');
 var randomstring = require('randomstring');
-
+var axios = require('axios');
+var addRoom = require('../../services/addRoom');
 //var users = new Set();
 
 io.sockets.on('connection', function (socket) {
@@ -10,19 +11,19 @@ io.sockets.on('connection', function (socket) {
 
     //io.sockets.to(socket.id).emit("updateSocketID", socket.id);
 
-    io.sockets.to(socket.id).emit("temporaryUser", {
-        socketID: socket.id,
-        username: `Guest-${ randomstring.generate(5) }`
+    socket.on("urlInserted", function (roomURL) {
+        //socket.join(roomURL);
+        console.info("Need to save room", roomURL);
+        (async ()=>{
+            var roomResult = await addRoom(roomURL);
+            socket.emit("updateRooms", roomResult);
+            socket.join(roomURL);
+        })();
     });
 
-    var handleRegistration = async (data)=>{
-        var profile = await registration(data);
-        io.sockets.to(socket.id).emit("profileUpdate", profile);
-    };
 
-    socket.on("saveTempUser", (data)=>{
-        handleRegistration(data);
-    });
+
+
 
     socket.on('updateID', function (loggedUser) {
         /*

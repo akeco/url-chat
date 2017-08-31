@@ -8,6 +8,7 @@ var mongoose = require('mongoose');
 require('dotenv').config();
 
 var index = require('./routes/index');
+var api = require('./routes/api/index');
 
 var app = express();
 
@@ -29,6 +30,7 @@ app.use(cookieParser());
 app.use('/static', express.static('public'));
 
 app.use('/', index);
+app.use('/api', api);
 
 
 mongoose.connect(process.env.MONGODB);

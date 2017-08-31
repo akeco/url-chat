@@ -15,7 +15,8 @@ exports.registration = async function (data) {
         userObject = {
             _id: user._id,
             username: user.username,
-            socketID: user.socketID
+            socketID: user.socketID,
+            savedSettings: user.savedSettings
         };
     }
     catch(err){

@@ -2,14 +2,17 @@ import React, {Component} from 'react';
 import {teal800, teal700, teal50} from 'material-ui/styles/colors';
 import {List, ListItem} from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
-//import RaisedButton from 'material-ui/RaisedButton';
 import IconButton from 'material-ui/IconButton';
 import Profile from 'material-ui/svg-icons/Action/perm-identity';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import { updateRoomList } from '../../actions/index';
 
 class ListURLContainer extends Component{
     constructor(props){
         super(props);
     }
+
 
     render(){
         return(
@@ -190,4 +193,19 @@ var style = {
     }
 };
 
-export default ListURLContainer;
+
+function matchDispatchToProps(dispatch) {
+    return bindActionCreators({
+        updateRoomList: updateRoomList
+    }, dispatch);
+}
+
+
+function mapStateToProps(state) {
+    return ({
+        rooms: state.rooms,
+        socketIO: state.socketobject
+    });
+}
+
+export default connect(mapStateToProps, matchDispatchToProps)(ListURLContainer);

@@ -24,5 +24,4 @@ router.get('/*', function(req, res, next) {
   res.render('index', { title: 'Chat-project' });
 });
 
-
 module.exports = router;

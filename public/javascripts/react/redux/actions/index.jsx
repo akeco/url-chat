@@ -26,6 +26,15 @@ export const addUser = data => {
     }
 }
 
+
+export const updateRoomList = data => {
+    return {
+        type: 'UPDATE_ROOM_LIST',
+        data
+    }
+}
+
+
 export const setTemporaryUser = data => {
     return {
         type: 'ADD_TEMP_USER',
