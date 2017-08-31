@@ -91,16 +91,18 @@ export const clearConversation = data => {
     }
 }
 
-export const setUsers = data => {
+
+
+export const getRooms = data => {
     return{
-        type: 'GET_USERS',
+        type: 'GET_ROOMS',
         data
     }
-}
+};
 
-export const activeUser = data => {
+export const activeRoom = data => {
     return{
-        type: 'ACTIVE_USER',
+        type: 'ACTIVE_ROOM',
         data
     }
 }

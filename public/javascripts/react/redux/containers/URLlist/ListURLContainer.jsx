@@ -6,14 +6,67 @@ import IconButton from 'material-ui/IconButton';
 import Profile from 'material-ui/svg-icons/Action/perm-identity';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import { updateRoomList } from '../../actions/index';
+import { getRooms, activeRoom } from '../../actions/index';
+import LinearProgress from 'material-ui/LinearProgress';
+import axios from 'axios';
 
 class ListURLContainer extends Component{
     constructor(props){
         super(props);
+        this.displayActiveRooms = this.displayActiveRooms.bind(this);
+        this.addActiveRoom = this.addActiveRoom.bind(this);
     }
 
+    componentDidMount(){
+        axios.get('/api/rooms').then((response)=>{
+            this.props.getRooms(response.data);
+        }).catch((err)=>{
+            console.info(err);
+        });
+    }
 
+    addActiveRoom(room){
+        this.props.activeRoom(room);
+    }
+
+    displayActiveRooms(){
+        if(this.props.rooms){
+            return this.props.rooms.map((room)=>{
+                return(
+                    <ListItem
+                        key={room._id}
+                        style={style.listItem}
+                        primaryText={room.name}
+                        innerDivStyle={style.innerDiv}
+                        onTouchTap={()=>{
+                            this.addActiveRoom(room);
+                        }}
+                        leftAvatar={<Avatar style={style.avatar} src="https://course_report_production.s3.amazonaws.com/rich/rich_files/rich_files/1678/s300/inceptures-software-school-logo.png" />}
+                    >
+                        <div style={style.innerWrap}>
+                            <IconButton style={style.memberNumb} iconStyle={style.profileIcon}>
+                                <Profile/>
+                            </IconButton>
+                            <div style={style.counter}>{ (room.members.length) && rooms.members.length || 0 }</div>
+                        </div>
+                    </ListItem>
+                );
+            });
+        }
+        else{
+            return <LinearProgress color={teal50} mode="indeterminate" />
+        }
+    }
+
+    render() {
+        return (
+            <List style={style.list}>
+                {this.displayActiveRooms()}
+            </List>
+        );
+    }
+
+    /*
     render(){
         return(
             <List style={style.list}>
@@ -137,6 +190,7 @@ class ListURLContainer extends Component{
             </List>
         )
     }
+    */
 }
 
 var style = {
@@ -196,7 +250,8 @@ var style = {
 
 function matchDispatchToProps(dispatch) {
     return bindActionCreators({
-        updateRoomList: updateRoomList
+        getRooms: getRooms,
+        activeRoom: activeRoom
     }, dispatch);
 }
 

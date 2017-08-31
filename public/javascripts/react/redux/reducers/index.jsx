@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
-import rooms from './users';
-import activeuser from './activeuser';
+import rooms from './rooms';
+import activeRoom from './activeRoom';
 import profileuser from './profileuser';
 import socketobject from './socketobject';
 import chatmessages from './chatmessages';
@@ -19,7 +19,7 @@ const reducers = combineReducers({
     updateRoomList: updateRoomList,
 
     rooms: rooms,
-    activeuser: activeuser,
+    activeRoom: activeRoom,
     profileuser: profileuser,
     socketobject: socketobject,
     chatmessages: chatmessages
