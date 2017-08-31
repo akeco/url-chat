@@ -47,7 +47,7 @@ class ListURLContainer extends Component{
                             <IconButton style={style.memberNumb} iconStyle={style.profileIcon}>
                                 <Profile/>
                             </IconButton>
-                            <div style={style.counter}>{ (room.members.length) && rooms.members.length || 0 }</div>
+                            <div style={style.counter}>{ (room.members.length) && room.members.length || 0 }</div>
                         </div>
                     </ListItem>
                 );

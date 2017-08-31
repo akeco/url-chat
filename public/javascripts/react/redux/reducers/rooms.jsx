@@ -1,6 +1,9 @@
 
 const users = (state = null, action) => {
     switch (action.type) {
+        case 'UPDATE_ROOM_LIST':
+            console.info("UPDATE", state, action.data);
+            return [...state, action.data];
         case 'GET_ROOMS':
             return action.data;
         default:

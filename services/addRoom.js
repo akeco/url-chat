@@ -4,7 +4,8 @@ var randomstring = require('randomstring');
 
 module.exports = async function (data) {
     var newRoom = new roomModel({
-        name: data,
+        name: data.url,
+        members: [data.user],
         roomID: randomstring.generate(10)
     });
 

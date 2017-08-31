@@ -105,7 +105,14 @@ export const activeRoom = data => {
         type: 'ACTIVE_ROOM',
         data
     }
-}
+};
+
+export const closeActiveRoom = data => {
+    return{
+        type: 'CLOSE_ACTIVE_ROOM',
+        data
+    }
+};
 
 export const sendMessage = data => {
     return {

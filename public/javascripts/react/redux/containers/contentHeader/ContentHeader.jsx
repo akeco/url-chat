@@ -12,7 +12,7 @@ import NotificationsNone from 'material-ui/svg-icons/Social/notifications-none';
 import Menu from 'material-ui/svg-icons/Navigation/menu';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {toggleUsersMenu, swipePage, showHeaderSubmenu} from '../../actions/index';
+import {toggleUsersMenu, swipePage, showHeaderSubmenu, closeActiveRoom} from '../../actions/index';
 
 class ContentHeader extends Component{
     constructor(props){
@@ -72,6 +72,9 @@ class ContentHeader extends Component{
                             iconStyle={style.icons}
                             tooltip="Close active chat"
                             tooltipPosition="top-center"
+                            onTouchTap={()=>{
+                                this.props.closeActiveRoom();
+                            }}
                         >
                             <Close
                                 hoverColor="white"
@@ -214,7 +217,8 @@ function matchDispatchToProps(dispatch) {
     return bindActionCreators({
         swipePage: swipePage,
         toggleUsersMenu: toggleUsersMenu,
-        showHeaderSubmenu: showHeaderSubmenu
+        showHeaderSubmenu: showHeaderSubmenu,
+        closeActiveRoom: closeActiveRoom
     }, dispatch);
 }
 

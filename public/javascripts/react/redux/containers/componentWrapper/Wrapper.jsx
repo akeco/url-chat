@@ -5,7 +5,7 @@ import axios from 'axios';
 import {withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {updateProfileSocket, setProfileUser, setSocketObject, setTemporaryUser} from '../../actions/index';
+import {updateProfileSocket, setProfileUser, setSocketObject, setTemporaryUser, updateRoomList} from '../../actions/index';
 
 class Wrapper extends Component{
     constructor(props){
@@ -24,6 +24,12 @@ class Wrapper extends Component{
                 username: `Guest-${ randomstring.generate(5) }`
             });
         });
+
+
+        this.socket.on('updateRooms', (data)=>{
+            this.props.updateRoomList(data);
+        });
+
 
         if(!window.localStorage.getItem("currentUser")){
             this.props.history.push("/login");
@@ -56,7 +62,6 @@ class Wrapper extends Component{
             else this.props.history.push("/register");
 */
     }
-
 
 
     updateSocketID(data){
@@ -93,7 +98,8 @@ function matchDispatchToProps(dispatch) {
         updateProfileSocket: updateProfileSocket,
         setProfileUser: setProfileUser,
         setSocketObject: setSocketObject,
-        setTemporaryUser: setTemporaryUser
+        setTemporaryUser: setTemporaryUser,
+        updateRoomList: updateRoomList
     }, dispatch);
 }
 

@@ -20,9 +20,12 @@ const userSchema = new Schema({
     savedSettings: {
         notifications: {
             type: Array,
-            default: null
+            default: []
         },
-        favourites: Array
+        favourites: {
+            type: Array,
+            default: []
+        }
     },
     socketID: {
         type: String,

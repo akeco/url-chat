@@ -11,12 +11,11 @@ io.sockets.on('connection', function (socket) {
 
     //io.sockets.to(socket.id).emit("updateSocketID", socket.id);
 
-    socket.on("urlInserted", function (roomURL) {
+    socket.on("urlInserted", function (roomData) {
         //socket.join(roomURL);
-        console.info("Need to save room", roomURL);
         (async ()=>{
-            var roomResult = await addRoom(roomURL);
-            socket.emit("updateRooms", roomResult);
+            var roomResult = await addRoom(roomData);
+            io.sockets.emit("updateRooms", roomResult);
             socket.join(roomURL);
         })();
     });

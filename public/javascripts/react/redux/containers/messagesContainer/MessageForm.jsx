@@ -2,18 +2,29 @@ import React, {Component} from 'react';
 import FlatButton from 'material-ui/FlatButton';
 import Add from 'material-ui/svg-icons/Content/add';
 import Send from 'material-ui/svg-icons/Content/send';
+import {connect} from 'react-redux';
+//import {bindActionCreators} from 'redux';
 import {teal700, teal100, teal50} from 'material-ui/styles/colors';
 import '../../../../../stylesheets/less/messageForm.less';
 
 class MessageForm extends Component{
     constructor(props){
         super(props);
+        this.sendMessage = this.sendMessage.bind(this);
+    }
+
+    sendMessage(event){
+        event.preventDefault();
+        console.info("radii");
     }
 
     render(){
         return(
             <div style={style.wrapper}>
-                <form action="javascript:void(0)" style={style.form}>
+                <form
+                    className={(!this.props.activeRoom) ? 'disabledForm' : ''}
+                    onSubmit={this.sendMessage}
+                    style={style.form}>
                     <FlatButton
                         className="addButton"
                         style={style.buttonStyle}
@@ -41,6 +52,10 @@ class MessageForm extends Component{
 }
 
 var style = {
+    disabled: {
+        opacity: '0.3',
+        pointerEvents: 'none'
+    },
     wrapper: {
        // position: 'absolute',
        // bottom: 41,
@@ -108,6 +123,14 @@ var style = {
         minWidth: 60,
         backgroundColor: teal50
     }
+};
+
+
+
+function mapStateToProps(state) {
+    return ({
+        activeRoom: state.activeRoom
+    });
 }
 
-export default MessageForm;
+export default connect(mapStateToProps)(MessageForm);

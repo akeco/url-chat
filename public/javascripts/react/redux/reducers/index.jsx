@@ -7,7 +7,6 @@ import chatmessages from './chatmessages';
 import swipepage from './swipepage';
 import headersubmenu from './headersubmenu';
 import setTemporayUser from './setTemporayUser';
-import updateRoomList from './updateRoomList';
 
 import toggleUsersMenu from './toggleUsersMenu';
 
@@ -16,7 +15,6 @@ const reducers = combineReducers({
     pageIndex: swipepage,
     headerSubmenuState: headersubmenu,
     temporaryUser: setTemporayUser,
-    updateRoomList: updateRoomList,
 
     rooms: rooms,
     activeRoom: activeRoom,

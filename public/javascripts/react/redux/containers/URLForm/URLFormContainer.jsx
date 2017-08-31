@@ -31,7 +31,10 @@ class URLFormContainer extends Component{
 
     handleURLSubmit(event){
         event.preventDefault();
-        this.props.socketIO.emit("urlInserted", this.refs.url.value);
+        this.props.socketIO.emit("urlInserted", {
+            url: this.refs.url.value,
+            user: this.props.profileuser
+        });
         this.refs.url.value = '';
         this.setState({
             open: true
@@ -115,7 +118,8 @@ function matchDispatchToProps(dispatch) {
 function mapStateToProps(state) {
     return ({
         pageIndex: state.pageIndex,
-        socketIO: state.socketobject
+        socketIO: state.socketobject,
+        profileuser: state.profileuser
     });
 }
 
