@@ -86,7 +86,7 @@ function matchDispatchToProps(dispatch) {
 
 function mapStateToProps(state) {
     return ({
-        activeuser: state.activeuser,
+        activeRoom: state.activeRoom,
         chatMessages: state.chatmessages
     });
 }

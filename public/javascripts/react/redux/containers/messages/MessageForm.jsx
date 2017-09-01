@@ -29,11 +29,10 @@ class MessageForm extends Component{
 
     sendMessage(event){
         event.preventDefault();
-        var receiver = this.props.activeuser.socketID;
         if(this.refs.message.getValue()){
             var createdTime = new Date().getTime();
             this.props.socketIO.emit("sendMessage",{
-                userID: receiver,
+                roomID: this.props.activeRoom.socketID,
                 sender: this.props.profileuser,
                 message: {
                     user: this.props.profileuser,
@@ -42,15 +41,16 @@ class MessageForm extends Component{
                 }
             });
 
-
+            /*
             this.props.insertMessage({
-                sender: this.props.activeuser,
+                sender: this.props.activeRoom,
                 message: {
                     user: this.props.profileuser,
                     text: this.refs.message.getValue(),
                     created: createdTime
                 }
             });
+            */
 
 
             this.setState({
@@ -191,14 +191,13 @@ var style={
 function matchDispatchToProps(dispatch) {
     return bindActionCreators({
         insertMessage: insertMessage
-        //activeUser: activeUser
     }, dispatch);
 }
 
 
 function mapStateToProps(state) {
     return ({
-        activeuser: state.activeuser,
+        activeRoom: state.activeRoom,
         socketIO: state.socketobject,
         profileuser: state.profileuser,
         socketIO: state.socketobject,

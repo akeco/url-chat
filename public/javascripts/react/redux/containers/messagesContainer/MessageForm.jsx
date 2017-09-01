@@ -15,7 +15,19 @@ class MessageForm extends Component{
 
     sendMessage(event){
         event.preventDefault();
-        console.info("radii");
+        console.info("submited");
+        if(this.refs.message.value.trim()){
+            this.props.socketIO.emit("sendMessage",{
+                room: this.props.activeRoom,
+                sender: this.props.profileuser,
+                message: {
+                    user: this.props.profileuser,
+                    text: this.refs.message.value,
+                    created: new Date().getTime()
+                }
+            });
+            this.refs.message.value = "";
+        }
     }
 
     render(){
@@ -36,9 +48,10 @@ class MessageForm extends Component{
                     >
                         <input type="file" style={style.uploadInput} />
                     </FlatButton>
-                    <textarea style={style.inputText} placeholder="Type message..."/>
+                    <textarea style={style.inputText} ref="message" placeholder="Type message..."/>
                     <FlatButton
                         style={style.sendButtonStyle}
+                        onTouchTap={this.sendMessage}
                         icon={<Send
                             style={style.sendIcon}
                         />}
@@ -126,10 +139,11 @@ var style = {
 };
 
 
-
 function mapStateToProps(state) {
     return ({
-        activeRoom: state.activeRoom
+        activeRoom: state.activeRoom,
+        socketIO: state.socketobject,
+        profileuser: state.profileuser
     });
 }
 

@@ -4,6 +4,7 @@ var {registration} = require('../../services/registration');
 var randomstring = require('randomstring');
 var axios = require('axios');
 var addRoom = require('../../services/addRoom');
+var saveMessage = require('../../services/saveMessage');
 //var users = new Set();
 
 io.sockets.on('connection', function (socket) {
@@ -16,12 +17,9 @@ io.sockets.on('connection', function (socket) {
         (async ()=>{
             var roomResult = await addRoom(roomData);
             io.sockets.emit("updateRooms", roomResult);
-            socket.join(roomURL);
+            socket.join(roomData.url);
         })();
     });
-
-
-
 
 
     socket.on('updateID', function (loggedUser) {
@@ -60,12 +58,27 @@ io.sockets.on('connection', function (socket) {
         });
     });
 
+    socket.on("joinRoom", function (roomID) {
+        socket.join(roomID);
+    });
+
+    socket.on("leaveRoom", function (roomID) {
+        socket.leave(roomID);
+    });
+
     socket.on("sendMessage", function (data) {
+        (async()=>{
+            var result = await saveMessage(data);
+            io.sockets.in(data.room.roomID).emit("getMessage", result);
+        })();
+
+        /*
         socket.emit("messageStatus", "Sent");
         socket.to(data.userID).emit("receiveMessage",{
             sender: data.sender,
             message: data.message
         });
+        */
     });
 
 });

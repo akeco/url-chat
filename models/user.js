@@ -14,7 +14,7 @@ const userSchema = new Schema({
         required: true
     },
     created: {
-        type: String,
+        type: Date,
         default: Date.now
     },
     savedSettings: {

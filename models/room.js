@@ -16,10 +16,6 @@ const roomSchema = new Schema({
     members: {
         type: Array,
         default: []
-    },
-    messages: {
-        type: Array,
-        default: []
     }
 });
 
@@ -32,7 +28,6 @@ roomSchema.pre('save', function(next) {
     this.name = this.name.toLowerCase();
     this.name = this.name.charAt(0).toUpperCase() + this.name.slice(1);
 
-    console.info(this);
    // this.members.push()
     next();
 });

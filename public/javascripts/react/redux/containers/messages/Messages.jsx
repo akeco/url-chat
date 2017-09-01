@@ -1,15 +1,15 @@
 import React, {Component} from 'react';
 import {List, ListItem} from 'material-ui/List';
-import Account from 'material-ui/svg-icons/Action/account-circle';
 import Message from '../../../components/message/Message';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {addUser, insertMessage, updateMessageStatus} from '../../actions/index';
+import {insertMessage} from '../../actions/index';
 import randomstring from 'randomstring';
-import moment from 'moment';
 import ActiveUserContainer from '../users/ActiveUserContainer';
 import { Observable, BehaviorSubject } from 'rxjs';
 //import triggerWindowState from '../../../components/utils/WindowFocus';
+import _ from 'lodash';
+import $ from 'jquery';
 import '../../../../../stylesheets/less/messages.less';
 
 class Messages extends Component{
@@ -22,17 +22,46 @@ class Messages extends Component{
         this.showMessages = this.showMessages.bind(this);
        // this.showActiveUser = this.showActiveUser.bind(this);
         //this.receiveMessage = this.receiveMessage.bind(this);
-        this.displayCorrectListItem = this.displayCorrectListItem.bind(this);
+        this.getMessage = this.getMessage.bind(this);
         //this.includeMessageStatus = this.includeMessageStatus.bind(this);
         //this.handleMessageStatus = this.handleMessageStatus.bind(this);
         //this.setWebNotification = this.setWebNotification.bind(this);
         //this.receiveMessageHandleLogic = this.receiveMessageHandleLogic.bind(this);
     }
 
+    componentWillMount(){
+        this.props.socketIO.on("getMessage", this.getMessage);
+    }
+
+    componentDidUpdate(){
+        var containerElement = $(document.querySelector(".messagesListWrapper > div"));
+        $(document.querySelector(".messagesListWrapper")).animate({scrollTop:containerElement.height(), top}, 500);
+    }
+
+    getMessage(data){
+        this.props.insertMessage(data);
+/*
+        var containerElement = $(document.querySelector(".messagesListWrapper > div"));
+        $(document.querySelector(".messagesListWrapper")).scrollTop(containerElement.height());
+        */
+    }
+
+
+    showMessages(){
+        if(this.props.activeRoom && this.props.chatMessages.length){
+            var roomObject = _.find(this.props.chatMessages, (o)=>{ return o.room._id == this.props.activeRoom._id; });
+            if(roomObject){
+                return roomObject.messages.map((item)=>{
+                    return <Message key={item._id} message={item} />;
+                });
+            }
+        }
+    }
+
+
+
 /*
     componentWillMount(){
-        this.props.socketIO.on('receiveMessage', this.receiveMessage);
-        this.props.socketIO.on('messageStatus', this.handleMessageStatus);
         this.setWebNotification();
         //this.activeSubject = new BehaviorSubject(this.props.activeusesr);
     }
@@ -42,8 +71,8 @@ class Messages extends Component{
     componentDidMount(){
         triggerWindowState(this, this.props.socketIO, this.props.activeuser);
     }
+*/
 
-    */
 
 /*
     setWebNotification(){
@@ -58,8 +87,9 @@ class Messages extends Component{
 */
 
 
+    /*
     showMessages(){
-        /*
+
         if(this.props.activeuser){
             var activeReciverID = this.props.activeuser._id;
             var userMessagesIndex = _.findIndex(this.props.chatMessages, function(o) { return o.sender._id == activeReciverID; });
@@ -68,37 +98,15 @@ class Messages extends Component{
                     <div key={randomstring.generate(7)}
                          className={ (item.user._id == this.props.profileuser._id) ? 'rightMessage' : 'leftMessage' }
                     >
-                        { this.displayCorrectListItem(item, index, userMessagesIndex) }
+
                     </div>
                 );
             });
         }
-        */
     }
+     /*
 
 
-    displayCorrectListItem(item, index, userMessagesIndex){
-        return <ListItem
-                    primaryText={'Text'}
-                    //secondaryText={moment(item.created).fromNow()}
-                    leftIcon={<Account/>}
-                    style={ style.messageItem }
-                    innerDivStyle={{padding:'12px 16px'}}
-                />
-
-    }
-
-
-    /*
-    handleMessageStatus(status){
-        var activeReciverID = this.props.activeuser._id;
-        var userMessagesIndex = _.findIndex(this.props.chatMessages, function(o) { return o.sender._id == activeReciverID; });
-        this.props.updateMessageStatus({
-            userMessagesIndex : userMessagesIndex,
-            status: status
-        });
-    }
-    */
 
     /*
     includeMessageStatus(index, userMessagesIndex){
@@ -163,27 +171,13 @@ class Messages extends Component{
     }
     */
 
-/*
-    showActiveUser(){
-        return (this.props.activeuser) ? <ActiveUserContainer/> : '';
-    }
-*/
 
     render(){
         return(
             <div style={style.outerDivBlock}>
-                {//this.showActiveUser()
-                     }
                 <div className="messagesListWrapper" style={style.messagesListWrapper} >
                     <List>
-                        <Message/>
-                        <Message/>
-                        <Message/>
-                        <Message/>
-                        <Message/>
-                        <Message/>
-                        <Message/>
-                        <Message/>
+                        {this.showMessages()}
                     </List>
                 </div>
             </div>
@@ -195,8 +189,7 @@ class Messages extends Component{
 function matchDispatchToProps(dispatch) {
     return bindActionCreators({
         addUser: addUser,
-        insertMessage: insertMessage,
-        updateMessageStatus: updateMessageStatus
+        insertMessage: insertMessage
     }, dispatch);
 }
 
@@ -247,5 +240,20 @@ var style = {
     }
 };
 
-//export default connect(mapStateToProps, matchDispatchToProps)(Messages);
-export default Messages;
+function matchDispatchToProps(dispatch) {
+    return bindActionCreators({
+        insertMessage: insertMessage
+    }, dispatch);
+}
+
+
+function mapStateToProps(state) {
+    return ({
+        activeRoom: state.activeRoom,
+        socketIO: state.socketobject,
+        profileuser: state.profileuser,
+        chatMessages: state.chatmessages
+    });
+}
+
+export default connect(mapStateToProps, matchDispatchToProps)(Messages);

@@ -26,6 +26,7 @@ class ContentHeader extends Component{
         this.changeIconsState = this.changeIconsState.bind(this);
         this.swipeView = this.swipeView.bind(this);
         this.showActiveRoom = this.showActiveRoom.bind(this);
+        this.closeAndLeaveRoom = this.closeAndLeaveRoom.bind(this);
     }
 
     toggleUserMenu(){
@@ -45,6 +46,11 @@ class ContentHeader extends Component{
 
     swipeView(index){
         this.props.swipePage(index);
+    }
+
+    closeAndLeaveRoom(){
+        this.props.closeActiveRoom();
+        this.props.socketIO.emit("leaveRoom", this.props.activeRoom.roomID);
     }
 
     showActiveRoom(){
@@ -73,7 +79,7 @@ class ContentHeader extends Component{
                             tooltip="Close active chat"
                             tooltipPosition="top-center"
                             onTouchTap={()=>{
-                                this.props.closeActiveRoom();
+                                this.closeAndLeaveRoom();
                             }}
                         >
                             <Close
@@ -227,7 +233,8 @@ function mapStateToProps(state) {
         pageIndex: state.pageIndex,
         showUserMenuValue: state.toggleUserMenu,
         headerSubmenuState: state.headerSubmenuState,
-        activeRoom: state.activeRoom
+        activeRoom: state.activeRoom,
+        socketIO: state.socketobject
     });
 }
 

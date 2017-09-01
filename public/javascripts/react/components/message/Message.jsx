@@ -3,8 +3,9 @@ import Account from 'material-ui/svg-icons/Action/account-circle';
 import {ListItem} from 'material-ui/List';
 import {teal900, teal700, teal400, teal100, teal50} from 'material-ui/styles/colors';
 import IconButton from 'material-ui/IconButton';
-import Contact from 'material-ui/svg-icons/Communication/email';
+import Contact from 'material-ui/svg-icons/Communication/chat';
 import HiddenControlsContainer from '../../redux/containers/messagesContainer/HiddenControlsContainer';
+import moment from 'moment';
 
 
 class Message extends Component{
@@ -17,6 +18,7 @@ class Message extends Component{
 
 
     render(){
+        var {sender, created, message} = this.props.message;
         return(
         <ListItem hoverColor={'#F6F6F6'}
                   style={style.listItem}
@@ -53,11 +55,11 @@ class Message extends Component{
                     </div>
                 </div>
                 <div style={style.messageContent}>
-                    <p style={style.title}>Username</p>
+                    <p style={style.title}>{sender.username}</p>
                     <p style={style.content}>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris sagittis hendrerit nisl et porttitor. Etiam placerat feugiat ligula non blandit. Nam libero eros, rutrum in hendrerit vitae, interdum quis magna.
+                        {message.text}
                     </p>
-                    <p style={style.time}>10 min ago</p>
+                    <p style={style.time}>{moment(created).fromNow()}</p>
                 </div>
             </li>
             {(this.state.hover) ? <HiddenControlsContainer/>: ''}

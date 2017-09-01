@@ -11,23 +11,15 @@ const chatmessages = (state = [], action) => {
                 return item;
             });
 
-        case 'MESSAGE_STATUS':
-            return state.map((item, index)=>{
-               if(index == action.data.userMessagesIndex){
-                   item.messages[item.messages.length-1].status = action.data.status;
-               }
-               return item;
-            });
-
         case 'ADD_MESSAGE':
             if(state.length){
-                var chatIndex = _.findIndex(state, function(o) { return o.sender._id == action.data.sender._id; });
+                var chatIndex = _.findIndex(state, function(o) { return o.room._id == action.data.receiver._id; });
                 if(chatIndex >= 0){
                     return state.map((item, index) => {
                         if (index == chatIndex) {
                             return {
-                                sender: item.sender,
-                                messages: [...item.messages, action.data.message]
+                                room: action.data.receiver,
+                                messages: [...item.messages, action.data]
                             }
                         }
                         return item;
@@ -42,10 +34,13 @@ const chatmessages = (state = [], action) => {
             }
 
         case 'ADD_CHAT':
-            if(!_.find(state, function(o) { return o.sender._id == action.data.sender._id; })){
-                var thisState = state;
-                thisState.push(action.data);
-                return thisState;
+            if(!_.find(state, function(o) { return o.room._id == action.data.receiver._id; })){
+                return [...state,
+                    {
+                        room: action.data.receiver,
+                        messages: [...action.data.messages]
+                    }
+                ];
             }
         default:
             return state;

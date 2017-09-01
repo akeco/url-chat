@@ -17,7 +17,7 @@ const messageSchema = new Schema({
         required: true
     },
     created: {
-        type: String,
+        type: Date,
         default: Date.now
     },
     rating: {

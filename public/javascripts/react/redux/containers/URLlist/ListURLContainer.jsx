@@ -6,7 +6,7 @@ import IconButton from 'material-ui/IconButton';
 import Profile from 'material-ui/svg-icons/Action/perm-identity';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import { getRooms, activeRoom } from '../../actions/index';
+import { getRooms, activeRoom, addChatMessages } from '../../actions/index';
 import LinearProgress from 'material-ui/LinearProgress';
 import axios from 'axios';
 
@@ -16,6 +16,7 @@ class ListURLContainer extends Component{
         this.displayActiveRooms = this.displayActiveRooms.bind(this);
         this.addActiveRoom = this.addActiveRoom.bind(this);
     }
+
 
     componentDidMount(){
         axios.get('/api/rooms').then((response)=>{
@@ -27,6 +28,15 @@ class ListURLContainer extends Component{
 
     addActiveRoom(room){
         this.props.activeRoom(room);
+        this.props.socketIO.emit("joinRoom", room.roomID);
+        axios.get(`/api/messages/${room.roomID}`).then((response)=>{
+            this.props.addChatMessages({
+                receiver: (this.props.activeRoomState) && this.props.activeRoomState,
+                messages: response.data
+            });
+        }).catch((err)=>{
+            console.info("error",err);
+        });
     }
 
     displayActiveRooms(){
@@ -44,10 +54,12 @@ class ListURLContainer extends Component{
                         leftAvatar={<Avatar style={style.avatar} src="https://course_report_production.s3.amazonaws.com/rich/rich_files/rich_files/1678/s300/inceptures-software-school-logo.png" />}
                     >
                         <div style={style.innerWrap}>
-                            <IconButton style={style.memberNumb} iconStyle={style.profileIcon}>
-                                <Profile/>
-                            </IconButton>
-                            <div style={style.counter}>{ (room.members.length) && room.members.length || 0 }</div>
+                            <div style={style.relativeWrap}>
+                                <IconButton style={style.memberNumb} iconStyle={style.profileIcon}>
+                                    <Profile/>
+                                </IconButton>
+                                <div style={style.counter}>{ (room.members.length) && room.members.length || 0 }</div>
+                            </div>
                         </div>
                     </ListItem>
                 );
@@ -209,14 +221,19 @@ var style = {
         position: 'relative'
     },
     innerWrap: {
-        display:'flex',
-        alignItems: 'center',
-        flexDirection: 'column',
         position: 'absolute',
         backgroundColor: teal700,
         height: '100%',
         right: 0,
-        top: 0,
+        top: 0
+    },
+    relativeWrap:{
+        display:'flex',
+        alignItems: 'center',
+        flexDirection: 'column',
+        position: 'relative',
+        height: '100%',
+        width:'100%'
     },
     memberNumb: {
         height: '100%',
@@ -226,8 +243,8 @@ var style = {
         fontSize: 10,
         color: teal50,
         fontWeight: 500,
-        position: 'absolute',
-        bottom: 3
+        alignSelf: 'center',
+        marginTop: -19
     },
     profileIcon:{
         color: teal50
@@ -251,7 +268,8 @@ var style = {
 function matchDispatchToProps(dispatch) {
     return bindActionCreators({
         getRooms: getRooms,
-        activeRoom: activeRoom
+        activeRoom: activeRoom,
+        addChatMessages: addChatMessages
     }, dispatch);
 }
 
@@ -259,7 +277,9 @@ function matchDispatchToProps(dispatch) {
 function mapStateToProps(state) {
     return ({
         rooms: state.rooms,
-        socketIO: state.socketobject
+        socketIO: state.socketobject,
+        chatMessages: state.chatmessages,
+        activeRoomState: state.activeRoom
     });
 }
 
