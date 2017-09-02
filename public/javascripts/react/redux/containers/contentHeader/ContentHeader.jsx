@@ -58,18 +58,7 @@ class ContentHeader extends Component{
             var starState = (this.state.star) ? 'white' : teal50;
             var notificationState = (this.state.notification) ? 'white' : teal50;
             return(
-                <div style={style.headerContentWrapper}>
-                    <IconButton
-                        iconStyle={style.icons}
-                        onTouchTap={()=>{
-                            this.swipeView(0);
-                        }}
-                        className="messagesBack"
-                    >
-                        <ArrowBack
-                            hoverColor="white"
-                        />
-                    </IconButton>
+                <div style={style.headerRightPartDiv}>
                     <Avatar className="headerAvatar" src="https://course_report_production.s3.amazonaws.com/rich/rich_files/rich_files/1678/s300/inceptures-software-school-logo.png" style={style.avatar} />
                     <h4 style={style.title}>{this.props.activeRoom.name}</h4>
                     <div className="iconsWrapper" style={style.iconsWrapper}>
@@ -159,13 +148,31 @@ class ContentHeader extends Component{
     render(){
         return(
             <div style={style.topHeader}>
-                {this.showActiveRoom()}
+                <div style={style.headerContentWrapper}>
+                    <IconButton
+                        iconStyle={style.icons}
+                        onTouchTap={()=>{
+                            this.swipeView(0);
+                        }}
+                        className="messagesBack"
+                    >
+                        <ArrowBack
+                            hoverColor="white"
+                        />
+                    </IconButton>
+                    {this.showActiveRoom()}
+                </div>
             </div>
         );
     }
 }
 
 var style = {
+    headerRightPartDiv: {
+        display: 'flex',
+        flexGrow: 1,
+        alignItems: 'center'
+    },
     headerContentWrapper: {
         display: 'flex',
         width: '100%',

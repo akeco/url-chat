@@ -6,9 +6,10 @@ import IconButton from 'material-ui/IconButton';
 import Profile from 'material-ui/svg-icons/Action/perm-identity';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import { getRooms, activeRoom, addChatMessages } from '../../actions/index';
+import { getRooms, activeRoom, addChatMessages, swipePage } from '../../actions/index';
 import LinearProgress from 'material-ui/LinearProgress';
 import axios from 'axios';
+import $ from 'jquery';
 
 class ListURLContainer extends Component{
     constructor(props){
@@ -34,6 +35,9 @@ class ListURLContainer extends Component{
                 receiver: (this.props.activeRoomState) && this.props.activeRoomState,
                 messages: response.data
             });
+            if($(window).innerWidth() <= 575){
+                this.props.swipePage(1);
+            }
         }).catch((err)=>{
             console.info("error",err);
         });
@@ -269,7 +273,8 @@ function matchDispatchToProps(dispatch) {
     return bindActionCreators({
         getRooms: getRooms,
         activeRoom: activeRoom,
-        addChatMessages: addChatMessages
+        addChatMessages: addChatMessages,
+        swipePage: swipePage
     }, dispatch);
 }
 
@@ -279,7 +284,8 @@ function mapStateToProps(state) {
         rooms: state.rooms,
         socketIO: state.socketobject,
         chatMessages: state.chatmessages,
-        activeRoomState: state.activeRoom
+        activeRoomState: state.activeRoom,
+        pageIndex: state.pageIndex
     });
 }
 
