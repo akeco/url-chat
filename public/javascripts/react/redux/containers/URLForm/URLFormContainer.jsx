@@ -58,13 +58,12 @@ class URLFormContainer extends Component{
                 </form>
                 <IconButton
                     iconStyle={style.icons}
-                    onTouchTap={this.goBack}
+                    onTouchTap={this.goForwards}
                     style={style.arrowIcon}
                     className="messagesForward"
                 >
                     <ArrowForward
                         hoverColor="white"
-                        onTouchTap={this.goForwards}
                     />
                 </IconButton>
             </div>

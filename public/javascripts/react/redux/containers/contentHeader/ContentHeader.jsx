@@ -128,15 +128,14 @@ class ContentHeader extends Component{
                         </IconButton>
                         <IconButton
                             iconStyle={style.icons}
-                            onTouchTap={this.goBack}
                             style={style.arrowIcon}
                             className="messagesForward"
+                            onTouchTap={()=>{
+                                this.swipeView(2);
+                            }}
                         >
                             <ArrowForward
                                 hoverColor="white"
-                                onTouchTap={()=>{
-                                    this.swipeView(2);
-                                }}
                             />
                         </IconButton>
                     </div>
