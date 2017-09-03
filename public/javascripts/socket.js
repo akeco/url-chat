@@ -5,15 +5,15 @@ var randomstring = require('randomstring');
 var axios = require('axios');
 var addRoom = require('../../services/addRoom');
 var saveMessage = require('../../services/saveMessage');
+var leaveRoom = require('../../services/leaveRoom');
+var joinRoom = require('../../services/joinRoom');
+var getActiveRooms = require('../../services/getActiveRooms');
 //var users = new Set();
 
 io.sockets.on('connection', function (socket) {
     console.info("CONNECTED",socket.id);
 
-    //io.sockets.to(socket.id).emit("updateSocketID", socket.id);
-
     socket.on("urlInserted", function (roomData) {
-        //socket.join(roomURL);
         (async ()=>{
             var roomResult = await addRoom(roomData);
             io.sockets.emit("updateRooms", roomResult);
@@ -22,49 +22,35 @@ io.sockets.on('connection', function (socket) {
     });
 
 
-    socket.on('updateID', function (loggedUser) {
-        /*
-        user.update({_id: loggedUser._id},{socketID: socket.id}, function (err) {
-            if (err) return handleError(err);
-            loggedUser.socketID = socket.id;
-            var userObj = {
-                _id: loggedUser._id,
-                username: loggedUser.username,
-                email: loggedUser.email,
-                socketID: loggedUser.socketID
-            };
-
-            io.sockets.emit("profileUpdated", userObj);
-        });
-        */
-    });
-
-
     socket.once('disconnect', function () {
-        //users.delete(socket.id);
-        //io.sockets.emit("updateList", Array.from(users));
+        (async ()=>{
+            await leaveRoom(socket.id);
+            var result = await getActiveRooms();
+            io.sockets.emit("refreshUrlList", result);
+        })();
+
         socket.disconnect();
     });
 
 
-    socket.on("transferStatus", function (data) {
-        socket.to(data.to).emit("messageStatus", data.status);
-    });
-    
-    socket.on("notifyTyping", function (data) {
-        socket.to(data.to).emit("isTyping",{
-            value: data.value,
-            typingUser: data.typingUser
-        });
+    socket.on("joinRoom", function (data) {
+        (async()=>{
+            var result = await joinRoom(data);
+            if(result) io.sockets.emit("refreshRoomsOnJoin", result);
+        })();
+        socket.join(data.room.roomID);
     });
 
-    socket.on("joinRoom", function (roomID) {
-        socket.join(roomID);
+
+    socket.on("leaveRoom", function (data) {
+        socket.leave(data.room.roomID);
+        (async ()=>{
+            await leaveRoom(data);
+            var result = await getActiveRooms();
+            io.sockets.emit("refreshUrlList", result);
+        })();
     });
 
-    socket.on("leaveRoom", function (roomID) {
-        socket.leave(roomID);
-    });
 
     socket.on("sendMessage", function (data) {
         (async()=>{
@@ -72,13 +58,6 @@ io.sockets.on('connection', function (socket) {
             io.sockets.in(data.room.roomID).emit("getMessage", result);
         })();
 
-        /*
-        socket.emit("messageStatus", "Sent");
-        socket.to(data.userID).emit("receiveMessage",{
-            sender: data.sender,
-            message: data.message
-        });
-        */
     });
 
 });

@@ -49,7 +49,7 @@ class URLFormContainer extends Component{
                     bodyStyle={style.snackBarBody}
                     contentStyle={style.snackBarContent}
                     open={this.state.open}
-                    message="New room created"
+                    message={`New room created`}
                     autoHideDuration={4000}
                     onRequestClose={this.handleRequestClose}
                 />
@@ -118,7 +118,8 @@ function mapStateToProps(state) {
     return ({
         pageIndex: state.pageIndex,
         socketIO: state.socketobject,
-        profileuser: state.profileuser
+        profileuser: state.profileuser,
+        activeRoomState: state.activeRoom
     });
 }
 

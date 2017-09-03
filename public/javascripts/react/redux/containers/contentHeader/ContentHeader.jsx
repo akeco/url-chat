@@ -49,18 +49,21 @@ class ContentHeader extends Component{
     }
 
     closeAndLeaveRoom(){
+        this.props.socketIO.emit("leaveRoom", {
+            room: this.props.activeRoomState,
+            user: this.props.profileuser
+        });
         this.props.closeActiveRoom();
-        this.props.socketIO.emit("leaveRoom", this.props.activeRoom.roomID);
     }
 
     showActiveRoom(){
-        if(this.props.activeRoom){
+        if(this.props.activeRoomState){
             var starState = (this.state.star) ? 'white' : teal50;
             var notificationState = (this.state.notification) ? 'white' : teal50;
             return(
                 <div style={style.headerRightPartDiv}>
                     <Avatar className="headerAvatar" src="https://course_report_production.s3.amazonaws.com/rich/rich_files/rich_files/1678/s300/inceptures-software-school-logo.png" style={style.avatar} />
-                    <h4 style={style.title}>{this.props.activeRoom.name}</h4>
+                    <h4 style={style.title}>{this.props.activeRoomState.name}</h4>
                     <div className="iconsWrapper" style={style.iconsWrapper}>
                         <IconButton
                             style={Object.assign({},style.iconExtend, style.closeIcon)}
@@ -198,7 +201,8 @@ var style = {
         fontWeight: 300,
         color: 'white',
         fontSize: 18,
-        marginLeft: 20
+        marginLeft: 20,
+        cursor: 'default'
     },
     avatar: {
         backgroundColor: 'white',
@@ -239,8 +243,9 @@ function mapStateToProps(state) {
         pageIndex: state.pageIndex,
         showUserMenuValue: state.toggleUserMenu,
         headerSubmenuState: state.headerSubmenuState,
-        activeRoom: state.activeRoom,
-        socketIO: state.socketobject
+        activeRoomState: state.activeRoom,
+        socketIO: state.socketobject,
+        profileuser: state.profileuser
     });
 }
 

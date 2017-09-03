@@ -1,6 +1,16 @@
+import { sort_by } from '../../../../../services/utils';
 
 const users = (state = null, action) => {
     switch (action.type) {
+        case 'JOIN_REFRESH_ROOMS':
+
+            var rooms = state.map((item)=>{
+                if(item._id == action.data._id) return action.data;
+                return item;
+            });
+
+             return rooms.sort(sort_by('members', false, function(a){return a.length}));
+
         case 'UPDATE_ROOM_LIST':
             console.info("UPDATE", state, action.data);
             return [...state, action.data];

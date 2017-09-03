@@ -3,6 +3,8 @@ var router = express.Router();
 var { registration } = require('../../services/registration');
 var getActiveRooms = require('../../services/getActiveRooms');
 var getMessages = require('../../services/getMessages');
+var updateSocketID = require('../../services/updateSocketID');
+var getUser = require('../../services/getUser');
 
 router.post('/user/save', function (req, res, next) {
     (async()=>{
@@ -21,6 +23,21 @@ router.get("/rooms", function (req, res, next) {
 router.get("/messages/:roomID", function (req, res, next) {
     (async ()=>{
         var result = await getMessages(req.params.roomID);
+        res.status(200).json(result);
+    })();
+});
+
+router.post("/update/socket", function (req, res, next) {
+    (async ()=>{
+        var result = await updateSocketID(req.body.data);
+        res.status(200).json(result);
+    })();
+});
+
+
+router.put('/user', function(req, res, next) {
+    (async ()=>{
+        var result = await getUser(req.body.data);
         res.status(200).json(result);
     })();
 });

@@ -9,6 +9,7 @@ import {bindActionCreators} from 'redux';
 import { getRooms, activeRoom, addChatMessages, swipePage } from '../../actions/index';
 import LinearProgress from 'material-ui/LinearProgress';
 import axios from 'axios';
+import randomstring from'randomstring';
 import $ from 'jquery';
 
 class ListURLContainer extends Component{
@@ -16,8 +17,12 @@ class ListURLContainer extends Component{
         super(props);
         this.displayActiveRooms = this.displayActiveRooms.bind(this);
         this.addActiveRoom = this.addActiveRoom.bind(this);
+        this.refreshUrlList = this.refreshUrlList.bind(this);
     }
 
+    componentWillMount(){
+        this.props.socketIO.on('refreshUrlList', this.refreshUrlList);
+    }
 
     componentDidMount(){
         axios.get('/api/rooms').then((response)=>{
@@ -27,9 +32,22 @@ class ListURLContainer extends Component{
         });
     }
 
+    refreshUrlList(data){
+        this.props.getRooms(data);
+    }
+
     addActiveRoom(room){
+        if(this.props.activeRoomState){
+            this.props.socketIO.emit("leaveRoom", {
+                room: this.props.activeRoomState,
+                user: this.props.profileuser
+            });
+        }
         this.props.activeRoom(room);
-        this.props.socketIO.emit("joinRoom", room.roomID);
+        this.props.socketIO.emit("joinRoom", {
+            room: room,
+            user: this.props.profileuser
+        });
         axios.get(`/api/messages/${room.roomID}`).then((response)=>{
             this.props.addChatMessages({
                 receiver: (this.props.activeRoomState) && this.props.activeRoomState,
@@ -43,15 +61,16 @@ class ListURLContainer extends Component{
         });
     }
 
+
     displayActiveRooms(){
         if(this.props.rooms){
             return this.props.rooms.map((room)=>{
                 return(
                     <ListItem
-                        key={room._id}
+                        key={randomstring.generate(10)}
                         style={style.listItem}
                         primaryText={room.name}
-                        innerDivStyle={style.innerDiv}
+                        innerDivStyle={Object.assign(style.innerDiv)}
                         onTouchTap={()=>{
                             this.addActiveRoom(room);
                         }}
@@ -62,7 +81,7 @@ class ListURLContainer extends Component{
                                 <IconButton style={style.memberNumb} iconStyle={style.profileIcon}>
                                     <Profile/>
                                 </IconButton>
-                                <div style={style.counter}>{ (room.members.length) && room.members.length || 0 }</div>
+                                <div style={style.counter}>{ (room.members) && room.members.length || 0 }</div>
                             </div>
                         </div>
                     </ListItem>
@@ -81,132 +100,6 @@ class ListURLContainer extends Component{
             </List>
         );
     }
-
-    /*
-    render(){
-        return(
-            <List style={style.list}>
-                <ListItem
-                    style={style.listItem}
-                    primaryText="Google.com"
-                    innerDivStyle={style.innerDiv}
-                    leftAvatar={<Avatar style={style.avatar} src="https://www.wired.com/wp-content/uploads/2015/09/google-logo-1200x630.jpg" />}
-                >
-                    <div style={style.innerWrap}>
-                        <IconButton style={style.memberNumb} iconStyle={style.profileIcon}>
-                            <Profile/>
-                        </IconButton>
-                        <div style={style.counter}>1000</div>
-                    </div>
-                </ListItem>
-                <ListItem
-                    style={style.listItem}
-                    primaryText="Reddit.com"
-                    innerDivStyle={style.innerDiv}
-                    leftAvatar={<Avatar style={style.avatar} src="https://media.glassdoor.com/sqll/796358/reddit-squarelogo-1490630845152.png" />}
-                >
-                    <div style={style.innerWrap}>
-                        <IconButton style={style.memberNumb} iconStyle={style.profileIcon}>
-                            <Profile/>
-                        </IconButton>
-                        <div style={style.counter}>800</div>
-                    </div>
-                </ListItem>
-                <ListItem
-                    style={style.listItem}
-                    primaryText="Github.com"
-                    innerDivStyle={style.innerDiv}
-                    leftAvatar={<Avatar style={style.avatar} src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDdc_GbydIBAy4EDJ4dyfRQfNVuKcJT0dKpMkybNVhwGNMxPrL" />}
-                >
-                    <div style={style.innerWrap}>
-                        <IconButton style={style.memberNumb} iconStyle={style.profileIcon}>
-                            <Profile/>
-                        </IconButton>
-                        <div style={style.counter}>650</div>
-                    </div>
-                </ListItem>
-                <ListItem
-                    style={style.listItem}
-                    primaryText="Slack.com"
-                    innerDivStyle={style.innerDiv}
-                    leftAvatar={<Avatar style={style.avatar} src="https://a.slack-edge.com/436da/marketing/img/meta/app-256.png" />}
-                >
-                    <div style={style.innerWrap}>
-                        <IconButton style={style.memberNumb} iconStyle={style.profileIcon}>
-                            <Profile/>
-                        </IconButton>
-                        <div style={style.counter}>650</div>
-                    </div>
-                </ListItem>
-                <ListItem
-                    style={style.listItem}
-                    primaryText="Paypal.com"
-                    innerDivStyle={style.innerDiv}
-                    leftAvatar={<Avatar style={style.avatar} src="http://www.underconsideration.com/brandnew/archives/paypal_2014_logo_detail.png" />}
-                >
-                    <div style={style.innerWrap}>
-                        <IconButton style={style.memberNumb} iconStyle={style.profileIcon}>
-                            <Profile/>
-                        </IconButton>
-                        <div style={style.counter}>650</div>
-                    </div>
-                </ListItem>
-                <ListItem
-                    style={style.listItem}
-                    primaryText="Apple.com"
-                    innerDivStyle={style.innerDiv}
-                    leftAvatar={<Avatar style={style.avatar} src="https://image.freepik.com/free-icon/apple-logo_318-40184.jpg" />}
-                >
-                    <div style={style.innerWrap}>
-                        <IconButton style={style.memberNumb} iconStyle={style.profileIcon}>
-                            <Profile/>
-                        </IconButton>
-                        <div style={style.counter}>650</div>
-                    </div>
-                </ListItem>
-                <ListItem
-                    style={style.listItem}
-                    primaryText="Samsung.com"
-                    innerDivStyle={style.innerDiv}
-                    leftAvatar={<Avatar style={style.avatar} src="http://wirelesstradersinc.com/wp-content/uploads/2016/02/Samsung-Logo.png" />}
-                >
-                    <div style={style.innerWrap}>
-                        <IconButton style={style.memberNumb} iconStyle={style.profileIcon}>
-                            <Profile/>
-                        </IconButton>
-                        <div style={style.counter}>650</div>
-                    </div>
-                </ListItem>
-                <ListItem
-                    style={style.listItem}
-                    primaryText="Ebay.com"
-                    innerDivStyle={style.innerDiv}
-                    leftAvatar={<Avatar style={style.avatar} src="https://blog.trackduck.com/wp-content/uploads/2015/05/Screen-Shot-2015-05-06-at-14.10.31-310x358.png" />}
-                >
-                    <div style={style.innerWrap}>
-                        <IconButton style={style.memberNumb} iconStyle={style.profileIcon}>
-                            <Profile/>
-                        </IconButton>
-                        <div style={style.counter}>650</div>
-                    </div>
-                </ListItem>
-                <ListItem
-                    style={style.listItem}
-                    primaryText="Gearbest.com"
-                    innerDivStyle={style.innerDiv}
-                    leftAvatar={<Avatar style={style.avatar} src="https://www.trustmus.com/_theme/uploads/x147124339757b164854add257b164854ae18.jpg.pagespeed.ic.9HINIs0HQP.jpg" />}
-                >
-                    <div style={style.innerWrap}>
-                        <IconButton style={style.memberNumb} iconStyle={style.profileIcon}>
-                            <Profile/>
-                        </IconButton>
-                        <div style={style.counter}>650</div>
-                    </div>
-                </ListItem>
-            </List>
-        )
-    }
-    */
 }
 
 var style = {
@@ -285,7 +178,8 @@ function mapStateToProps(state) {
         socketIO: state.socketobject,
         chatMessages: state.chatmessages,
         activeRoomState: state.activeRoom,
-        pageIndex: state.pageIndex
+        pageIndex: state.pageIndex,
+        profileuser: state.profileuser
     });
 }
 

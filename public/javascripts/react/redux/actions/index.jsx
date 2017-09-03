@@ -100,6 +100,13 @@ export const getRooms = data => {
     }
 };
 
+export const joinRefreshRooms = data => {
+    return{
+        type: 'JOIN_REFRESH_ROOMS',
+        data
+    }
+};
+
 export const activeRoom = data => {
     return{
         type: 'ACTIVE_ROOM',
