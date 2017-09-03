@@ -35,11 +35,4 @@ router.post("/update/socket", function (req, res, next) {
 });
 
 
-router.put('/user', function(req, res, next) {
-    (async ()=>{
-        var result = await getUser(req.body.data);
-        res.status(200).json(result);
-    })();
-});
-
 module.exports = router;
