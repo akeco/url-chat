@@ -1,4 +1,5 @@
 import { sort_by } from '../../../../../services/utils';
+import _ from 'lodash';
 
 const users = (state = null, action) => {
     switch (action.type) {
@@ -13,7 +14,21 @@ const users = (state = null, action) => {
 
         case 'UPDATE_ROOM_LIST':
             console.info("UPDATE", state, action.data);
-            return [...state, action.data];
+
+            var exist='';
+            state.forEach((item)=>{
+                console.info(item._id, action.data._id);
+                if(item._id == action.data._id) exist = item._id;
+            });
+
+            if(exist){
+                return state.map((item)=>{
+                    if(item._id == exist) item = action.data;
+                    return item;
+                });
+            }
+            else return [...state, action.data];
+
         case 'GET_ROOMS':
             return action.data;
         default:

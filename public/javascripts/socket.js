@@ -16,9 +16,11 @@ io.sockets.on('connection', function (socket) {
     socket.on("urlInserted", function (roomData) {
         (async ()=>{
             var roomResult = await addRoom(roomData);
-            io.sockets.emit("updateRooms", roomResult);
-            socket.emit("addActiveRoom", roomResult);
-            socket.join(roomData.url);
+            if(roomResult){
+                io.sockets.emit("updateRooms", roomResult);
+                socket.emit("addActiveRoom", roomResult);
+                socket.join(roomData.url);
+            }
         })();
     });
 

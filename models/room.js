@@ -21,6 +21,20 @@ const roomSchema = new Schema({
 
 
 roomSchema.pre('save', function(next) {
+    var self = this;
+    mongoose.model('room', roomSchema).findOne({route: self.name}, function (err, doc) {
+        if (err || !doc) {
+           // console.info("Room doesn't exist");
+            next(true);
+        } else {
+           // console.info("Room exist");
+            next(new Error('Room exist'));
+        }
+    });
+});
+
+
+roomSchema.pre('save', function(next) {
     this.route = this.name.toLowerCase();
     this.name = (this.name.indexOf("www.") !=-1) ? this.name.split("www.")[1] : this.name;
     this.name = (this.name.indexOf("/") !=-1) ? this.name.split("/")[0] : this.name;

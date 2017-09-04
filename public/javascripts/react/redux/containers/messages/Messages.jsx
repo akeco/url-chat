@@ -4,8 +4,6 @@ import Message from '../../../components/message/Message';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {insertMessage} from '../../actions/index';
-import randomstring from 'randomstring';
-import ActiveUserContainer from '../users/ActiveUserContainer';
 import { Observable, BehaviorSubject } from 'rxjs';
 //import triggerWindowState from '../../../components/utils/WindowFocus';
 import _ from 'lodash';
@@ -20,13 +18,7 @@ class Messages extends Component{
             windowFocus: true
         };
         this.showMessages = this.showMessages.bind(this);
-       // this.showActiveUser = this.showActiveUser.bind(this);
-        //this.receiveMessage = this.receiveMessage.bind(this);
         this.getMessage = this.getMessage.bind(this);
-        //this.includeMessageStatus = this.includeMessageStatus.bind(this);
-        //this.handleMessageStatus = this.handleMessageStatus.bind(this);
-        //this.setWebNotification = this.setWebNotification.bind(this);
-        //this.receiveMessageHandleLogic = this.receiveMessageHandleLogic.bind(this);
     }
 
     componentWillMount(){
@@ -40,10 +32,6 @@ class Messages extends Component{
 
     getMessage(data){
         this.props.insertMessage(data);
-/*
-        var containerElement = $(document.querySelector(".messagesListWrapper > div"));
-        $(document.querySelector(".messagesListWrapper")).scrollTop(containerElement.height());
-        */
     }
 
 
@@ -56,120 +44,10 @@ class Messages extends Component{
                 });
             }
         }
-    }
-
-
-
-/*
-    componentWillMount(){
-        this.setWebNotification();
-        //this.activeSubject = new BehaviorSubject(this.props.activeusesr);
-    }
-*/
-
-/*
-    componentDidMount(){
-        triggerWindowState(this, this.props.socketIO, this.props.activeuser);
-    }
-*/
-
-
-/*
-    setWebNotification(){
-        if (Notification.permission === "granted") {
-           // this.notification = new Notification(this.state.windowFocus);
-        }
-
-        else if (Notification.permission !== "denied") {
-            Notification.requestPermission();
-        }
-    }
-*/
-
-
-    /*
-    showMessages(){
-
-        if(this.props.activeuser){
-            var activeReciverID = this.props.activeuser._id;
-            var userMessagesIndex = _.findIndex(this.props.chatMessages, function(o) { return o.sender._id == activeReciverID; });
-            return this.props.chatMessages[userMessagesIndex].messages.map((item, index)=>{
-                return(
-                    <div key={randomstring.generate(7)}
-                         className={ (item.user._id == this.props.profileuser._id) ? 'rightMessage' : 'leftMessage' }
-                    >
-
-                    </div>
-                );
-            });
-        }
-    }
-     /*
-
-
-
-    /*
-    includeMessageStatus(index, userMessagesIndex){
-        const messageStatus = this.props.chatMessages[userMessagesIndex].messages[this.props.chatMessages[userMessagesIndex].messages.length - 1].status;
-        if(messageStatus){
-            return (index == (this.props.chatMessages[userMessagesIndex].messages.length-1)) ? messageStatus : '';
-        }
-    }
-    */
-
-    /*
-    receiveMessageHandleLogic(data, focus){
-        if(this.props.activeuser){
-            if(focus){
-                if(this.props.activeuser._id == data.sender._id){
-                    this.props.socketIO.emit('transferStatus', {
-                        status: 'Seen',
-                        to: data.sender.socketID
-                    });
-                }
-                else{
-                    this.props.socketIO.emit('transferStatus', {
-                        status: 'Delivered',
-                        to: data.sender.socketID
-                    });
-                }
-            }
-            else{
-                this.props.socketIO.emit('transferStatus', {
-                    status: 'Delivered',
-                    to: data.sender.socketID
-                });
-            }
-        }
         else{
-            this.props.socketIO.emit('transferStatus', {
-                status: 'Delivered',
-                to: data.sender.socketID
-            });
+            
         }
     }
-    */
-
-    /*
-    receiveMessage(data){
-        console.info("GOT MESSAGE",data);
-        if(this.state.windowFocus){
-            this.receiveMessageHandleLogic(data, true);
-        }
-        else{
-            if(Notification.permission === "granted"){
-                var options = {
-                    body: data.message.text
-                };
-
-                this.notification = new Notification(data.sender.username, options);
-            }
-            this.receiveMessageHandleLogic(data, false);
-        }
-
-        this.props.insertMessage(data);
-    }
-    */
 
 
     render(){
@@ -185,24 +63,6 @@ class Messages extends Component{
     }
 }
 
-/*
-function matchDispatchToProps(dispatch) {
-    return bindActionCreators({
-        addUser: addUser,
-        insertMessage: insertMessage
-    }, dispatch);
-}
-
-function mapStateToProps(state) {
-    return ({
-        users: state.users,
-        activeuser: state.activeuser,
-        profileuser: state.profileuser,
-        socketIO: state.socketobject,
-        chatMessages: state.chatmessages
-    });
-}
-*/
 
 var style = {
     outerDivBlock:{
