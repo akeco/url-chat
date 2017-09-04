@@ -33,7 +33,17 @@ app.use('/', index);
 app.use('/api', api);
 
 
-mongoose.connect(process.env.MONGODB);
+mongoose.connection.on('error',function (err) {
+  console.log('Mongoose default connection error: ' + err);
+});
+
+try {
+  mongoose.connect(process.env.MONGODB);
+}
+catch (err){
+  console.info("Mongo connection error",err);
+}
+
 require('./models/message');
 require('./models/room');
 require('./models/user');

@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var { registration } = require('../../services/registration');
+var registration = require('../../services/registration');
 var getActiveRooms = require('../../services/getActiveRooms');
 var getMessages = require('../../services/getMessages');
 var updateSocketID = require('../../services/updateSocketID');

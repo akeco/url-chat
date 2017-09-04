@@ -2,9 +2,10 @@ import React, {Component} from 'react';
 import {teal900, teal50} from 'material-ui/styles/colors';
 import IconButton from 'material-ui/IconButton';
 import ArrowBack from 'material-ui/svg-icons/Navigation/arrow-back';
+import CloseIcon from 'material-ui/svg-icons/Navigation/close';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {swipePage} from '../../actions/index';
+import {swipePage, toggleUsersMenu} from '../../actions/index';
 import UserFormContainer from '../userForm/UserFormContainer';
 import '../../../../../stylesheets/less/userSidebarMenu.less';
 
@@ -12,10 +13,15 @@ class RightUserSidebar extends Component{
     constructor(props){
         super(props);
         this.goBack = this.goBack.bind(this);
+        this.toggleUserMenu = this.toggleUserMenu.bind(this);
     }
 
     goBack(){
         this.props.swipePage(1);
+    }
+
+    toggleUserMenu(){
+        this.props.toggleUsersMenu(false);
     }
 
     render(){
@@ -31,9 +37,15 @@ class RightUserSidebar extends Component{
                         onTouchTap={this.goBack}
                         className="messagesBack"
                     >
-                        <ArrowBack
-                            hoverColor="white"
-                        />
+                        <ArrowBack hoverColor="white"/>
+                    </IconButton>
+                    <IconButton
+                        style={style.arrowButton}
+                        iconStyle={style.icons}
+                        className="closeRightMenu"
+                        onTouchTap={this.toggleUserMenu}
+                    >
+                        <CloseIcon hoverColor="white"/>
                     </IconButton>
                     <UserFormContainer/>
                 </div>
@@ -67,7 +79,8 @@ const style = {
 
 function matchDispatchToProps(dispatch) {
     return bindActionCreators({
-        swipePage: swipePage
+        swipePage: swipePage,
+        toggleUsersMenu: toggleUsersMenu
     }, dispatch);
 }
 

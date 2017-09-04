@@ -2,7 +2,7 @@ var randomstring = require('randomstring');
 var passwordHash = require('password-hash');
 var userModel = require('../models/user');
 
-exports.registration = async function (data) {
+module.exports = async function (data) {
     var newUser =  new userModel ({
         username: data.username,
         password: passwordHash.generate('pass'),

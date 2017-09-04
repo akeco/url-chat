@@ -28,6 +28,7 @@ module.exports = async function (data) {
             var roomResult = await roomModel.findOne({_id: `${filtered._id}`});
             roomResult.members = _.filter(roomResult.members, function(o) { return o.socketID !=  `${data}` });
             await roomResult.save();
+            console.info("CLOSED");
         }
     }
 

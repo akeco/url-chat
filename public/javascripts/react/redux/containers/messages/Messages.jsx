@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import {List, ListItem} from 'material-ui/List';
+import LinearProgress from 'material-ui/LinearProgress';
+import {teal50} from 'material-ui/styles/colors';
 import Message from '../../../components/message/Message';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
@@ -45,7 +47,7 @@ class Messages extends Component{
             }
         }
         else{
-            
+            return <LinearProgress style={style.loader} color={teal50} mode="indeterminate" />;
         }
     }
 
@@ -65,6 +67,9 @@ class Messages extends Component{
 
 
 var style = {
+    loader: {
+      marginTop: -23
+    },
     outerDivBlock:{
         height:'100%',
         display: 'flex',

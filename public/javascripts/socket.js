@@ -1,19 +1,30 @@
 var server = require('../../bin/www');
 var io = require('socket.io').listen(server);
-var {registration} = require('../../services/registration');
-var randomstring = require('randomstring');
-var axios = require('axios');
+var registration = require('../../services/registration');
 var addRoom = require('../../services/addRoom');
 var saveMessage = require('../../services/saveMessage');
 var leaveRoom = require('../../services/leaveRoom');
 var joinRoom = require('../../services/joinRoom');
 var getActiveRooms = require('../../services/getActiveRooms');
-//var users = new Set();
 
 io.sockets.on('connection', function (socket) {
     console.info("CONNECTED",socket.id);
 
     socket.on("urlInserted", function (roomData) {
+
+        if(roomData.activeRoom){
+            socket.leave(roomData.activeRoom.roomID);
+            (async ()=>{
+                await leaveRoom({
+                    user: roomData.user,
+                    room: roomData.activeRoom
+                });
+                var result = await getActiveRooms();
+                if(result) io.sockets.emit("refreshUrlList", result);
+            })();
+        }
+
+
         (async ()=>{
             var roomResult = await addRoom(roomData);
             if(roomResult){
@@ -50,7 +61,7 @@ io.sockets.on('connection', function (socket) {
         (async ()=>{
             await leaveRoom(data);
             var result = await getActiveRooms();
-            io.sockets.emit("refreshUrlList", result);
+            if(result) io.sockets.emit("refreshUrlList", result);
         })();
     });
 
