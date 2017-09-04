@@ -37,17 +37,30 @@ class ListURLContainer extends Component{
     }
 
     addActiveRoom(room){
-        if(this.props.activeRoomState){
+        if(this.props.activeRoomState && this.props.activeRoomState._id != room._id){
             this.props.socketIO.emit("leaveRoom", {
                 room: this.props.activeRoomState,
                 user: this.props.profileuser
             });
         }
-        this.props.activeRoom(room);
-        this.props.socketIO.emit("joinRoom", {
-            room: room,
-            user: this.props.profileuser
-        });
+
+        if(this.props.activeRoomState){
+            if(this.props.activeRoomState._id != room._id){
+                this.props.activeRoom(room);
+                this.props.socketIO.emit("joinRoom", {
+                    room: room,
+                    user: this.props.profileuser
+                });
+            }
+        }
+        else{
+            this.props.activeRoom(room);
+            this.props.socketIO.emit("joinRoom", {
+                room: room,
+                user: this.props.profileuser
+            });
+        }
+
         axios.get(`/api/messages/${room.roomID}`).then((response)=>{
             this.props.addChatMessages({
                 receiver: (this.props.activeRoomState) && this.props.activeRoomState,

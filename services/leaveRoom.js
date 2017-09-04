@@ -8,13 +8,26 @@ module.exports = async function (data) {
     if(data instanceof Object){
         var result = await roomModel.findOne({_id: `${data.room._id}`});
         result.members = _.filter(result.members, function(o) { return o._id !=  `${data.user._id}` });
-        result = await result.save();
-        return result;
+        try {
+            result = await result.save();
+        }
+        catch (err){
+            console.info("Error",err);
+        }
+        finally {
+            return result;
+        }
     }
     else{
-        var result = await roomModel.find({members: {$not: {$size: 0}}});
-        if(result){
+        var result = '';
+        try {
+            result = await roomModel.find({members: {$not: {$size: 0}}});
+        }
+        catch (err){
+            console.info("Error",err);
+        }
 
+        if(result){
             var filtered = '';
             await result.forEach((item)=>{
                 _.find(item.members, function(o) {
@@ -25,10 +38,22 @@ module.exports = async function (data) {
                 });
             });
 
-            var roomResult = await roomModel.findOne({_id: `${filtered._id}`});
-            roomResult.members = _.filter(roomResult.members, function(o) { return o.socketID !=  `${data}` });
-            await roomResult.save();
-            console.info("CLOSED");
+            var roomResult = '';
+            try {
+                roomResult = await roomModel.findOne({_id: `${filtered._id}`});
+            }
+            catch (err){
+                console.info("Error",err);
+            }
+            if(roomResult){
+                roomResult.members = _.filter(roomResult.members, function(o) { return o.socketID != `${data}` });
+                try {
+                    await roomResult.save();
+                }
+                catch (err){
+                    console.info("Error",err);
+                }
+            }
         }
     }
 
