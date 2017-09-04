@@ -9,7 +9,7 @@ import NotificationsNone from 'material-ui/svg-icons/Social/notifications-none';
 import Menu from 'material-ui/svg-icons/Navigation/menu';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {showHeaderSubmenu} from '../../actions/index';
+import {showHeaderSubmenu, closeActiveRoom, swipePage} from '../../actions/index';
 import '../../../../../stylesheets/less/subheader.less';
 
 class SubHeader extends Component{
@@ -19,6 +19,7 @@ class SubHeader extends Component{
             notification: false,
             star: false
         };
+        this.closeAndLeaveRoom = this.closeAndLeaveRoom.bind(this);
     }
 
     toggIconChange(icon, bordered, full){
@@ -30,6 +31,16 @@ class SubHeader extends Component{
         this.setState({
             [icon]: stateVal
         });
+    }
+
+    closeAndLeaveRoom(){
+        this.props.socketIO.emit("leaveRoom", {
+            room: this.props.activeRoomState,
+            user: this.props.profileuser
+        });
+        this.props.closeActiveRoom();
+        this.props.showHeaderSubmenu(false);
+        this.props.swipePage(0);
     }
 
     render(){
@@ -46,6 +57,9 @@ class SubHeader extends Component{
                   <IconButton
                       style={Object.assign({},style.iconExtend, style.closeIcon)}
                       iconStyle={style.icons}
+                      onTouchTap={()=>{
+                          this.closeAndLeaveRoom();
+                      }}
                   >
                       <Close/>
                   </IconButton>
@@ -88,18 +102,14 @@ var style = {
         marginRight: 10
     },
     outer: {
-        //backgroundColor: '#D8D8D8',
-        //backgroundColor: 'white',
         backgroundColor: teal200,
         borderBottom: '1px solid #CDC9C9',
         boxSizing: 'border-box',
         display: 'flex',
-        alignItems: 'center',
-        //boxShadow: '0px 2px 2px 0px rgba(0,0,0,0.2)'
+        alignItems: 'center'
     },
     icons:{
-        color: 'white',
-        //color: teal600
+        color: 'white'
     },
     iconExtend: {
         width:35,
@@ -113,13 +123,18 @@ var style = {
 
 function matchDispatchToProps(dispatch) {
     return bindActionCreators({
-        showHeaderSubmenu: showHeaderSubmenu
+        showHeaderSubmenu: showHeaderSubmenu,
+        closeActiveRoom: closeActiveRoom,
+        swipePage: swipePage
     }, dispatch);
 }
 
 function mapStateToProps(state) {
     return ({
-        headerSubmenuState: state.headerSubmenuState
+        headerSubmenuState: state.headerSubmenuState,
+        socketIO: state.socketobject,
+        activeRoomState: state.activeRoom,
+        profileuser: state.profileuser
     });
 }
 
