@@ -22,7 +22,7 @@ const roomSchema = new Schema({
 
 roomSchema.pre('save', function(next) {
     var self = this;
-    mongoose.model('room', roomSchema).findOne({route: self.name}, function (err, doc) {
+    mongoose.model('rooms', roomSchema).findOne({route: self.name}, function (err, doc) {
         if (err || !doc) {
            // console.info("Room doesn't exist");
             next(true);

@@ -11,5 +11,6 @@ module.exports = async function (data) {
     });
 
     var message = await newMessage.save();
-    return message;
+    if(message) return message;
+    return;
 };

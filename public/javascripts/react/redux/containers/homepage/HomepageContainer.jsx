@@ -42,6 +42,16 @@ class Homepage extends Component{
                 });
             }
         }
+
+        $(window).on("navigate", function (event, data) {
+            var direction = data.state.direction;
+            if (direction == 'back') {
+                console.info("back");
+            }
+            if (direction == 'forward') {
+                // do something else
+            }
+        });
     }
 
     handleSwipe(index){

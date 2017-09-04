@@ -10,19 +10,16 @@ module.exports = async function (data) {
     });
 
     var userObject = {};
-    try{
-        user = await newUser.save();
+    user = await newUser.save();
+
+    if(user){
         userObject = {
             _id: user._id,
             username: user.username,
             socketID: user.socketID,
             savedSettings: user.savedSettings
         };
-    }
-    catch(err){
-        console.info("Error",err);
-    }
-    finally {
         return userObject;
     }
+    return;
 };

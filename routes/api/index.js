@@ -9,7 +9,7 @@ var getUser = require('../../services/getUser');
 router.post('/user/save', function (req, res, next) {
     (async()=>{
         var profile = await registration(req.body.data.user);
-        res.status(200).json(profile);
+        if(profile) res.status(200).json(profile);
     })();
 });
 
@@ -23,7 +23,7 @@ router.get("/rooms", function (req, res, next) {
 router.get("/messages/:roomID", function (req, res, next) {
     (async ()=>{
         var result = await getMessages(req.params.roomID);
-        res.status(200).json(result);
+        if(result) res.status(200).json(result);
     })();
 });
 

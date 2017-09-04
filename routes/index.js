@@ -12,7 +12,7 @@ router.get('/', function(req, res, next) {
 router.post('/user', function(req, res, next) {
   (async ()=>{
     var result = await getUser(req.body.data);
-    res.status(200).json(result);
+    if(result) res.status(200).json(result);
   })();
 });
 

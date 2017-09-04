@@ -8,28 +8,14 @@ module.exports = async function (data) {
     if(data instanceof Object){
         var result = await roomModel.findOne({_id: `${data.room._id}`});
         result.members = _.filter(result.members, function(o) { return o._id !=  `${data.user._id}` });
-        try {
-            result = await result.save();
-        }
-        catch (err){
-            console.info("Error",err);
-        }
-        finally {
-            return result;
-        }
+        result = await result.save();
+        return result;
     }
     else{
-        var result = '';
-        try {
-            result = await roomModel.find({members: {$not: {$size: 0}}});
-        }
-        catch (err){
-            console.info("Error",err);
-        }
-
+        var result = await roomModel.find({members: {$not: {$size: 0}}});
         if(result){
             var filtered = '';
-            await result.forEach((item)=>{
+            result.forEach((item)=>{
                 _.find(item.members, function(o) {
                     if(o.socketID == data){
                         filtered = item;
@@ -38,13 +24,8 @@ module.exports = async function (data) {
                 });
             });
 
-            var roomResult = '';
-            try {
-                roomResult = await roomModel.findOne({_id: `${filtered._id}`});
-            }
-            catch (err){
-                console.info("Error",err);
-            }
+            var roomResult = await roomModel.findOne({_id: `${filtered._id}`});
+
             if(roomResult){
                 roomResult.members = _.filter(roomResult.members, function(o) { return o.socketID != `${data}` });
                 try {

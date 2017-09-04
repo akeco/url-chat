@@ -31,6 +31,7 @@ class Wrapper extends Component{
             }
             else{
                 var user = JSON.parse(window.localStorage.getItem("currentUser"));
+
                 axios.post("/user",{
                     data: {
                         username: user && user.username,
@@ -41,7 +42,8 @@ class Wrapper extends Component{
                     this.props.setProfileUser(response.data);
                 }).catch((err)=>{
                     console.info(err);
-                })
+                });
+
             }
 
         });

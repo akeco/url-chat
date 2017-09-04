@@ -11,7 +11,6 @@ io.sockets.on('connection', function (socket) {
     console.info("CONNECTED",socket.id);
 
     socket.on("urlInserted", function (roomData) {
-
         if(roomData.activeRoom){
             socket.leave(roomData.activeRoom.roomID);
             (async ()=>{
@@ -23,7 +22,6 @@ io.sockets.on('connection', function (socket) {
                 if(result) io.sockets.emit("refreshUrlList", result);
             })();
         }
-
 
         (async ()=>{
             var roomResult = await addRoom(roomData);
@@ -40,9 +38,8 @@ io.sockets.on('connection', function (socket) {
         (async ()=>{
             await leaveRoom(socket.id);
             var result = await getActiveRooms();
-            io.sockets.emit("refreshUrlList", result);
+            if(result) io.sockets.emit("refreshUrlList", result);
         })();
-
         socket.disconnect();
     });
 
@@ -69,7 +66,7 @@ io.sockets.on('connection', function (socket) {
     socket.on("sendMessage", function (data) {
         (async()=>{
             var result = await saveMessage(data);
-            io.sockets.in(data.room.roomID).emit("getMessage", result);
+            if(result) io.sockets.in(data.room.roomID).emit("getMessage", result);
         })();
 
     });
