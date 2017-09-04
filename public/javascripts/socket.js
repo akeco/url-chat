@@ -28,7 +28,7 @@ io.sockets.on('connection', function (socket) {
             if(roomResult){
                 io.sockets.emit("updateRooms", roomResult);
                 socket.emit("addActiveRoom", roomResult);
-                socket.join(roomData.url);
+                socket.join(roomResult.roomID);
             }
         })();
     });
@@ -47,9 +47,11 @@ io.sockets.on('connection', function (socket) {
     socket.on("joinRoom", function (data) {
         (async()=>{
             var result = await joinRoom(data);
-            if(result) io.sockets.emit("refreshRoomsOnJoin", result);
+            if(result) {
+                io.sockets.emit("refreshRoomsOnJoin", result);
+                socket.join(data.room.roomID);
+            }
         })();
-        socket.join(data.room.roomID);
     });
 
 
