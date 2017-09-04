@@ -11,6 +11,9 @@ class MessageForm extends Component{
     constructor(props){
         super(props);
         this.sendMessage = this.sendMessage.bind(this);
+        this.state = {
+            inputFocus: false
+        };
     }
 
     sendMessage(event){
@@ -48,7 +51,24 @@ class MessageForm extends Component{
                     >
                         <input type="file" style={style.uploadInput} />
                     </FlatButton>
-                    <textarea style={style.inputText} ref="message" placeholder="Type message..."/>
+                    <textarea
+                        style={Object.assign(style.inputText,{
+                            backgroundColor: (this.state.inputFocus) ? 'rgba(255,255,255,0.6)' : 'transparent'
+                        })}
+                        ref="message"
+                        placeholder="Type message..."
+                        onFocus={()=>{
+                            this.setState({
+                                inputFocus: true
+                            })
+                        }}
+
+                        onBlur={()=>{
+                            this.setState({
+                                inputFocus: false
+                            })
+                        }}
+                    />
                     <FlatButton
                         style={style.sendButtonStyle}
                         onTouchTap={this.sendMessage}
@@ -101,7 +121,6 @@ var style = {
     },
     inputText: {
         outline:'none',
-        backgroundColor: 'transparent',
         border: '2px solid white',
         height: 60,
         fontSize: 16,
