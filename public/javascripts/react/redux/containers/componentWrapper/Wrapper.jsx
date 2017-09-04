@@ -67,7 +67,6 @@ class Wrapper extends Component{
 
         this.socket.on('updateRooms', (data)=>{
             this.props.updateRoomList(data);
-            //this.props.activeRoom(data);
         });
 
 
@@ -75,6 +74,9 @@ class Wrapper extends Component{
             this.props.joinRefreshRooms(data);
         });
 
+        this.socket.on('addActiveRoom', (data)=>{
+            this.props.activeRoom(data);
+        });
     }
 
 

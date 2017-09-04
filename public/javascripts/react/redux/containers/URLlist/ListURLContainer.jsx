@@ -61,7 +61,6 @@ class ListURLContainer extends Component{
         });
     }
 
-
     displayActiveRooms(){
         if(this.props.rooms){
             return this.props.rooms.map((room)=>{

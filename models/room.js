@@ -19,7 +19,6 @@ const roomSchema = new Schema({
     }
 });
 
-var roomModel = mongoose.model('rooms', roomSchema);
 
 roomSchema.pre('save', function(next) {
     this.route = this.name.toLowerCase();
@@ -32,4 +31,4 @@ roomSchema.pre('save', function(next) {
 });
 
 
-module.exports = roomModel;
+module.exports = mongoose.model('rooms', roomSchema);

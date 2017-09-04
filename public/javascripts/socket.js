@@ -17,6 +17,7 @@ io.sockets.on('connection', function (socket) {
         (async ()=>{
             var roomResult = await addRoom(roomData);
             io.sockets.emit("updateRooms", roomResult);
+            socket.emit("addActiveRoom", roomResult);
             socket.join(roomData.url);
         })();
     });
