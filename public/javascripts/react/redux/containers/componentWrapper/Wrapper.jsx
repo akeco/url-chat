@@ -10,8 +10,18 @@ import {updateProfileSocket, setProfileUser, setSocketObject, setTemporaryUser, 
 class Wrapper extends Component{
     constructor(props){
         super(props);
-        this.sendMessage = this.sendMessage.bind(this);
         this.updateSocketID = this.updateSocketID.bind(this);
+    }
+
+    componentDidMount(){
+        $(window).on('beforeunload', function () {
+            if(this.props.activeRoomState){
+                this.props.socketIO.emit("leaveRoom", {
+                    room: this.props.activeRoomState,
+                    user: this.props.profileuser
+                });
+            }
+        });
     }
 
     componentWillMount(){
@@ -86,18 +96,6 @@ class Wrapper extends Component{
         this.props.updateProfileSocket(data);
     }
 
-    sendMessage(event){
-        event.preventDefault();
-        var messages = this.state.messages;
-        messages.push(this.refs.message.value);
-        this.setState({
-            messages: messages
-        });
-        this.socket.emit("message", {
-            id: this.refs.id.value,
-            text: this.refs.message.value
-        });
-    }
 
     render(){
         return(
@@ -125,8 +123,9 @@ function matchDispatchToProps(dispatch) {
 
 function mapStateToProps(state) {
     return ({
-        profiluser: state.profileuser,
-        socketIO: state.socketobject
+        profileuser: state.profileuser,
+        socketIO: state.socketobject,
+        activeRoomState: state.activeRoom
     });
 }
 
