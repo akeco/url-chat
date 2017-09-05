@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Account from 'material-ui/svg-icons/Action/account-circle';
 import {ListItem} from 'material-ui/List';
-import {teal900, teal700, teal400, teal100, teal50} from 'material-ui/styles/colors';
+import {teal900, teal800, teal700, teal400, teal100, teal50} from 'material-ui/styles/colors';
 import IconButton from 'material-ui/IconButton';
 import Contact from 'material-ui/svg-icons/Communication/chat';
 import HiddenControlsContainer from '../../redux/containers/messagesContainer/HiddenControlsContainer';
@@ -103,12 +103,12 @@ const style = {
         marginBottom: 7
     },
     content: {
-        color: teal900,
+        color: teal800,
         fontSize: '14px',
         marginTop: 0,
         marginBottom: 7,
         lineHeight: '20px',
-        fontWeight: 200
+        fontWeight: 400
     },
     time:{
         color: teal400,

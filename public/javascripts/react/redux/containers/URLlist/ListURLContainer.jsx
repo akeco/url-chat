@@ -70,7 +70,7 @@ class ListURLContainer extends Component{
                 this.props.swipePage(1);
             }
         }).catch((err)=>{
-            console.info("error",err);
+           // console.info("error",err);
         });
     }
 
