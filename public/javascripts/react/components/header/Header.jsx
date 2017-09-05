@@ -11,6 +11,7 @@ import MenuItem from 'material-ui/MenuItem';
 import Account from 'material-ui/svg-icons/Action/account-circle';
 import Settings from 'material-ui/svg-icons/Action/settings';
 import {connect} from 'react-redux';
+import {withRouter} from 'react-router-dom';
 import {bindActionCreators} from 'redux';
 
 const muiTheme = getMuiTheme({
@@ -22,6 +23,12 @@ const muiTheme = getMuiTheme({
 class Header extends Component{
     constructor(props){
         super(props);
+        this.signOut = this.signOut.bind(this);
+    }
+
+    signOut(){
+        localStorage.removeItem("currentUser");
+        this.props.history.push('/login');
     }
 
     render(){
@@ -56,7 +63,10 @@ class Header extends Component{
                                       targetOrigin={{horizontal: 'right', vertical: 'top'}}
                                   >
                                       <MenuItem primaryText="Profile" />
-                                      <MenuItem primaryText="Sign out" />
+                                      <MenuItem
+                                          primaryText="Sign out"
+                                          onTouchTap={this.signOut}
+                                      />
                                   </IconMenu>
                               }
                           >
@@ -150,4 +160,4 @@ function mapStateToProps(state) {
     });
 }
 
-export default connect(mapStateToProps)(Header);
+export default withRouter(connect(mapStateToProps)(Header));
