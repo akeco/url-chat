@@ -34,6 +34,7 @@ class MessageForm extends Component{
     }
 
     render(){
+        var focusedForm = (this.state.inputFocus) ? 'focusFormInput' : '';
         return(
             <div style={style.wrapper}>
                 <form
@@ -52,9 +53,8 @@ class MessageForm extends Component{
                         <input type="file" style={style.uploadInput} />
                     </FlatButton>
                     <textarea
-                        style={Object.assign(style.inputText,{
-                            backgroundColor: (this.state.inputFocus) ? 'rgba(255,255,255,0.6)' : 'transparent'
-                        })}
+                        className={focusedForm}
+                        style={Object.assign(style.inputText)}
                         ref="message"
                         placeholder="Type message..."
                         onFocus={()=>{
@@ -130,7 +130,8 @@ var style = {
         color: teal700,
         resize: 'none',
         padding: '10px 20px',
-        lineHeight: '20px'
+        lineHeight: '20px',
+        backgroundColor:  'transparent'
     },
     addIcon: {
         fill: 'white'

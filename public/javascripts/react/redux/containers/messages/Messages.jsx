@@ -3,6 +3,7 @@ import {List, ListItem} from 'material-ui/List';
 import LinearProgress from 'material-ui/LinearProgress';
 import {teal50} from 'material-ui/styles/colors';
 import Message from '../../../components/message/Message';
+import randomstring from 'randomstring';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {insertMessage} from '../../actions/index';
@@ -36,13 +37,14 @@ class Messages extends Component{
         this.props.insertMessage(data);
     }
 
-
     showMessages(){
         if(this.props.activeRoom && this.props.chatMessages.length){
-            var roomObject = _.find(this.props.chatMessages, (o)=>{ return o.room._id == this.props.activeRoom._id; });
+            var roomObject = _.find(this.props.chatMessages, (o)=>{
+                return o.room._id == this.props.activeRoom._id;
+            });
             if(roomObject){
                 return roomObject.messages.map((item)=>{
-                    return <Message key={item._id} message={item} />;
+                    return <Message key={ item._id } message={item} />;
                 });
             }
         }
@@ -101,7 +103,6 @@ var style = {
         borderTopRightRadius: 0,
         backgroundColor: 'white',
         color: 'rgba(0,0,0,0.8)'
-        //backgroundColor: 'lightslategray'
     }
 };
 

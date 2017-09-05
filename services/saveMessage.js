@@ -5,7 +5,7 @@ module.exports = async function (data) {
     var newMessage = new messageModel({
         sender: data.sender,
         receiver: data.room,
-        roomSocketID: data.room.roomID,
+        roomID: data.room.roomID,
         message: data.message,
         created: data.message.created
     });
