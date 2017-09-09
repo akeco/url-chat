@@ -37,6 +37,7 @@ roomSchema.pre('save', function(next) {
 roomSchema.pre('save', function(next) {
     this.route = this.name.toLowerCase();
     this.name = (this.name.indexOf("www.") !=-1) ? this.name.split("www.")[1] : this.name;
+    this.name = (this.name.indexOf("://") !=-1) ? this.name.split("://")[1] : this.name;
     this.name = (this.name.indexOf("/") !=-1) ? this.name.split("/")[0] : this.name;
     this.name = (this.name.indexOf("?") !=-1) ? this.name.split("?")[0] : this.name;
     this.name = this.name.toLowerCase();

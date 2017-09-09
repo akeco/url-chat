@@ -10,6 +10,8 @@ import { getRooms, activeRoom, addChatMessages, swipePage } from '../../actions/
 import LinearProgress from 'material-ui/LinearProgress';
 import axios from 'axios';
 import $ from 'jquery';
+import ReactTooltip from 'react-tooltip';
+import {primaryTextFunction} from '../../../../../../services/utils';
 
 class ListURLContainer extends Component{
     constructor(props){
@@ -99,6 +101,7 @@ class ListURLContainer extends Component{
         });
     }
 
+
     displayActiveRooms(){
         if(this.props.rooms){
             return this.props.rooms.map((room)=>{
@@ -108,7 +111,7 @@ class ListURLContainer extends Component{
                     <div key={theKey} >
                         <ListItem
                             style={style.listItem}
-                            primaryText={room.name}
+                            primaryText={primaryTextFunction(room.name, 23)}
                             innerDivStyle={Object.assign(style.innerDiv)}
                             onTouchTap={()=>{
                                 this.toggleSublist(theKey);
@@ -127,17 +130,21 @@ class ListURLContainer extends Component{
                         <div ref={theKey} style={Object.assign(toggleElement, style.wrapSubList)}>
                             <List className="subList" style={style.subList}>
                                 { room.rooms.map((item)=>{
-                                    return <ListItem
-                                        className="urlListItem"
-                                        key={item._id}
-                                        primaryText={item.route}
-                                        innerDivStyle={style.subListItemInner}
-                                        style={style.subListItem}
-                                        secondaryText={item.members.length}
-                                        onTouchTap={()=>{
-                                            this.addActiveRoom(item);
-                                        }}
-                                    />
+                                    return <div key={item._id}>
+                                        <div data-tip={item.route}>
+                                            <ListItem
+                                                className="urlListItem"
+                                                primaryText={primaryTextFunction(item.route, 30)}
+                                                innerDivStyle={style.subListItemInner}
+                                                style={style.subListItem}
+                                                secondaryText={item.members.length}
+                                                onTouchTap={()=>{
+                                                    this.addActiveRoom(item);
+                                                }}
+                                            />
+                                        </div>
+                                        <ReactTooltip place="top" type="dark" effect="solid"/>
+                                    </div>
                                 }) }
                             </List>
                         </div>

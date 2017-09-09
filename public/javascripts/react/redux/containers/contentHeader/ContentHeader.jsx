@@ -13,6 +13,7 @@ import Menu from 'material-ui/svg-icons/Navigation/menu';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {toggleUsersMenu, swipePage, showHeaderSubmenu, closeActiveRoom} from '../../actions/index';
+import {primaryTextFunction} from '../../../../../../services/utils';
 
 class ContentHeader extends Component{
     constructor(props){
@@ -65,7 +66,7 @@ class ContentHeader extends Component{
                     <Avatar className="headerAvatar" src="https://course_report_production.s3.amazonaws.com/rich/rich_files/rich_files/1678/s300/inceptures-software-school-logo.png" style={style.avatar} />
                     <div>
                         <h4 style={style.title}>{this.props.activeRoomState.name}</h4>
-                        <p style={style.route}>{this.props.activeRoomState.route}</p>
+                        <p style={style.route}>{primaryTextFunction(this.props.activeRoomState.route, 40)}</p>
                     </div>
                     <div className="iconsWrapper" style={style.iconsWrapper}>
                         <IconButton
