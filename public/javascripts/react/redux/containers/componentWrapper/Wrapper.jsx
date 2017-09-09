@@ -6,7 +6,7 @@ import {withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {updateProfileSocket, setProfileUser, setSocketObject, setTemporaryUser,
-    updateRoomList, activeRoom, joinRefreshRooms, addChatMessages} from '../../actions/index';
+    updateRoomList, activeRoom, joinRefreshRooms, addChatMessages, swipePage} from '../../actions/index';
 
 class Wrapper extends Component{
     constructor(props){
@@ -133,7 +133,8 @@ function matchDispatchToProps(dispatch) {
         updateRoomList: updateRoomList,
         activeRoom: activeRoom,
         joinRefreshRooms: joinRefreshRooms,
-        addChatMessages: addChatMessages
+        addChatMessages: addChatMessages,
+        swipePage: swipePage
     }, dispatch);
 }
 
