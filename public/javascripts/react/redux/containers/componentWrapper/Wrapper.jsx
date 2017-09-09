@@ -5,7 +5,8 @@ import axios from 'axios';
 import {withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {updateProfileSocket, setProfileUser, setSocketObject, setTemporaryUser, updateRoomList, activeRoom, joinRefreshRooms} from '../../actions/index';
+import {updateProfileSocket, setProfileUser, setSocketObject, setTemporaryUser,
+    updateRoomList, activeRoom, joinRefreshRooms, addChatMessages} from '../../actions/index';
 
 class Wrapper extends Component{
     constructor(props){
@@ -87,7 +88,21 @@ class Wrapper extends Component{
         });
 
         this.socket.on('addActiveRoom', (data)=>{
-            this.props.activeRoom(data);
+            (async ()=>{
+                await this.props.activeRoom(data);
+                axios.get(`/api/messages/${data.roomID}`).then((response)=>{
+                    this.props.addChatMessages({
+                        receiver: (this.props.activeRoomState) && this.props.activeRoomState,
+                        messages: response.data
+                    });
+                    if($(window).innerWidth() <= 575){
+                        this.props.swipePage(1);
+                    }
+                }).catch((err)=>{
+                    // console.info("error",err);
+                });
+            })();
+
         });
     }
 
@@ -117,7 +132,8 @@ function matchDispatchToProps(dispatch) {
         setTemporaryUser: setTemporaryUser,
         updateRoomList: updateRoomList,
         activeRoom: activeRoom,
-        joinRefreshRooms: joinRefreshRooms
+        joinRefreshRooms: joinRefreshRooms,
+        addChatMessages: addChatMessages
     }, dispatch);
 }
 
