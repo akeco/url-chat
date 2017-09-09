@@ -4,28 +4,23 @@ var randomstring = require('randomstring');
 var _ = require('lodash');
 
 module.exports = async function (data) {
-    var newRoom = new roomModel({
-        name: data.url,
-        roomID: randomstring.generate(10)
-    });
 
-    newRoom.members.push(data.user);
+    var room = await roomModel.findOne({route: data.url});
+    if(!room){
+        var newRoom = new roomModel({
+            name: data.url,
+            roomID: randomstring.generate(10)
+        });
 
-    var room='';
-    try{
-       room = await newRoom.save();
+        newRoom.members.push(data.user);
+
+        room = await newRoom.save();
+        if(room) return room;
     }
-    catch (err){
-        console.info("Room save problem");
-        room = await roomModel.findOne({route: data.url});
-
-        var existUser = _.find(room.members, function(o) { return o._id == `${data.user._id}` });
-        if(!existUser){
-            room.members.push(data.user);
-            room = await room.save();
+    else{
+        room = await roomModel.findOneAndUpdate({route: data.url}, { $push: { members: data.user } }, {new: true});
+        if(room) {
+            return room;
         }
-    }
-    finally {
-        return room;
     }
 };

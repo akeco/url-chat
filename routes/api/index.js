@@ -16,7 +16,7 @@ router.post('/user/save', function (req, res, next) {
 router.get("/rooms", function (req, res, next) {
     (async ()=>{
         var result = await getActiveRooms();
-        res.status(200).json(result);
+        if(result) res.status(200).json(result);
     })();
 });
 
@@ -30,7 +30,7 @@ router.get("/messages/:roomID", function (req, res, next) {
 router.post("/update/socket", function (req, res, next) {
     (async ()=>{
         var result = await updateSocketID(req.body.data);
-        res.status(200).json(result);
+        if(result) res.status(200).json(result);
     })();
 });
 

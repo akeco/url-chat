@@ -63,7 +63,10 @@ class ContentHeader extends Component{
             return(
                 <div style={style.headerRightPartDiv}>
                     <Avatar className="headerAvatar" src="https://course_report_production.s3.amazonaws.com/rich/rich_files/rich_files/1678/s300/inceptures-software-school-logo.png" style={style.avatar} />
-                    <h4 style={style.title}>{this.props.activeRoomState.name}</h4>
+                    <div>
+                        <h4 style={style.title}>{this.props.activeRoomState.name}</h4>
+                        <p style={style.route}>{this.props.activeRoomState.route}</p>
+                    </div>
                     <div className="iconsWrapper" style={style.iconsWrapper}>
                         <IconButton
                             style={Object.assign({},style.iconExtend, style.closeIcon)}
@@ -170,6 +173,12 @@ class ContentHeader extends Component{
 }
 
 var style = {
+    route:{
+        margin: '3px 0px 0px 20px',
+        color: 'rgba(255,255,255,0.85)',
+        fontSize: 12,
+        cursor: 'default'
+    },
     headerRightPartDiv: {
         display: 'flex',
         flexGrow: 1,

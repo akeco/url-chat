@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {teal800, teal700, teal50} from 'material-ui/styles/colors';
+import {teal800, teal700, teal600, teal50} from 'material-ui/styles/colors';
 import {List, ListItem} from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
 import IconButton from 'material-ui/IconButton';
@@ -9,15 +9,18 @@ import {bindActionCreators} from 'redux';
 import { getRooms, activeRoom, addChatMessages, swipePage } from '../../actions/index';
 import LinearProgress from 'material-ui/LinearProgress';
 import axios from 'axios';
-import randomstring from'randomstring';
 import $ from 'jquery';
 
 class ListURLContainer extends Component{
     constructor(props){
         super(props);
+        this.state = {
+            toggleRooms: []
+        };
         this.displayActiveRooms = this.displayActiveRooms.bind(this);
         this.addActiveRoom = this.addActiveRoom.bind(this);
         this.refreshUrlList = this.refreshUrlList.bind(this);
+        this.toggleSublist = this.toggleSublist.bind(this);
     }
 
     componentWillMount(){
@@ -34,6 +37,28 @@ class ListURLContainer extends Component{
 
     refreshUrlList(data){
         this.props.getRooms(data);
+    }
+
+    toggleSublist(className){
+        var self = this;
+        $(this.refs[className]).slideToggle("fast", function () {
+            switch ($(this).css("display")){
+                case 'block':
+                    var newArray = self.state.toggleRooms;
+                    newArray.push(className);
+                    self.setState({
+                       toggleRooms: newArray
+                    });
+                    break;
+                case 'none':
+                    self.setState({
+                        toggleRooms: self.state.toggleRooms.filter((item)=>{
+                            return item != className
+                        })
+                    });
+                    break;
+            }
+        });
     }
 
     addActiveRoom(room){
@@ -77,26 +102,46 @@ class ListURLContainer extends Component{
     displayActiveRooms(){
         if(this.props.rooms){
             return this.props.rooms.map((room)=>{
+                var theKey = room.name;
+                var toggleElement = (this.state.toggleRooms.indexOf(room.name) >=0) ? {display:'block'} : {display:'none'};
                 return(
-                    <ListItem
-                        key={randomstring.generate(10)}
-                        style={style.listItem}
-                        primaryText={room.name}
-                        innerDivStyle={Object.assign(style.innerDiv)}
-                        onTouchTap={()=>{
-                            this.addActiveRoom(room);
-                        }}
-                        leftAvatar={<Avatar style={style.avatar} src="https://course_report_production.s3.amazonaws.com/rich/rich_files/rich_files/1678/s300/inceptures-software-school-logo.png" />}
-                    >
-                        <div style={style.innerWrap}>
-                            <div style={style.relativeWrap}>
-                                <IconButton style={style.memberNumb} iconStyle={style.profileIcon}>
-                                    <Profile/>
-                                </IconButton>
-                                <div style={style.counter}>{ (room.members) && room.members.length || 0 }</div>
+                    <div key={theKey} >
+                        <ListItem
+                            style={style.listItem}
+                            primaryText={room.name}
+                            innerDivStyle={Object.assign(style.innerDiv)}
+                            onTouchTap={()=>{
+                                this.toggleSublist(theKey);
+                            }}
+                            leftAvatar={<Avatar style={style.avatar} src="https://course_report_production.s3.amazonaws.com/rich/rich_files/rich_files/1678/s300/inceptures-software-school-logo.png" />}
+                        >
+                            <div style={style.innerWrap}>
+                                <div style={style.relativeWrap}>
+                                    <IconButton style={style.memberNumb} iconStyle={style.profileIcon}>
+                                        <Profile/>
+                                    </IconButton>
+                                    <div style={style.counter}>{ (room.membersNumber) && room.membersNumber || 0 }</div>
+                                </div>
                             </div>
+                        </ListItem>
+                        <div ref={theKey} style={Object.assign(toggleElement, style.wrapSubList)}>
+                            <List className="subList" style={style.subList}>
+                                { room.rooms.map((item)=>{
+                                    return <ListItem
+                                        className="urlListItem"
+                                        key={item._id}
+                                        primaryText={item.route}
+                                        innerDivStyle={style.subListItemInner}
+                                        style={style.subListItem}
+                                        secondaryText={item.members.length}
+                                        onTouchTap={()=>{
+                                            this.addActiveRoom(item);
+                                        }}
+                                    />
+                                }) }
+                            </List>
                         </div>
-                    </ListItem>
+                    </div>
                 );
             });
         }
@@ -115,6 +160,23 @@ class ListURLContainer extends Component{
 }
 
 var style = {
+    subListItem:{
+        fontSize: 14,
+        color: teal50,
+        fontWeight: 300
+    },
+    subListItemInner:{
+        padding: '10px 15px'
+    },
+    wrapSubList: {
+        //display: 'none',
+        marginTop: -3,
+    },
+    subList: {
+        backgroundColor: teal700,
+        padding: 0,
+        boxShadow: 'inset 0 3px 3px 0 rgba(0,0,0,0.3)'
+    },
     list: {
         padding:0,
         height: 315,
@@ -126,8 +188,9 @@ var style = {
         border: '1px solid rgba(255,255,255,0.15)',
         color: 'white',
         fontWeight: 300,
-        marginBottom: 5,
-        position: 'relative'
+        marginBottom: 3,
+        position: 'relative',
+        fontSize: 14
     },
     innerWrap: {
         position: 'absolute',
@@ -159,14 +222,17 @@ var style = {
         color: teal50
     },
     innerDiv:{
-        padding: '15px 16px 15px 72px',
+        padding: '15px 16px 15px 65px',
         textShadow: '0 1px 1px rgba(0,0,0,0.2)'
     },
     avatar: {
-        borderRadius: '40%',
+        //borderRadius: '40%',
+        borderRadius: '35%',
         objectFit:'cover',
-        width: 30,
-        height: 30,
+        //width: 30,
+        //height: 30,
+        width: 28,
+        height: 28,
         boxShadow: '0 1px 3px 0 rgba(0,0,0,0.5)',
         border: '1px solid rgba(255,255,255,0.3)',
         backgroundColor: 'white'

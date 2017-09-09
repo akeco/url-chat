@@ -58,7 +58,12 @@ io.sockets.on('connection', function (socket) {
     socket.on("leaveRoom", function (data) {
         socket.leave(data.room.roomID);
         (async ()=>{
-            await leaveRoom(data);
+            try{
+                await leaveRoom(data);
+            }
+            catch (err){
+                console.info("ROOM LEAVE ERROR", err);
+            }
             var result = await getActiveRooms();
             if(result) io.sockets.emit("refreshUrlList", result);
         })();
