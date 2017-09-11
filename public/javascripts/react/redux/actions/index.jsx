@@ -27,6 +27,13 @@ export const updateRoomList = data => {
     }
 };
 
+export const loadSpinner = data => {
+    return {
+        type: 'LOAD_SPINNER',
+        data
+    }
+};
+
 
 export const setTemporaryUser = data => {
     return {

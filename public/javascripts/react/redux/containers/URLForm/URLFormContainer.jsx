@@ -1,11 +1,12 @@
 import React,{Component} from 'react';
 import IconButton from 'material-ui/IconButton';
-import {teal600, teal50} from 'material-ui/styles/colors';
+import {teal600, teal300, teal50} from 'material-ui/styles/colors';
 import ArrowForward from 'material-ui/svg-icons/Navigation/arrow-forward';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {swipePage} from '../../actions/index';
+import {swipePage, loadSpinner} from '../../actions/index';
 import Snackbar from 'material-ui/Snackbar';
+import CircularProgress from 'material-ui/CircularProgress';
 import '../../../../../stylesheets/less/urlForm.less';
 
 class URLFormContainer extends Component{
@@ -17,6 +18,7 @@ class URLFormContainer extends Component{
         this.goForwards = this.goForwards.bind(this);
         this.handleURLSubmit = this.handleURLSubmit.bind(this);
         this.handleRequestClose = this.handleRequestClose.bind(this);
+        this.showSpinner = this.showSpinner.bind(this);
     }
 
     handleRequestClose(){
@@ -37,9 +39,18 @@ class URLFormContainer extends Component{
             activeRoom: (this.props.activeRoomState) ? this.props.activeRoomState : null
         });
         this.refs.url.value = '';
+        this.props.loadSpinner(true);
         this.setState({
             open: true
         });
+    }
+
+    showSpinner(){
+        if(this.props.spinner) return <CircularProgress
+            className="spinner"
+            size={28}
+            color={teal300}
+            style={style.spinner} />;
     }
 
     render(){
@@ -56,6 +67,7 @@ class URLFormContainer extends Component{
                 />
                 <form className="formURL" style={style.form} onSubmit={this.handleURLSubmit}>
                     <input type="text" ref="url" placeholder="Insert URL" style={style.input} />
+                    {this.showSpinner()}
                 </form>
                 <IconButton
                     iconStyle={style.icons}
@@ -73,6 +85,11 @@ class URLFormContainer extends Component{
 }
 
 var style = {
+    spinner: {
+        position: 'absolute',
+        right: 3,
+        top: 4
+    },
     snackBarBody:{
         backgroundColor: teal600
     },
@@ -89,7 +106,8 @@ var style = {
         alignItems: 'center'
     },
     form:{
-        width: '100%'
+        width: '100%',
+        position: 'relative'
     },
     input:{
         width: '100%',
@@ -112,6 +130,7 @@ var style = {
 function matchDispatchToProps(dispatch) {
     return bindActionCreators({
         swipePage: swipePage,
+        loadSpinner: loadSpinner
     }, dispatch);
 }
 
@@ -120,7 +139,8 @@ function mapStateToProps(state) {
         pageIndex: state.pageIndex,
         socketIO: state.socketobject,
         profileuser: state.profileuser,
-        activeRoomState: state.activeRoom
+        activeRoomState: state.activeRoom,
+        spinner: state.spinner
     });
 }
 

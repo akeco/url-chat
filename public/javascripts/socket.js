@@ -6,6 +6,7 @@ var saveMessage = require('../../services/saveMessage');
 var leaveRoom = require('../../services/leaveRoom');
 var joinRoom = require('../../services/joinRoom');
 var getActiveRooms = require('../../services/getActiveRooms');
+var getFavicon = require('../../services/getFavicon');
 
 io.sockets.on('connection', function (socket) {
     console.info("CONNECTED",socket.id);
@@ -24,6 +25,8 @@ io.sockets.on('connection', function (socket) {
         }
 
         (async ()=>{
+            var image = await getFavicon(roomData.url);
+            if(image) roomData.image = image;
             var roomResult = await addRoom(roomData);
             if(roomResult){
                 io.sockets.emit("updateRooms", roomResult);

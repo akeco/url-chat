@@ -4,12 +4,12 @@ var randomstring = require('randomstring');
 var _ = require('lodash');
 
 module.exports = async function (data) {
-
     var room = await roomModel.findOne({route: data.url});
     if(!room){
         var newRoom = new roomModel({
             name: data.url,
-            roomID: randomstring.generate(10)
+            roomID: randomstring.generate(10),
+            image: data.image && data.image || null
         });
 
         newRoom.members.push(data.user);

@@ -6,7 +6,7 @@ import {withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {updateProfileSocket, setProfileUser, setSocketObject, setTemporaryUser,
-    updateRoomList, activeRoom, joinRefreshRooms, addChatMessages, swipePage} from '../../actions/index';
+    updateRoomList, activeRoom, joinRefreshRooms, addChatMessages, swipePage, loadSpinner} from '../../actions/index';
 
 class Wrapper extends Component{
     constructor(props){
@@ -79,6 +79,7 @@ class Wrapper extends Component{
 
 
         this.socket.on('updateRooms', (data)=>{
+            this.props.loadSpinner(false);
             this.props.updateRoomList(data);
         });
 
@@ -134,7 +135,8 @@ function matchDispatchToProps(dispatch) {
         activeRoom: activeRoom,
         joinRefreshRooms: joinRefreshRooms,
         addChatMessages: addChatMessages,
-        swipePage: swipePage
+        swipePage: swipePage,
+        loadSpinner: loadSpinner
     }, dispatch);
 }
 

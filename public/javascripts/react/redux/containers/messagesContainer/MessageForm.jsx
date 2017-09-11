@@ -25,7 +25,7 @@ class MessageForm extends Component{
                 sender: this.props.profileuser,
                 message: {
                     user: this.props.profileuser,
-                    text: this.refs.message.value.trim().toLowerCase(),
+                    text: this.refs.message.value.trim(),
                     created: new Date().getTime()
                 }
             });

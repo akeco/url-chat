@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {teal800, teal50} from 'material-ui/styles/colors';
+import {teal800, teal400, teal50} from 'material-ui/styles/colors';
 import IconButton from 'material-ui/IconButton';
 import Avatar from 'material-ui/Avatar';
 import Close from 'material-ui/svg-icons/Navigation/close';
@@ -23,6 +23,7 @@ class ContentHeader extends Component{
             notification: false,
             star: false
         };
+        this.fallBack = "https://www.designfreelogoonline.com/wp-content/uploads/2016/03/00167-Abstract-spiral-globe-logo-design-free-online-logomaker-01.png";
         this.toggleUserMenu = this.toggleUserMenu.bind(this);
         this.toggIconChange = this.toggIconChange.bind(this);
         this.changeIconsState = this.changeIconsState.bind(this);
@@ -64,7 +65,10 @@ class ContentHeader extends Component{
             var notificationState = (this.state.notification) ? 'white' : teal50;
             return(
                 <div style={style.headerRightPartDiv}>
-                    <Avatar className="headerAvatar" src="https://course_report_production.s3.amazonaws.com/rich/rich_files/rich_files/1678/s300/inceptures-software-school-logo.png" style={style.avatar} />
+                    <Avatar className="headerAvatar"
+                            src={(this.props.activeRoomState.image) ? this.props.activeRoomState.image : this.fallBack}
+                            style={style.avatar}
+                    />
                     <div>
                         <h4 style={style.title}>{this.props.activeRoomState.name}</h4>
                         <p data-tip data-for='headerURL' style={style.route}>{primaryTextFunction(this.props.activeRoomState.route, 40)}</p>
@@ -222,7 +226,8 @@ var style = {
         backgroundColor: 'white',
         borderRadius: '40%',
         boxShadow: '0 1px 3px 0 rgba(0,0,0,0.5)',
-        border: '1px solid rgba(255,255,255,0.3)',
+        border: '1px solid',
+        borderColor: teal400,
         objectFit:'cover',
         width: 37,
         height: 37

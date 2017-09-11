@@ -16,6 +16,10 @@ const roomSchema = new Schema({
     members: {
         type: Array,
         default: []
+    },
+    image: {
+        type: String,
+        default: null
     }
 });
 

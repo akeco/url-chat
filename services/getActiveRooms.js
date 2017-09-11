@@ -20,10 +20,11 @@ module.exports = async function () {
         for (var key of Object.keys(filteredResult)) {
             var obj = {};
             obj.name = key;
-
+            obj.image = null;
             var members = 0;
             filteredResult[key].forEach((item)=>{
                 members += item.members.length;
+                if(item.image && !obj.image) obj.image = item.image;
             });
             obj.membersNumber = members;
 

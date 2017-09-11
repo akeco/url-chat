@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {teal800, teal700, teal600, teal50} from 'material-ui/styles/colors';
+import {teal800, teal700, teal600, teal400, teal50} from 'material-ui/styles/colors';
 import {List, ListItem} from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
 import IconButton from 'material-ui/IconButton';
@@ -14,11 +14,13 @@ import ReactTooltip from 'react-tooltip';
 import {primaryTextFunction} from '../../../../../../services/utils';
 
 class ListURLContainer extends Component{
+
     constructor(props){
         super(props);
         this.state = {
             toggleRooms: []
         };
+        this.fallBack = "https://www.designfreelogoonline.com/wp-content/uploads/2016/03/00167-Abstract-spiral-globe-logo-design-free-online-logomaker-01.png";
         this.displayActiveRooms = this.displayActiveRooms.bind(this);
         this.addActiveRoom = this.addActiveRoom.bind(this);
         this.refreshUrlList = this.refreshUrlList.bind(this);
@@ -36,6 +38,7 @@ class ListURLContainer extends Component{
             console.info(err);
         });
     }
+
 
     refreshUrlList(data){
         this.props.getRooms(data);
@@ -116,7 +119,9 @@ class ListURLContainer extends Component{
                             onTouchTap={()=>{
                                 this.toggleSublist(theKey);
                             }}
-                            leftAvatar={<Avatar style={style.avatar} src="https://course_report_production.s3.amazonaws.com/rich/rich_files/rich_files/1678/s300/inceptures-software-school-logo.png" />}
+                            leftAvatar={<Avatar style={style.avatar}
+                                                src={(room.image) ? room.image : this.fallBack}
+                            />}
                         >
                             <div style={style.innerWrap}>
                                 <div style={style.relativeWrap}>
@@ -176,8 +181,7 @@ var style = {
         padding: '10px 15px'
     },
     wrapSubList: {
-        //display: 'none',
-        marginTop: -3,
+        marginTop: -3
     },
     subList: {
         backgroundColor: teal700,
@@ -186,7 +190,7 @@ var style = {
     },
     list: {
         padding:0,
-        height: 315,
+        height: 400,
         overflowY: 'scroll',
         overflowX: 'hidden'
     },
@@ -241,7 +245,8 @@ var style = {
         width: 28,
         height: 28,
         boxShadow: '0 1px 3px 0 rgba(0,0,0,0.5)',
-        border: '1px solid rgba(255,255,255,0.3)',
+        border: '1px solid',
+        borderColor: teal400,
         backgroundColor: 'white'
     }
 };

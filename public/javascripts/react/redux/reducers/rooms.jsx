@@ -19,7 +19,7 @@ const users = (state = null, action) => {
                         }).sort(sort_by('members', false, function(a){return a.length}));
                     }
                     return item;
-                });
+                }).sort(sort_by('membersNumber'));;
             }
 
         case 'UPDATE_ROOM_LIST':
@@ -31,17 +31,30 @@ const users = (state = null, action) => {
             if(exist){
                 return state.map((item)=>{
                     if(item.name == exist){
-                        item.rooms.push(action.data);
-                        item.membersNumber += action.data.members.length;
+                        var sameRoute = false;
+                        item.rooms = item.rooms.map((room)=>{
+                            if(room.route == action.data.route) {
+                                sameRoute = true;
+                                room = action.data;
+                            }
+                            return room;
+                        });
+
+                        if(!sameRoute) {
+                            item.rooms.push(action.data);
+                            item.membersNumber += action.data.members.length;
+                        }
+                        else item.membersNumber = action.data.members.length;
                         item.rooms = item.rooms.sort(sort_by('members', false, function(a){return a.length}));
                     }
                     return item;
-                });//.sort(sort_by('membersNumber'));
+                }).sort(sort_by('membersNumber'));
             }
             else{
                 return [...state, {
                     name: action.data.name,
                     membersNumber: action.data.members.length,
+                    image: action.data.image && action.data.image || null,
                     rooms: [action.data]
                 }];
             }

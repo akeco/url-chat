@@ -9,6 +9,4 @@ const activeuser = (state = null, action) => {
     }
 }
 
-
-
 export default activeuser;
