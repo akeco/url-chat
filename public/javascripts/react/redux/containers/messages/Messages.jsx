@@ -49,7 +49,7 @@ class Messages extends Component{
             });
             if(roomObject){
                 return roomObject.messages.map((item)=>{
-                    return <Message key={ item._id } message={item} />;
+                    return <Message key={ item._id } message={item} show={this.props.pageIndex} />;
                 });
             }
         }
@@ -124,7 +124,8 @@ function mapStateToProps(state) {
         activeRoom: state.activeRoom,
         socketIO: state.socketobject,
         profileuser: state.profileuser,
-        chatMessages: state.chatmessages
+        chatMessages: state.chatmessages,
+        pageIndex: state.pageIndex
     });
 }
 

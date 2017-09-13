@@ -15,9 +15,9 @@ class Message extends Component{
     constructor(props){
         super(props);
         this.state = {
-            hover: false,
-            mobileRating: null
+            hover: false
         };
+        this.showMobileRatingMenu = this.showMobileRatingMenu.bind(this);
     }
 
 
@@ -34,22 +34,8 @@ class Message extends Component{
         }
     }
 
-
-    componentDidUpdate(){
-        if($(window).innerWidth() <= 575){
-            if(!this.state.mobileRating){
-                this.setState({
-                    mobileRating: true
-                });
-            }
-        }
-        else{
-            if(this.state.mobileRating){
-                this.setState({
-                    mobileRating: false
-                });
-            }
-        }
+    showMobileRatingMenu(){
+        if(this.props.show) return <MobileRatingMenu message={this.props.message} />;
     }
 
     render(){
@@ -103,7 +89,9 @@ class Message extends Component{
                         </p>
                     </div>
                 </div>
-                { (this.state.mobileRating) && <MobileRatingMenu message={this.props.message} /> }
+                {
+                    this.showMobileRatingMenu()
+                }
             </li>
             {(this.state.hover) ? <HiddenControlsContainer message={this.props.message} />: ''}
         </ListItem>
