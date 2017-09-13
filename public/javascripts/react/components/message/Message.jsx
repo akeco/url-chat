@@ -8,16 +8,49 @@ import Star from 'material-ui/svg-icons/Toggle/star-border';
 import HiddenControlsContainer from '../../redux/containers/messagesContainer/HiddenControlsContainer';
 import MobileRatingMenu from '../../redux/containers/messagesContainer/MobileRatingMenu';
 import moment from 'moment';
+import $ from 'jquery';
 
 
 class Message extends Component{
     constructor(props){
         super(props);
         this.state = {
-            hover: false
+            hover: false,
+            mobileRating: null
         };
     }
 
+
+    componentWillMount(){
+        if($(window).innerWidth() <= 575){
+            this.setState({
+                mobileRating: true
+            });
+        }
+        else{
+            this.setState({
+                mobileRating: false
+            });
+        }
+    }
+
+
+    componentDidUpdate(){
+        if($(window).innerWidth() <= 575){
+            if(!this.state.mobileRating){
+                this.setState({
+                    mobileRating: true
+                });
+            }
+        }
+        else{
+            if(this.state.mobileRating){
+                this.setState({
+                    mobileRating: false
+                });
+            }
+        }
+    }
 
     render(){
         var {sender, created, message, rating} = this.props.message;
@@ -70,7 +103,7 @@ class Message extends Component{
                         </p>
                     </div>
                 </div>
-                <MobileRatingMenu message={this.props.message} />
+                { (this.state.mobileRating) && <MobileRatingMenu message={this.props.message} /> }
             </li>
             {(this.state.hover) ? <HiddenControlsContainer message={this.props.message} />: ''}
         </ListItem>
