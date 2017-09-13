@@ -1,16 +1,15 @@
 import React, {Component} from 'react';
-import {List, ListItem} from 'material-ui/List';
+import {List} from 'material-ui/List';
 import LinearProgress from 'material-ui/LinearProgress';
 import {teal50} from 'material-ui/styles/colors';
 import Message from '../../../components/message/Message';
-import randomstring from 'randomstring';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {insertMessage} from '../../actions/index';
-import { Observable, BehaviorSubject } from 'rxjs';
+import {insertMessage, updateMessage} from '../../actions/index';
+//import { Observable, BehaviorSubject } from 'rxjs';
 //import triggerWindowState from '../../../components/utils/WindowFocus';
 import _ from 'lodash';
-import $ from 'jquery';
+//import $ from 'jquery';
 import '../../../../../stylesheets/less/messages.less';
 
 class Messages extends Component{
@@ -22,15 +21,21 @@ class Messages extends Component{
         };
         this.showMessages = this.showMessages.bind(this);
         this.getMessage = this.getMessage.bind(this);
+        this.updateMessageVote = this.updateMessageVote.bind(this);
     }
 
     componentWillMount(){
         this.props.socketIO.on("getMessage", this.getMessage);
+        this.props.socketIO.on("updateMessageVote", this.updateMessageVote);
     }
 
     componentDidUpdate(){
         var containerElement = $(document.querySelector(".messagesListWrapper > div"));
         $(document.querySelector(".messagesListWrapper")).animate({scrollTop:containerElement.height(), top}, 500);
+    }
+
+    updateMessageVote(data){
+        this.props.updateMessage(data);
     }
 
     getMessage(data){
@@ -108,7 +113,8 @@ var style = {
 
 function matchDispatchToProps(dispatch) {
     return bindActionCreators({
-        insertMessage: insertMessage
+        insertMessage: insertMessage,
+        updateMessage: updateMessage
     }, dispatch);
 }
 

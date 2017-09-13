@@ -5,19 +5,101 @@ import Down from 'material-ui/svg-icons/Hardware/keyboard-arrow-down';
 import Copy from 'material-ui/svg-icons/Content/content-copy';
 import Report from 'material-ui/svg-icons/Action/info-outline';
 import Block from 'material-ui/svg-icons/Content/block';
+import {connect} from 'react-redux';
+import _ from 'lodash';
 
 class HiddenControlsContainer extends Component{
     constructor(props){
         super(props);
+        this.state={
+            up: false,
+            down: false
+        };
+        this.message = this.props.message;
+        this.votePositive = this.votePositive.bind(this);
+        this.voteNegative = this.voteNegative.bind(this);
+    }
 
+    componentWillMount(){
+        if(this.message.ratingUsers.length){
+            var findUser = _.find(this.message.ratingUsers, (o)=>{ return o._id == this.props.profileUser._id; });
+            if(findUser && findUser.vote){
+                switch (findUser.vote){
+                    case 'up':
+                        this.setState({
+                            up: true,
+                            down: false
+                        });
+                        break;
+                    case 'down':
+                        this.setState({
+                            up: false,
+                            down: true
+                        });
+                        break;
+                }
+            }
+        }
+    }
+
+    votePositive(){
+        console.info("Voted positive");
+
+        if(!this.state.up && !this.state.down){
+            this.setState({
+                up: true,
+                down: false
+            });
+        }
+        else if(this.state.down){
+            this.setState({
+                up: false,
+                down: false
+            });
+        }
+
+        this.props.profileUser.vote = 'up';
+        this.props.socketIO.emit("voting", {
+            vote: 'up',
+            messageID: this.message._id,
+            user: this.props.profileUser
+        });
+    }
+
+    voteNegative(){
+        console.info("Voted Negative");
+
+        if(!this.state.up && !this.state.down){
+            this.setState({
+                up: false,
+                down: true
+            });
+        }
+        else if(this.state.up){
+            this.setState({
+                up: false,
+                down: false
+            });
+        }
+
+        this.props.profileUser.vote = 'down';
+        this.props.socketIO.emit("voting", {
+            vote: 'down',
+            messageID: this.message._id,
+            user: this.props.profileUser
+        });
     }
 
     render(){
+        var disableUpClass = (this.state.up) ? 'disableList' : '';
+        var disableDownClass = (this.state.down) ? 'disableList' : '';
         return(
-            <div style={style.outerDiv}>
+            <div className="desktopRatingIcons" style={style.outerDiv}>
                 <ul className="hiddenControls" style={style.hiddenControls}>
-                    <li style={style.li}>
+                    <li className={disableUpClass} style={Object.assign(style.li, {})}>
                         <IconButton
+                            disabled={this.state.up}
+                            onTouchTap={this.votePositive}
                             tooltip="Vote positive"
                             tooltipPosition="top-center"
                             iconStyle={style.smallIcon}
@@ -25,8 +107,10 @@ class HiddenControlsContainer extends Component{
                             <Up />
                         </IconButton>
                     </li>
-                    <li style={style.li}>
+                    <li className={disableDownClass} style={Object.assign(style.li, {})}>
                         <IconButton
+                            disabled={this.state.down}
+                            onTouchTap={this.voteNegative}
                             tooltip="Vote negative"
                             tooltipPosition="top-center"
                             iconStyle={style.smallIcon}
@@ -100,4 +184,11 @@ const style = {
     }
 };
 
-export default HiddenControlsContainer;
+function mapStateToProps(state) {
+    return ({
+        socketIO: state.socketobject,
+        profileUser: state.profileuser
+    });
+}
+
+export default connect(mapStateToProps)(HiddenControlsContainer);

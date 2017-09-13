@@ -23,6 +23,10 @@ const messageSchema = new Schema({
     rating: {
         type: Number,
         default: 0
+    },
+    ratingUsers: {
+        type: Array,
+        default: null
     }
 });
 

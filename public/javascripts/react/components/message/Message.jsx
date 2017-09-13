@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
 import Account from 'material-ui/svg-icons/Action/account-circle';
 import {ListItem} from 'material-ui/List';
-import {teal900, teal800, teal700, teal400, teal100, teal50} from 'material-ui/styles/colors';
+import {teal900, teal800, teal700, teal400, teal100} from 'material-ui/styles/colors';
 import IconButton from 'material-ui/IconButton';
 import Contact from 'material-ui/svg-icons/Communication/chat';
+import Star from 'material-ui/svg-icons/Toggle/star-border';
 import HiddenControlsContainer from '../../redux/containers/messagesContainer/HiddenControlsContainer';
+import MobileRatingMenu from '../../redux/containers/messagesContainer/MobileRatingMenu';
 import moment from 'moment';
 
 
@@ -18,21 +20,22 @@ class Message extends Component{
 
 
     render(){
-        var {sender, created, message} = this.props.message;
+        var {sender, created, message, rating} = this.props.message;
         return(
-        <ListItem hoverColor={'#F6F6F6'}
-                  style={style.listItem}
-                  innerDivStyle={style.itemListDiv}
-                  onMouseEnter={()=>{
-                      this.setState({
-                          hover: true
-                      });
-                  }}
-                  onMouseLeave={()=>{
-                      this.setState({
-                          hover: false
-                      });
-                  }}
+        <ListItem
+            hoverColor={'#F6F6F6'}
+            style={style.listItem}
+            innerDivStyle={style.itemListDiv}
+            onMouseEnter={()=>{
+                this.setState({
+                    hover: true
+                });
+            }}
+            onMouseLeave={()=>{
+                this.setState({
+                    hover: false
+                });
+            }}
         >
             <li style={style.li}>
                 <div
@@ -59,16 +62,35 @@ class Message extends Component{
                     <p style={style.content}>
                         {message.text}
                     </p>
-                    <p style={style.time}>{moment(created).fromNow()}</p>
+                    <div style={style.bottomWrap}>
+                        <p style={style.time}>{moment(created).fromNow()}</p>
+                        <p style={style.rating}>
+                            <Star style={style.voteStar} />
+                            <span>{rating}</span>
+                        </p>
+                    </div>
                 </div>
+                <MobileRatingMenu message={this.props.message} />
             </li>
-            {(this.state.hover) ? <HiddenControlsContainer/>: ''}
+            {(this.state.hover) ? <HiddenControlsContainer message={this.props.message} />: ''}
         </ListItem>
         );
     }
 }
 
 const style = {
+    voteStar: {
+        color: teal400,
+        fontSize: 12,
+        marginTop: 0,
+        marginBottom: 7,
+        marginRight: 3,
+        width: 15,
+        height: 15
+    },
+    bottomWrap: {
+        display: 'flex'
+    },
     avatar: {
         width: 40,
         height: 40,
@@ -78,7 +100,7 @@ const style = {
         display:'flex'
     },
     listItem:{
-      position: 'relative'
+        position: 'relative'
     },
     itemListDiv:{
         padding: '0px 16px'
@@ -110,15 +132,25 @@ const style = {
         lineHeight: '20px',
         fontWeight: 400
     },
+    rating: {
+        color: teal400,
+        fontSize: 12,
+        marginTop: 0,
+        marginBottom: 0,
+        width: 'auto',
+        marginLeft: 15,
+        display: 'flex'
+    },
     time:{
         color: teal400,
         fontSize: 12,
         marginTop: 0,
-        marginBottom: 7
+        marginBottom: 7,
+        width: 'auto'
     },
     contactIcon:{
         color: 'white'
     }
-}
+};
 
 export default Message;

@@ -34,6 +34,12 @@ export const loadSpinner = data => {
     }
 };
 
+export const updateMessage = data => {
+    return {
+        type: 'UPDATE_MESSAGE',
+        data
+    }
+};
 
 export const setTemporaryUser = data => {
     return {

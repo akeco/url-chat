@@ -4,6 +4,7 @@ import randomstring from'randomstring';
 import axios from 'axios';
 import {withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
+import $ from 'jquery';
 import {bindActionCreators} from 'redux';
 import {updateProfileSocket, setProfileUser, setSocketObject, setTemporaryUser,
     updateRoomList, activeRoom, joinRefreshRooms, addChatMessages, swipePage, loadSpinner} from '../../actions/index';
@@ -15,7 +16,7 @@ class Wrapper extends Component{
     }
 
     componentDidMount(){
-        $(window).on('beforeunload', function () {
+        $(window).on('beforeunload', ()=>{
             if(this.props.activeRoomState){
                 this.props.socketIO.emit("leaveRoom", {
                     room: this.props.activeRoomState,
@@ -85,7 +86,11 @@ class Wrapper extends Component{
 
 
         this.socket.on('refreshRoomsOnJoin', (data)=>{
-            this.props.joinRefreshRooms(data);
+                this.props.joinRefreshRooms(data);
+            /*
+                var containerElement = $(document.querySelector(".messagesListWrapper > div"));
+                $(document.querySelector(".messagesListWrapper")).animate({scrollTop:containerElement.height(), top}, 500);
+                */
         });
 
         this.socket.on('addActiveRoom', (data)=>{
@@ -96,6 +101,7 @@ class Wrapper extends Component{
                         receiver: (this.props.activeRoomState) && this.props.activeRoomState,
                         messages: response.data
                     });
+
                     if($(window).innerWidth() <= 575){
                         this.props.swipePage(1);
                     }
@@ -125,18 +131,18 @@ class Wrapper extends Component{
 }
 
 
-function matchDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        updateProfileSocket: updateProfileSocket,
-        setProfileUser: setProfileUser,
-        setSocketObject: setSocketObject,
-        setTemporaryUser: setTemporaryUser,
-        updateRoomList: updateRoomList,
-        activeRoom: activeRoom,
-        joinRefreshRooms: joinRefreshRooms,
-        addChatMessages: addChatMessages,
-        swipePage: swipePage,
-        loadSpinner: loadSpinner
+        updateProfileSocket,
+        setProfileUser,
+        setSocketObject,
+        setTemporaryUser,
+        updateRoomList,
+        activeRoom,
+        joinRefreshRooms,
+        addChatMessages,
+        swipePage,
+        loadSpinner
     }, dispatch);
 }
 
@@ -148,4 +154,4 @@ function mapStateToProps(state) {
     });
 }
 
-export default withRouter(connect(mapStateToProps, matchDispatchToProps)(Wrapper));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Wrapper));

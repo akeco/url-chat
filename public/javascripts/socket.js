@@ -7,6 +7,7 @@ var leaveRoom = require('../../services/leaveRoom');
 var joinRoom = require('../../services/joinRoom');
 var getActiveRooms = require('../../services/getActiveRooms');
 var getFavicon = require('../../services/getFavicon');
+var voting = require('../../services/voting');
 
 io.sockets.on('connection', function (socket) {
     console.info("CONNECTED",socket.id);
@@ -46,6 +47,12 @@ io.sockets.on('connection', function (socket) {
         socket.disconnect();
     });
 
+    socket.on("voting", function (data) {
+        (async()=>{
+            var result = await voting(data);
+            if(result) io.sockets.emit("updateMessageVote", result);
+        })();
+    });
 
     socket.on("joinRoom", function (data) {
         (async()=>{

@@ -14,6 +14,11 @@ html, body{
   overflow: hidden;
 }
 
+body{
+  -webkit-font-smoothing: subpixel-antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 #reactApp{
   & > div{
     width:100%;
@@ -60,6 +65,17 @@ html, body{
         }
       }
     }
+  }
+}
+
+.desktopRatingIcons{
+  display:none;
+}
+
+.disableList{
+  pointerEvents: all;
+  button{
+  opacity: 0.2;
   }
 }
 
@@ -128,6 +144,12 @@ html, body{
 }
 
 @media (min-width: 576px){
+  .desktopRatingIcons{
+    display: block;
+  }
+  .showMore{
+    display:none !important;
+  }
  .homepageWrapper{
    display: flex !important;
    & > div{
