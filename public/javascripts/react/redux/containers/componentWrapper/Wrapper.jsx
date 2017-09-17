@@ -7,13 +7,15 @@ import {connect} from 'react-redux';
 import $ from 'jquery';
 import {bindActionCreators} from 'redux';
 import {updateProfileSocket, setProfileUser, setSocketObject, setTemporaryUser,
-    updateRoomList, activeRoom, joinRefreshRooms, addChatMessages, swipePage, loadSpinner, insertMessage} from '../../actions/index';
+    updateRoomList, activeRoom, joinRefreshRooms, addChatMessages, swipePage, loadSpinner,
+    insertMessage, updateMessage} from '../../actions/index';
 
 class Wrapper extends Component{
     constructor(props){
         super(props);
         this.updateSocketID = this.updateSocketID.bind(this);
         this.getMessage = this.getMessage.bind(this);
+        this.updateMessageVote = this.updateMessageVote.bind(this);
     }
 
     componentDidMount(){
@@ -28,11 +30,11 @@ class Wrapper extends Component{
     }
 
     componentWillMount(){
-
         this.socket = io(document.location.host);
         this.props.setSocketObject(this.socket);
 
         this.socket.on("getMessage", this.getMessage);
+        this.socket.on("updateMessageVote", this.updateMessageVote);
 
         this.socket.on('connect', ()=>{
             var socket = this.socket;
@@ -125,6 +127,10 @@ class Wrapper extends Component{
         this.props.updateProfileSocket(data);
     }
 
+    updateMessageVote(data){
+        this.props.updateMessage(data);
+    }
+
     render(){
         return(
             <div>
@@ -149,7 +155,8 @@ function mapDispatchToProps(dispatch) {
         addChatMessages,
         swipePage,
         loadSpinner,
-        insertMessage
+        insertMessage,
+        updateMessage
     }, dispatch);
 }
 

@@ -18,6 +18,7 @@ class Message extends Component{
             hover: false
         };
         this.showMobileRatingMenu = this.showMobileRatingMenu.bind(this);
+        this.showDesktopRatingMenu = this.showDesktopRatingMenu.bind(this);
     }
 
 
@@ -35,7 +36,15 @@ class Message extends Component{
     }
 
     showMobileRatingMenu(){
-        if(this.props.show) return <MobileRatingMenu message={this.props.message} />;
+        var {user} = this.props.message.message;
+        if(this.props.show && user._id != this.props.profileUserID) return <MobileRatingMenu message={this.props.message} />;
+    }
+
+    showDesktopRatingMenu(){
+        var {user} = this.props.message.message;
+        if(user._id != this.props.profileUserID && this.state.hover){
+          return <HiddenControlsContainer message={this.props.message} profileUserID={this.props.profileUserID} />;
+        }
     }
 
     render(){
@@ -93,7 +102,9 @@ class Message extends Component{
                     this.showMobileRatingMenu()
                 }
             </li>
-            {(this.state.hover) ? <HiddenControlsContainer message={this.props.message} />: ''}
+            {
+                this.showDesktopRatingMenu()
+            }
         </ListItem>
         );
     }
@@ -173,5 +184,6 @@ const style = {
         color: 'white'
     }
 };
+
 
 export default Message;

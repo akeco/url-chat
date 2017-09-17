@@ -92,6 +92,10 @@ class HiddenControlsContainer extends Component{
         });
     }
 
+    showRatingComponent(){
+
+    }
+
     render(){
         var disableUpClass = (this.state.up) ? 'disableList' : '';
         var disableDownClass = (this.state.down) ? 'disableList' : '';

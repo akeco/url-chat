@@ -3,9 +3,8 @@ import {List} from 'material-ui/List';
 import LinearProgress from 'material-ui/LinearProgress';
 import {teal50} from 'material-ui/styles/colors';
 import Message from '../../../components/message/Message';
-import {bindActionCreators} from 'redux';
+//import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {updateMessage} from '../../actions/index';
 //import { Observable, BehaviorSubject } from 'rxjs';
 //import triggerWindowState from '../../../components/utils/WindowFocus';
 import _ from 'lodash';
@@ -20,21 +19,11 @@ class Messages extends Component{
             windowFocus: true
         };
         this.showMessages = this.showMessages.bind(this);
-        this.updateMessageVote = this.updateMessageVote.bind(this);
-    }
-
-    componentWillMount(){
-        this.props.socketIO.on("updateMessageVote", this.updateMessageVote);
     }
 
     componentDidUpdate(){
         var containerElement = $(document.querySelector(".messagesListWrapper > div"));
         $(document.querySelector(".messagesListWrapper")).animate({scrollTop:containerElement.height(), top}, 500);
-    }
-
-    updateMessageVote(data){
-        console.info("VOTING UPDATE");
-        this.props.updateMessage(data);
     }
 
     showMessages(){
@@ -44,7 +33,7 @@ class Messages extends Component{
             });
             if(roomObject){
                 return roomObject.messages.map((item)=>{
-                    return <Message key={ item._id } message={item} show={this.props.pageIndex} />;
+                    return <Message key={ item._id } message={item} show={this.props.pageIndex} profileUserID={this.props.profileuser._id} />;
                 });
             }
         }
@@ -106,12 +95,6 @@ var style = {
     }
 };
 
-function matchDispatchToProps(dispatch) {
-    return bindActionCreators({
-        updateMessage: updateMessage
-    }, dispatch);
-}
-
 
 function mapStateToProps(state) {
     return ({
@@ -123,4 +106,4 @@ function mapStateToProps(state) {
     });
 }
 
-export default connect(mapStateToProps, matchDispatchToProps)(Messages);
+export default connect(mapStateToProps)(Messages);
