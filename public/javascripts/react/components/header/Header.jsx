@@ -13,6 +13,7 @@ import Settings from 'material-ui/svg-icons/Action/settings';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import {bindActionCreators} from 'redux';
+import {closeActiveRoom} from '../../redux/actions/index';
 
 const muiTheme = getMuiTheme({
     palette: {
@@ -24,11 +25,23 @@ class Header extends Component{
     constructor(props){
         super(props);
         this.signOut = this.signOut.bind(this);
+        this.closeAndLeaveRoom = this.closeAndLeaveRoom.bind(this);
     }
 
     signOut(){
+        this.closeAndLeaveRoom();
         localStorage.removeItem("currentUser");
-        this.props.history.push('/login');
+        this.props.history.push('/home');
+    }
+
+    closeAndLeaveRoom(){
+        if(this.props.activeRoomState && this.props.profileuser){
+            this.props.socketIO.emit("leaveRoom", {
+                room: this.props.activeRoomState,
+                user: this.props.profileuser
+            });
+            this.props.closeActiveRoom();
+        }
     }
 
     render(){
@@ -42,7 +55,7 @@ class Header extends Component{
                 <div className="userBlock" style={style.userBlock}>
                     <MuiThemeProvider muiTheme={muiTheme}>
                       <List style={style.list}>
-                          <p style={style.username}>{this.props.profiluser && this.props.profiluser.username}</p>
+                          <p style={style.username}>{this.props.profileuser && this.props.profileuser.username}</p>
                           <ListItem
                               disabled={true}
                               style={style.userList}
@@ -143,21 +156,20 @@ var style = {
     }
 };
 
-/*
+
 function matchDispatchToProps(dispatch) {
     return bindActionCreators({
-        updateProfileSocket: updateProfileSocket,
-        setProfileUser: setProfileUser,
-        setSocketObject: setSocketObject
+        closeActiveRoom: closeActiveRoom
     }, dispatch);
 }
-*/
+
 
 function mapStateToProps(state) {
     return ({
-        profiluser: state.profileuser,
-        socketIO: state.socketobject
+        profileuser: state.profileuser,
+        socketIO: state.socketobject,
+        activeRoomState: state.activeRoom
     });
 }
 
-export default withRouter(connect(mapStateToProps)(Header));
+export default withRouter(connect(mapStateToProps, matchDispatchToProps)(Header));

@@ -18,7 +18,6 @@ class MessageForm extends Component{
 
     sendMessage(event){
         event.preventDefault();
-        console.info("submited");
         if(this.refs.message.value.trim()){
             this.props.socketIO.emit("sendMessage",{
                 room: this.props.activeRoom,
@@ -38,8 +37,8 @@ class MessageForm extends Component{
         return(
             <div style={style.wrapper}>
                 <form
+                    action="javascript:void(0)"
                     className={(!this.props.activeRoom) ? 'disabledForm' : ''}
-                    onSubmit={this.sendMessage}
                     style={style.form}>
                     <FlatButton
                         className="addButton"
@@ -70,6 +69,7 @@ class MessageForm extends Component{
                         }}
                     />
                     <FlatButton
+                        onTouchStart={this.sendMessage}
                         style={style.sendButtonStyle}
                         onTouchTap={this.sendMessage}
                         icon={<Send

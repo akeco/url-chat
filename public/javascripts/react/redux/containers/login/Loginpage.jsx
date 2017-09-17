@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import RaisedButton from 'material-ui/RaisedButton';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {teal700, teal50} from 'material-ui/styles/colors';
+import {teal900, teal700, teal400, teal500, teal100, teal50} from 'material-ui/styles/colors';
 import { setProfileUser } from '../../actions/index';
 import axios from 'axios';
 
@@ -11,6 +11,8 @@ class Loginpage extends Component{
     constructor(props){
         super(props);
         this.homepageRedirect = this.homepageRedirect.bind(this);
+        this.loginRedirect = this.loginRedirect.bind(this);
+        this.registerRedirect = this.registerRedirect.bind(this);
     }
 
 
@@ -26,23 +28,44 @@ class Loginpage extends Component{
         }).catch((err)=>{
             console.info(err);
         });
-
     }
 
+    loginRedirect(){
+        this.props.history.push("/login");
+    }
+
+    registerRedirect(){
+        this.props.history.push("/register");
+    }
 
     render(){
         return(
             <div className="loginWrapper" style={style.loginWrapper}>
-                <div style={style.innerDiv}>
-                    <RaisedButton
-                        label={`Continue as ${ (this.props.temporaryUser) && this.props.temporaryUser.username }`}
-                        labelColor={teal700}
-                        onTouchTap={this.homepageRedirect}
-                    />
-                    <br/>
-                    <RaisedButton label="Login" labelColor={teal700} />
-                    <br/>
-                    <RaisedButton label="Register" labelColor={teal700} />
+                <h2 style={style.websiteLogo}>WEBSITE<span style={{fontWeight:300}}>Logo</span></h2>
+                <div style={style.centerBlock}>
+                   <div style={style.elementWrapper}>
+                       <RaisedButton
+                           label={`Continue as ${ (this.props.temporaryUser) && this.props.temporaryUser.username }`}
+                           onTouchTap={this.homepageRedirect}
+                           style={style.guestButton}
+                           backgroundColor={teal900}
+                           labelColor={teal100}
+                       />
+                       <RaisedButton
+                           label="Login"
+                           style={style.buttons}
+                           labelColor={teal700}
+                           backgroundColor={teal50}
+                           onTouchTap={this.loginRedirect}
+                       />
+                       <RaisedButton
+                           label="Register"
+                           style={{width:'100%'}}
+                           labelColor={teal700}
+                           backgroundColor={teal50}
+                           onTouchTap={this.registerRedirect}
+                       />
+                   </div>
                 </div>
             </div>
         );
@@ -50,17 +73,51 @@ class Loginpage extends Component{
 }
 
 const style = {
+    websiteLogo:{
+        position: 'absolute',
+        top: 95,
+        left: 0,
+        right: 0,
+        margin: 'auto',
+        textAlign: 'center',
+        fontWeight: 600,
+        color: teal700,
+        cursor: 'default'
+    },
+    guestButton: {
+        border: '1px solid',
+        borderColor: teal500,
+        width: '100%',
+        marginBottom: 20
+    },
+    buttons: {
+        width: '100%',
+        marginBottom: 20
+    },
+    elementWrapper: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: 270
+    },
+    centerBlock: {
+        width: '100%',
+        backgroundColor: teal700,
+        padding: '70px 0px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        boxShadow: 'inset 0 2px 4px 0 rgba(0,0,0,0.3), inset 0 -2px 4px 0 rgba(0,0,0,0.3)',
+        backgroundImage: 'url(\'../../../../../../images/login-back.png\')',
+    },
     loginWrapper: {
         width: '100%',
         height: '100%',
         display: 'flex',
-        justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: teal50
-    },
-    innerDiv:{
-        display:'flex',
-        flexDirection:'column'
+        backgroundColor: teal50,
+        position: 'relative'
     }
 };
 

@@ -20,6 +20,6 @@ var style = {
     wrapper: {
         flexGrow: 1
     }
-}
+};
 
 export default MessagesContainer;

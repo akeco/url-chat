@@ -8,6 +8,8 @@ import reducers from './redux/reducers/index';
 import Wrapper from '../react/redux/containers/componentWrapper/Wrapper';
 import Homepage from './redux/containers/homepage/HomepageContainer';
 import Loginpage from './redux/containers/login/Loginpage';
+import LoginComponent from './redux/containers/login/LoginComponent';
+import RegisterComponent from './redux/containers/login/RegisterComponent';
 import 'normalize.css/normalize.css';
 import '../../stylesheets/less/main.less';
 
@@ -26,7 +28,9 @@ class Main extends Component{
                     <Router>
                         <Wrapper>
                             <Route exact path="/" component={Homepage}></Route>
-                            <Route path="/login" component={Loginpage}></Route>
+                            <Route path="/home" component={Loginpage}></Route>
+                            <Route path="/login" component={LoginComponent}></Route>
+                            <Route path="/register" component={RegisterComponent}></Route>
                         </Wrapper>
                     </Router>
                 </MuiThemeProvider>

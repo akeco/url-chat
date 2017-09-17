@@ -61,6 +61,7 @@ class HiddenControlsContainer extends Component{
         this.props.profileUser.vote = 'up';
         this.props.socketIO.emit("voting", {
             vote: 'up',
+            roomID: this.props.activeRoomState.roomID,
             messageID: this.message._id,
             user: this.props.profileUser
         });
@@ -85,6 +86,7 @@ class HiddenControlsContainer extends Component{
         this.props.profileUser.vote = 'down';
         this.props.socketIO.emit("voting", {
             vote: 'down',
+            roomID: this.props.activeRoomState.roomID,
             messageID: this.message._id,
             user: this.props.profileUser
         });
@@ -187,7 +189,8 @@ const style = {
 function mapStateToProps(state) {
     return ({
         socketIO: state.socketobject,
-        profileUser: state.profileuser
+        profileUser: state.profileuser,
+        activeRoomState: state.activeRoom
     });
 }
 

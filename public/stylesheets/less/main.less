@@ -79,6 +79,29 @@ body{
   }
 }
 
+.loginForm{
+  &.hidden{
+    opacity: 0.1;
+    pointer-events: none;
+  }
+  opacity:1;
+  transition: all 250ms cubic-bezier(0.4, 0.0, 0.2, 1);
+  input{
+    transition: all 250ms cubic-bezier(0.4, 0.0, 0.2, 1);
+    &:focus{
+      //background-color: rgba(255,255,255,0.1) !important;
+      background-color: #00695C !important;
+      border: 1px solid #26A69A !important;
+      color: #E0F2F1 !important;
+    }
+  }
+}
+
+.emailError, .passwordError{
+  border-color: #F44336 !important;
+  color: #F44336 !important;
+}
+
 
 @media (max-width: 575px){
   .mainHeader{

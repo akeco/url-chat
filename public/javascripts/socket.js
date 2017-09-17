@@ -50,7 +50,7 @@ io.sockets.on('connection', function (socket) {
     socket.on("voting", function (data) {
         (async()=>{
             var result = await voting(data);
-            if(result) io.sockets.emit("updateMessageVote", result);
+            if(result) io.sockets.in(data.roomID).emit("updateMessageVote", result);
         })();
     });
 

@@ -5,7 +5,7 @@ import {teal50} from 'material-ui/styles/colors';
 import Message from '../../../components/message/Message';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {insertMessage, updateMessage} from '../../actions/index';
+import {updateMessage} from '../../actions/index';
 //import { Observable, BehaviorSubject } from 'rxjs';
 //import triggerWindowState from '../../../components/utils/WindowFocus';
 import _ from 'lodash';
@@ -20,12 +20,10 @@ class Messages extends Component{
             windowFocus: true
         };
         this.showMessages = this.showMessages.bind(this);
-        this.getMessage = this.getMessage.bind(this);
         this.updateMessageVote = this.updateMessageVote.bind(this);
     }
 
     componentWillMount(){
-        this.props.socketIO.on("getMessage", this.getMessage);
         this.props.socketIO.on("updateMessageVote", this.updateMessageVote);
     }
 
@@ -35,11 +33,8 @@ class Messages extends Component{
     }
 
     updateMessageVote(data){
+        console.info("VOTING UPDATE");
         this.props.updateMessage(data);
-    }
-
-    getMessage(data){
-        this.props.insertMessage(data);
     }
 
     showMessages(){
@@ -113,7 +108,6 @@ var style = {
 
 function matchDispatchToProps(dispatch) {
     return bindActionCreators({
-        insertMessage: insertMessage,
         updateMessage: updateMessage
     }, dispatch);
 }

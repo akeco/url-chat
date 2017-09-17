@@ -8,7 +8,6 @@ import swipepage from './swipepage';
 import headersubmenu from './headersubmenu';
 import setTemporayUser from './setTemporayUser';
 import spinner from './spinner';
-
 import toggleUsersMenu from './toggleUsersMenu';
 
 const reducers = combineReducers({
