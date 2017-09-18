@@ -10,7 +10,8 @@
     "start-copy": "webpack --config webpack.production.config.js",
     "poststart-copy": "node ./bin/www",
     "dev-start": "nodemon ./bin/www",
-    "webpack": "webpack --colors --progress --watch"
+    "webpack": "webpack --colors --progress --watch",
+    "webpack-prod": "webpack --config webpack.production.config.js"
   },
   "dependencies": {
     "async-uglify-js-webpack-plugin": "0.0.6",
