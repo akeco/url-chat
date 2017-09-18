@@ -1,6 +1,5 @@
 var mongoose = require('mongoose');
 var roomModel = require('../models/room');
-var _ = require('lodash');
 var {sort_by} = require('../services/utils');
 
 module.exports = async function (data) {

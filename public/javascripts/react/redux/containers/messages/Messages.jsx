@@ -7,7 +7,7 @@ import Message from '../../../components/message/Message';
 import {connect} from 'react-redux';
 //import { Observable, BehaviorSubject } from 'rxjs';
 //import triggerWindowState from '../../../components/utils/WindowFocus';
-import _ from 'lodash';
+import { find } from 'lodash';
 //import $ from 'jquery';
 import '../../../../../stylesheets/less/messages.less';
 
@@ -28,7 +28,7 @@ class Messages extends Component{
 
     showMessages(){
         if(this.props.activeRoom && this.props.chatMessages.length){
-            var roomObject = _.find(this.props.chatMessages, (o)=>{
+            var roomObject = find(this.props.chatMessages, (o)=>{
                 return o.room._id == this.props.activeRoom._id;
             });
             if(roomObject){

@@ -6,7 +6,7 @@ import Copy from 'material-ui/svg-icons/Content/content-copy';
 import Report from 'material-ui/svg-icons/Action/info-outline';
 import Block from 'material-ui/svg-icons/Content/block';
 import {connect} from 'react-redux';
-import _ from 'lodash';
+import {find} from 'lodash';
 
 class HiddenControlsContainer extends Component{
     constructor(props){
@@ -22,7 +22,7 @@ class HiddenControlsContainer extends Component{
 
     componentWillMount(){
         if(this.message.ratingUsers.length){
-            var findUser = _.find(this.message.ratingUsers, (o)=>{ return o._id == this.props.profileUser._id; });
+            var findUser = find(this.message.ratingUsers, (o)=>{ return o._id == this.props.profileUser._id; });
             if(findUser && findUser.vote){
                 switch (findUser.vote){
                     case 'up':

@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var roomModel = require('../models/room');
 var { sort_by } = require('./utils');
-var _ = require('lodash');
+var { groupBy } = require('lodash');
 const util = require('util');
 
 module.exports = async function () {
@@ -11,7 +11,7 @@ module.exports = async function () {
     if(result){
         result = result.sort(sort_by('members', false, function(a){return a.length}));
 
-        var filteredResult = _.groupBy(result, function (item) {
+        var filteredResult = groupBy(result, function (item) {
             return item.name
         });
 

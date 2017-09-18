@@ -1,7 +1,6 @@
 var mongoose = require('mongoose');
 var roomModel = require('../models/room');
 var randomstring = require('randomstring');
-var _ = require('lodash');
 
 module.exports = async function (data) {
     var room = await roomModel.findOne({route: data.url});

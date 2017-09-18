@@ -1,6 +1,7 @@
 const path = require('path');
 var webpack = require('webpack');
 const Uglify = require("uglifyjs-webpack-plugin");
+var CompressionPlugin = require("compression-webpack-plugin");
 
 module.exports = {
     entry: "./public/javascripts/react/App.jsx",
@@ -65,8 +66,8 @@ module.exports = {
 
     plugins: [
         new webpack.DefinePlugin({
-            'process.env': {
-                'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production')
+            "process.env": {
+                NODE_ENV: JSON.stringify("production")
             }
         }),
         new webpack.ProvidePlugin({
@@ -78,6 +79,13 @@ module.exports = {
             compress: {
                 warnings: false
             }
+        }),
+        new CompressionPlugin({
+            asset: "[path].gz[query]",
+            algorithm: "gzip",
+            test: /\.(js|html)$/,
+            threshold: 10240,
+            minRatio: 0.8
         })
     ],
 
@@ -89,7 +97,7 @@ module.exports = {
         extensions: [".js", ".json", ".jsx", ".css"]
     },
 
-    devtool: "source-map", // enum
+    
     context: __dirname, // string (absolute path!)
     target: "web", // enum
     stats: "errors-only"
