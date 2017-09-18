@@ -1,5 +1,4 @@
 import { sort_by } from '../../../../../services/utils';
-import _ from 'lodash';
 
 const users = (state = null, action) => {
     switch (action.type) {
