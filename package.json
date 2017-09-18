@@ -6,8 +6,9 @@
     "node": "8.1.0"
   },
   "scripts": {
-    "start": "webpack --config webpack.production.config.js",
-    "poststart": "node ./bin/www",
+    "start": "node ./bin/www",
+    "start-copy": "webpack --config webpack.production.config.js",
+    "poststart-copy": "node ./bin/www",
     "dev-start": "nodemon ./bin/www",
     "webpack": "webpack --colors --progress --watch"
   },
