@@ -48,9 +48,7 @@ class Header extends Component{
         return(
             <div className="mainHeader" style={style.outer}>
                 <Link to="/" style={style.link}>
-                    <h4 style={style.logo}>
-                        Website<span style={{fontWeight:400}}>Logo</span>
-                    </h4>
+                    <img style={style.logo} src="../../../images/forum_final_1.png"/>
                 </Link>
                 <div className="userBlock" style={style.userBlock}>
                     <MuiThemeProvider muiTheme={muiTheme}>
@@ -135,7 +133,8 @@ var style = {
         marginRight:25
     },
     logo: {
-        margin: 0,
+        width: 105,
+        marginTop: 5
     },
     link: {
         textDecoration:'none',

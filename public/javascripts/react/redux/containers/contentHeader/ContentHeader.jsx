@@ -57,6 +57,7 @@ class ContentHeader extends Component{
             user: this.props.profileuser
         });
         this.props.closeActiveRoom();
+        this.props.toggleUsersMenu(false);
     }
 
     showActiveRoom(){
@@ -120,8 +121,8 @@ class ContentHeader extends Component{
                             style={style.iconExtend}
                             className="lastHeaderIcon"
                             iconStyle={style.icons}
-                            tooltip="Show users"
-                            tooltipPosition="top-center"
+                            tooltip="Show active members"
+                            tooltipPosition="top-left"
                             onTouchTap={this.toggleUserMenu}
                         >
                             <Menu

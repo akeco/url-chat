@@ -13,10 +13,12 @@ class LoginComponent extends Component{
     constructor(props){
         super(props);
         this.state = {
-            disabledForm: false
+            disabledForm: false,
+            warning: false
         };
         this.handleLogin = this.handleLogin.bind(this);
         this.validateEmailError = this.validateEmailError.bind(this);
+        this.showWarning = this.showWarning.bind(this);
     }
 
     handleLogin(event){
@@ -26,7 +28,8 @@ class LoginComponent extends Component{
         password = password.value.trim();
         if(email && password && validateEmail(email)){
             this.setState({
-                disabledForm: true
+                disabledForm: true,
+                warning: false
             });
 
             axios.post("/login",{
@@ -41,7 +44,12 @@ class LoginComponent extends Component{
                     this.props.history.push("/");
                 }, 2000);
             }).catch((err)=>{
-                console.info("error");
+                setTimeout(()=>{
+                    this.setState({
+                        disabledForm: false,
+                        warning: true
+                    });
+                }, 2000);
             });
 
             this.refs.email.value = '';
@@ -73,16 +81,29 @@ class LoginComponent extends Component{
         }
     }
 
+    showWarning(){
+        if(this.state.warning){
+            return(
+                <p style={style.warning}>
+                    Wrong username or password
+                </p>
+            );
+        }
+    }
+
     render(){
         var emailError = (this.state.validEmail) ? 'emailError' : '';
         var disabledForm = (this.state.disabledForm) ? 'hidden loginForm' : 'loginForm';
         return(
             <div className="loginWrapper" style={style.loginWrapper}>
-                <h2 style={style.websiteLogo}>WEBSITE<span style={{fontWeight:300}}>Logo</span></h2>
+                <img style={style.websiteLogo} src="../../../../../images/forum_final_1.png"/>
                 <div style={style.centerBlock}>
                     <div style={style.elementWrapper}>
                         {
                             this.showProgressCircle()
+                        }
+                        {
+                            this.showWarning()
                         }
                         <form
                             onSubmit={this.handleLogin}
@@ -118,6 +139,12 @@ class LoginComponent extends Component{
 }
 
 const style = {
+    warning:{
+        color: teal50,
+        fontSize: 12,
+        alignSelf: 'flex-end',
+        cursor: 'default'
+    },
     form:{
         width: '100%'
     },
@@ -143,13 +170,11 @@ const style = {
     },
     websiteLogo:{
         position: 'absolute',
-        top: 95,
+        width: 200,
+        top: 75,
         left: 0,
         right: 0,
         margin: 'auto',
-        textAlign: 'center',
-        fontWeight: 600,
-        color: teal700,
         cursor: 'default'
     },
     buttons: {

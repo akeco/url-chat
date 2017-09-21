@@ -97,7 +97,7 @@ module.exports = {
         extensions: [".js", ".json", ".jsx", ".css"]
     },
 
-    
+
     context: __dirname, // string (absolute path!)
     target: "web", // enum
     stats: "errors-only"

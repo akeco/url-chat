@@ -88,6 +88,23 @@ io.sockets.on('connection', function (socket) {
 
     });
 
+
+
+    // PRIVATE CHAT PART
+
+    socket.on("joinPrivate", function (data) {
+        console.info("Join private", data);
+        /*
+        (async()=>{
+            var result = await joinRoom(data);
+            if(result) {
+                io.sockets.emit("refreshRoomsOnJoin", result);
+                socket.join(data.room.roomID);
+            }
+        })();
+        */
+    });
+
 });
 
 

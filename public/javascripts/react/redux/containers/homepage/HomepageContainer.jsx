@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { withRouter } from 'react-router-dom';
 import LeftURLSidebar from '../../../components/homepage/LeftURLSidebar';
-import RightUserSidebar from './RightUserSidebar';
+import RightUserSidebar from '../usersPart/RightUserSidebar';
 import Content from '../../../components/homepage/Content';
 import Header from '../../../components/header/Header';
 import SwipeableViews from 'react-swipeable-views';

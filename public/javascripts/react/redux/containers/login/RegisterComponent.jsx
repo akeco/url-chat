@@ -55,7 +55,6 @@ class RegisterComponent extends Component{
                     this.props.history.push("/");
                 }, 2000);
             }).catch((err)=>{
-                console.info("Error");
                 setTimeout(()=>{
                     this.setState({
                         disabledForm: false,
@@ -124,7 +123,7 @@ class RegisterComponent extends Component{
         var disabledForm = (this.state.disabledForm) ? 'hidden loginForm' : 'loginForm';
         return(
             <div className="loginWrapper" style={style.loginWrapper}>
-                <h2 style={style.websiteLogo}>WEBSITE<span style={{fontWeight:300}}>Logo</span></h2>
+                <img style={style.websiteLogo} src="../../../../../images/forum_final_1.png"/>
                 <div style={style.centerBlock}>
                     <div style={style.elementWrapper}>
                         {
@@ -214,13 +213,11 @@ const style = {
     },
     websiteLogo:{
         position: 'absolute',
-        top: 68,
+        width: 200,
+        top: 45,
         left: 0,
         right: 0,
         margin: 'auto',
-        textAlign: 'center',
-        fontWeight: 600,
-        color: teal700,
         cursor: 'default'
     },
     buttons: {

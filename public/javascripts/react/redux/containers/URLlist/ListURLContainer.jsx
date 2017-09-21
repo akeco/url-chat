@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
-import {teal800, teal700, teal600, teal400, teal50} from 'material-ui/styles/colors';
+import {teal800, teal700, teal400, teal50} from 'material-ui/styles/colors';
 import {List, ListItem} from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
 import IconButton from 'material-ui/IconButton';
 import Profile from 'material-ui/svg-icons/Action/perm-identity';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import { getRooms, activeRoom, addChatMessages, swipePage } from '../../actions/index';
+import { getRooms, activeRoom, addChatMessages, swipePage, toggleUsersMenu, addPrivateUser} from '../../actions/index';
 import LinearProgress from 'material-ui/LinearProgress';
 import axios from 'axios';
 import $ from 'jquery';
@@ -72,6 +72,8 @@ class ListURLContainer extends Component{
                 room: this.props.activeRoomState,
                 user: this.props.profileuser
             });
+            this.props.toggleUsersMenu(false);
+            this.props.addPrivateUser(null);
         }
 
         if(this.props.activeRoomState){
@@ -113,6 +115,7 @@ class ListURLContainer extends Component{
                 return(
                     <div key={theKey} >
                         <ListItem
+                            className="ListItem"
                             style={style.listItem}
                             primaryText={primaryTextFunction(room.name, 23)}
                             innerDivStyle={Object.assign(style.innerDiv)}
@@ -237,11 +240,8 @@ var style = {
         textShadow: '0 1px 1px rgba(0,0,0,0.2)'
     },
     avatar: {
-        //borderRadius: '40%',
         borderRadius: '35%',
         objectFit:'cover',
-        //width: 30,
-        //height: 30,
         width: 28,
         height: 28,
         boxShadow: '0 1px 3px 0 rgba(0,0,0,0.5)',
@@ -257,7 +257,9 @@ function matchDispatchToProps(dispatch) {
         getRooms: getRooms,
         activeRoom: activeRoom,
         addChatMessages: addChatMessages,
-        swipePage: swipePage
+        swipePage: swipePage,
+        toggleUsersMenu: toggleUsersMenu,
+        addPrivateUser: addPrivateUser
     }, dispatch);
 }
 

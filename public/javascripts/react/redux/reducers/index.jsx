@@ -9,6 +9,7 @@ import headersubmenu from './headersubmenu';
 import setTemporayUser from './setTemporayUser';
 import spinner from './spinner';
 import toggleUsersMenu from './toggleUsersMenu';
+import addPrivateUser from './addPrivateUser';
 
 const reducers = combineReducers({
     toggleUserMenu: toggleUsersMenu,
@@ -20,7 +21,8 @@ const reducers = combineReducers({
     activeRoom: activeRoom,
     profileuser: profileuser,
     socketobject: socketobject,
-    chatmessages: chatmessages
+    chatmessages: chatmessages,
+    privateUser: addPrivateUser,
 });
 
 export default reducers;

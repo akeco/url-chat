@@ -19,6 +19,12 @@ export const showHeaderSubmenu = data => {
     }
 };
 
+export const addPrivateUser = data => {
+    return {
+        type: 'ADD_PRIVATE_USER',
+        data
+    }
+};
 
 export const updateRoomList = data => {
     return {

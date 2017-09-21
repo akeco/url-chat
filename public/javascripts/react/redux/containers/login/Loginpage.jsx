@@ -41,7 +41,7 @@ class Loginpage extends Component{
     render(){
         return(
             <div className="loginWrapper" style={style.loginWrapper}>
-                <h2 style={style.websiteLogo}>WEBSITE<span style={{fontWeight:300}}>Logo</span></h2>
+                <img style={style.websiteLogo} src="../../../../../images/forum_final_1.png"/>
                 <div style={style.centerBlock}>
                    <div style={style.elementWrapper}>
                        <RaisedButton
@@ -75,13 +75,11 @@ class Loginpage extends Component{
 const style = {
     websiteLogo:{
         position: 'absolute',
-        top: 95,
+        width: 200,
+        top: 75,
         left: 0,
         right: 0,
         margin: 'auto',
-        textAlign: 'center',
-        fontWeight: 600,
-        color: teal700,
         cursor: 'default'
     },
     guestButton: {
