@@ -7,8 +7,9 @@ import ArrowBack from 'material-ui/svg-icons/Navigation/arrow-back';
 import CloseIcon from 'material-ui/svg-icons/Navigation/close';
 import Contact from 'material-ui/svg-icons/Communication/chat';
 import {connect} from 'react-redux';
+import {find} from 'lodash';
 import {bindActionCreators} from 'redux';
-import {swipePage, toggleUsersMenu, addPrivateUser} from '../../actions/index';
+import {swipePage, toggleUsersMenu, addPrivateRoom} from '../../actions/index';
 import UserFormContainer from '../userForm/UserFormContainer';
 import PrivateMessagesContainer from './PrivateMessagesContainer';
 import PrivateMessageForm from './PrivateMessageForm';
@@ -22,6 +23,7 @@ class RightUserSidebar extends Component{
         this.showMembers = this.showMembers.bind(this);
         this.showMessagesAndForm = this.showMessagesAndForm.bind(this);
         this.closeChat = this.closeChat.bind(this);
+        this.addPrivateChat = this.addPrivateChat.bind(this);
     }
 
     goBack(){
@@ -33,27 +35,72 @@ class RightUserSidebar extends Component{
     }
 
     addPrivateChat(user){
-        this.props.addPrivateUser(user);
+        this.props.addPrivateRoom(user);
         this.props.socketIO.emit("joinPrivate", {
             sender: this.props.profileuser._id,
-            receiver: user._id
+            receiver: user._id,
+            users: [this.props.profileuser, user]
         });
     }
 
     closeChat(){
-        this.props.addPrivateUser(null);
+        this.props.addPrivateRoom(null);
     }
 
     showMembers(){
-        if(this.props.activeRoomState && !this.props.privateUser){
-            return this.props.activeRoomState.members.map((item)=>{
-                if(item._id != this.props.profileuser._id){
-                    return(
+        if(this.props.activeRoomState && !this.props.privateRoom){
+            var activeRoom = find(this.props.rooms, (o)=>{ return o.name == this.props.activeRoomState.name; });
+            if(activeRoom) {
+                activeRoom = find(activeRoom.rooms, (o)=>{ return o.route == this.props.activeRoomState.route });
+                if(activeRoom){
+                    return activeRoom.members.map((item)=>{
+                        if(item._id != this.props.profileuser._id){
+                            return(
+                                <ListItem
+                                    key={item._id}
+                                    className="userListItem"
+                                    primaryText={item.username}
+                                    style={style.listItem}
+                                    innerDivStyle={style.innerDiv}
+                                    leftIcon={
+                                        <Account
+                                            style={style.avatar}
+                                        />
+                                    }
+                                    rightIconButton={
+                                        <IconButton
+                                            className="contactBtn"
+                                            iconStyle={style.contact}
+                                            tooltip="Private chat"
+                                            tooltipPosition="top-left"
+                                            onTouchTap={()=>{
+                                                this.addPrivateChat(item)
+                                                }
+                                            }
+                                        >
+                                            <Contact/>
+                                        </IconButton>
+                                    }
+                                />
+                            );
+                        }
+                    });
+                }
+            }
+        }
+    }
+
+    showMessagesAndForm(){
+        if(this.props.privateRoom && this.props.privateRoom.users){
+            var receiver = this.props.privateRoom.users.filter((item)=> item.username != this.props.profileuser.username);
+            if(receiver.length){
+                var {username} = receiver[0];
+                return(
+                    <div style={style.innerWrapper}>
                         <ListItem
-                            key={item._id}
-                            className="userListItem"
-                            primaryText={item.username}
-                            style={style.listItem}
+                            className="singleUserItem"
+                            primaryText={username}
+                            style={style.listItemSingle}
                             innerDivStyle={style.innerDiv}
                             leftIcon={
                                 <Account
@@ -64,53 +111,19 @@ class RightUserSidebar extends Component{
                                 <IconButton
                                     className="contactBtn"
                                     iconStyle={style.contact}
-                                    tooltip="Private chat"
+                                    tooltip="Close chat"
                                     tooltipPosition="top-left"
-                                    onTouchTap={()=>{
-                                        this.addPrivateChat(item)
-                                        }
-                                    }
+                                    onTouchTap={this.closeChat}
                                 >
-                                    <Contact/>
+                                    <CloseIcon/>
                                 </IconButton>
                             }
                         />
-                    );
-                }
-            });
-        }
-    }
-
-    showMessagesAndForm(){
-        if(this.props.privateUser){
-            return(
-                <div style={style.innerWrapper}>
-                    <ListItem
-                        className="singleUserItem"
-                        primaryText={this.props.privateUser.username}
-                        style={style.listItemSingle}
-                        innerDivStyle={style.innerDiv}
-                        leftIcon={
-                            <Account
-                                style={style.avatar}
-                            />
-                        }
-                        rightIconButton={
-                            <IconButton
-                                className="contactBtn"
-                                iconStyle={style.contact}
-                                tooltip="Close chat"
-                                tooltipPosition="top-left"
-                                onTouchTap={this.closeChat}
-                            >
-                                <CloseIcon/>
-                            </IconButton>
-                        }
-                    />
-                    <PrivateMessagesContainer/>
-                    <PrivateMessageForm/>
-                </div>
-            );
+                        <PrivateMessagesContainer/>
+                        <PrivateMessageForm/>
+                    </div>
+                );
+            }
         }
     }
 
@@ -226,7 +239,7 @@ function matchDispatchToProps(dispatch) {
     return bindActionCreators({
         swipePage: swipePage,
         toggleUsersMenu: toggleUsersMenu,
-        addPrivateUser: addPrivateUser
+        addPrivateRoom: addPrivateRoom,
     }, dispatch);
 }
 
@@ -236,9 +249,10 @@ function mapStateToProps(state) {
         showUserMenuValue: state.toggleUserMenu,
         activeRoomState: state.activeRoom,
         profileuser: state.profileuser,
-        privateUser: state.privateUser,
         socketIO: state.socketobject,
-        privateUser: state.privateUser
+        privateRoom: state.privateRoom,
+        rooms: state.rooms,
+        privateNotification: state.privateNotification
     });
 }
 

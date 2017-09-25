@@ -2,13 +2,8 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 const privateMessageSchema = new Schema({
-    usersID: {
-        type: Array,
-        required: true
-    },
-    users: {
-        type: Array,
-        required: true
+    sender: {
+        type: Object
     },
     privateRoomID: {
         type: String,

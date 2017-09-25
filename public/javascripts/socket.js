@@ -8,6 +8,9 @@ var joinRoom = require('../../services/joinRoom');
 var getActiveRooms = require('../../services/getActiveRooms');
 var getFavicon = require('../../services/getFavicon');
 var voting = require('../../services/voting');
+var getOrCreatePrivateRoom = require('../../services/getOrCreatePrivateRoom');
+var savePrivateMessage = require('../../services/savePrivateMessage');
+var {find} = require('lodash');
 
 io.sockets.on('connection', function (socket) {
     console.info("CONNECTED",socket.id);
@@ -89,22 +92,26 @@ io.sockets.on('connection', function (socket) {
     });
 
 
-
     // PRIVATE CHAT PART
 
     socket.on("joinPrivate", function (data) {
-        console.info("Join private", data);
-        /*
         (async()=>{
-            var result = await joinRoom(data);
+            var result = await getOrCreatePrivateRoom(data);
             if(result) {
-                io.sockets.emit("refreshRoomsOnJoin", result);
-                socket.join(data.room.roomID);
+                socket.join(result.room.privateRoomID);
+                io.sockets.emit("joinPrivateRoom", result);
             }
         })();
-        */
     });
 
+    socket.on("sendPrivateMessage", function (data) {
+        (async ()=>{
+            var result = await savePrivateMessage(data);
+            if(result){
+                io.sockets.in(result.privateRoomID).emit("handlePrivateMessage", result);
+            }
+        })();
+    });
 });
 
 

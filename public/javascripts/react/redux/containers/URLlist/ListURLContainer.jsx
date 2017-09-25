@@ -6,7 +6,7 @@ import IconButton from 'material-ui/IconButton';
 import Profile from 'material-ui/svg-icons/Action/perm-identity';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import { getRooms, activeRoom, addChatMessages, swipePage, toggleUsersMenu, addPrivateUser} from '../../actions/index';
+import { getRooms, activeRoom, addChatMessages, swipePage, toggleUsersMenu, addPrivateRoom} from '../../actions/index';
 import LinearProgress from 'material-ui/LinearProgress';
 import axios from 'axios';
 import $ from 'jquery';
@@ -73,7 +73,7 @@ class ListURLContainer extends Component{
                 user: this.props.profileuser
             });
             this.props.toggleUsersMenu(false);
-            this.props.addPrivateUser(null);
+            this.props.addPrivateRoom(null);
         }
 
         if(this.props.activeRoomState){
@@ -259,7 +259,7 @@ function matchDispatchToProps(dispatch) {
         addChatMessages: addChatMessages,
         swipePage: swipePage,
         toggleUsersMenu: toggleUsersMenu,
-        addPrivateUser: addPrivateUser
+        addPrivateRoom
     }, dispatch);
 }
 

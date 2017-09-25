@@ -8,21 +8,25 @@ import swipepage from './swipepage';
 import headersubmenu from './headersubmenu';
 import setTemporayUser from './setTemporayUser';
 import spinner from './spinner';
-import toggleUsersMenu from './toggleUsersMenu';
-import addPrivateUser from './addPrivateUser';
+import toggleUserMenu from './toggleUsersMenu';
+import privateMessages from './addPrivateMessages';
+import privateRoom from './privateRoom';
+import privateNotification from './privateNotification';
 
 const reducers = combineReducers({
-    toggleUserMenu: toggleUsersMenu,
+    toggleUserMenu,
     pageIndex: swipepage,
     headerSubmenuState: headersubmenu,
     temporaryUser: setTemporayUser,
-    spinner: spinner,
-    rooms: rooms,
-    activeRoom: activeRoom,
-    profileuser: profileuser,
-    socketobject: socketobject,
-    chatmessages: chatmessages,
-    privateUser: addPrivateUser,
+    spinner,
+    rooms,
+    activeRoom,
+    profileuser,
+    socketobject,
+    chatmessages,
+    privateMessages,
+    privateRoom,
+    privateNotification
 });
 
 export default reducers;

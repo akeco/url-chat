@@ -19,9 +19,16 @@ export const showHeaderSubmenu = data => {
     }
 };
 
-export const addPrivateUser = data => {
+export const addPrivateMessages = data => {
     return {
-        type: 'ADD_PRIVATE_USER',
+        type: 'ADD_PRIVATE_MESSAGES',
+        data
+    }
+};
+
+export const addPrivateRoom = data => {
+    return {
+        type: 'ADD_PRIVATE_ROOM',
         data
     }
 };
@@ -129,6 +136,13 @@ export const closeActiveRoom = data => {
 export const sendMessage = data => {
     return {
         type: 'SEND_MESSAGE',
+        data
+    }
+};
+
+export const addPrivateNotification = data => {
+    return {
+        type: 'ADD_PRIVATE_NOTIFICATION',
         data
     }
 };

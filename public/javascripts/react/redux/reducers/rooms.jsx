@@ -1,6 +1,6 @@
 import { sort_by } from '../../../../../services/utils';
 
-const users = (state = null, action) => {
+const rooms = (state = null, action) => {
     switch (action.type) {
         case 'JOIN_REFRESH_ROOMS':
             var exist='';
@@ -18,7 +18,7 @@ const users = (state = null, action) => {
                         }).sort(sort_by('members', false, function(a){return a.length}));
                     }
                     return item;
-                }).sort(sort_by('membersNumber'));;
+                }).sort(sort_by('membersNumber'));
             }
 
         case 'UPDATE_ROOM_LIST':
@@ -64,4 +64,4 @@ const users = (state = null, action) => {
     }
 };
 
-export default users;
+export default rooms;

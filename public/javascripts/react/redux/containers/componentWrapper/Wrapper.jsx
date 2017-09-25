@@ -8,7 +8,7 @@ import $ from 'jquery';
 import {bindActionCreators} from 'redux';
 import {updateProfileSocket, setProfileUser, setSocketObject, setTemporaryUser,
     updateRoomList, activeRoom, joinRefreshRooms, addChatMessages, swipePage, loadSpinner,
-    insertMessage, updateMessage} from '../../actions/index';
+    insertMessage, updateMessage, addPrivateRoom, addPrivateMessages, addPrivateNotification} from '../../actions/index';
 
 class Wrapper extends Component{
     constructor(props){
@@ -16,6 +16,9 @@ class Wrapper extends Component{
         this.updateSocketID = this.updateSocketID.bind(this);
         this.getMessage = this.getMessage.bind(this);
         this.updateMessageVote = this.updateMessageVote.bind(this);
+        this.addPrivateRoom = this.addPrivateRoom.bind(this);
+        this.handlePrivateMessage = this.handlePrivateMessage.bind(this);
+        this.joinRequest = this.joinRequest.bind(this);
     }
 
     componentDidMount(){
@@ -35,6 +38,9 @@ class Wrapper extends Component{
 
         this.socket.on("getMessage", this.getMessage);
         this.socket.on("updateMessageVote", this.updateMessageVote);
+        this.socket.on("joinPrivateRoom", this.addPrivateRoom);
+        this.socket.on("handlePrivateMessage", this.handlePrivateMessage);
+        this.socket.on("joinRequest", this.joinRequest);
 
         this.socket.on('connect', ()=>{
             var socket = this.socket;
@@ -119,8 +125,29 @@ class Wrapper extends Component{
         });
     }
 
+    joinRequest(data){
+        this.socket.emit("acceptJoin",data.room.privateRoomID);
+    }
+
+    addPrivateRoom(data){
+        this.props.addPrivateRoom(data.room);
+        if(data.messages) this.props.addPrivateMessages(data.messages);
+        setTimeout(()=>{
+            var containerElement = $(".privateListContainer");
+            containerElement.parent("div").animate({scrollTop:containerElement.height(), top}, 250);
+        },250);
+    }
+
     getMessage(data){
         this.props.insertMessage(data);
+    }
+
+    handlePrivateMessage(data){
+        this.props.addPrivateMessages(data);
+        setTimeout(()=>{
+            var containerElement = $(".privateListContainer");
+            containerElement.parent("div").animate({scrollTop:containerElement.height(), top}, 250);
+        },250);
     }
 
     updateSocketID(data){
@@ -156,7 +183,10 @@ function mapDispatchToProps(dispatch) {
         swipePage,
         loadSpinner,
         insertMessage,
-        updateMessage
+        updateMessage,
+        addPrivateRoom,
+        addPrivateMessages,
+        addPrivateNotification
     }, dispatch);
 }
 
@@ -164,7 +194,8 @@ function mapStateToProps(state) {
     return ({
         profileuser: state.profileuser,
         socketIO: state.socketobject,
-        activeRoomState: state.activeRoom
+        activeRoomState: state.activeRoom,
+        privateRoom: state.privateRoom
     });
 }
 

@@ -11,29 +11,26 @@ class PrivateMessageForm extends Component{
     constructor(props){
         super(props);
         this.sendMessage = this.sendMessage.bind(this);
-        this.state = {
-            inputFocus: false
-        };
     }
 
     sendMessage(event){
         event.preventDefault();
+        var createdTime = new Date().getTime();
         if(this.refs.message.value.trim()){
-            this.props.socketIO.emit("sendMessage",{
-                room: this.props.activeRoom,
+            this.props.socketIO.emit("sendPrivateMessage",{
                 sender: this.props.profileuser,
+                privateRoomID: this.props.privateRoom.privateRoomID,
                 message: {
-                    user: this.props.profileuser,
                     text: this.refs.message.value.trim(),
-                    created: new Date().getTime()
-                }
+                    created: createdTime
+                },
+                created: createdTime
             });
             this.refs.message.value = "";
         }
     }
 
     render(){
-        //var focusedForm = (this.state.inputFocus) ? 'focusFormInput' : '';
         return(
             <div style={style.wrapper}>
                 <form
@@ -44,17 +41,6 @@ class PrivateMessageForm extends Component{
                         style={Object.assign(style.inputText)}
                         ref="message"
                         placeholder="Type message..."
-                        onFocus={()=>{
-                            this.setState({
-                                inputFocus: true
-                            })
-                        }}
-
-                        onBlur={()=>{
-                            this.setState({
-                                inputFocus: false
-                            })
-                        }}
                     />
                     <FlatButton
                         onTouchStart={this.sendMessage}
@@ -150,7 +136,8 @@ function mapStateToProps(state) {
     return ({
         activeRoom: state.activeRoom,
         socketIO: state.socketobject,
-        profileuser: state.profileuser
+        profileuser: state.profileuser,
+        privateRoom: state.privateRoom
     });
 }
 
