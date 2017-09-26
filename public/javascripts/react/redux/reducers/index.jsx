@@ -11,7 +11,7 @@ import spinner from './spinner';
 import toggleUserMenu from './toggleUsersMenu';
 import privateMessages from './addPrivateMessages';
 import privateRoom from './privateRoom';
-import privateNotification from './privateNotification';
+import privateNotifyCollection from './privateNotifyCollection';
 
 const reducers = combineReducers({
     toggleUserMenu,
@@ -26,7 +26,7 @@ const reducers = combineReducers({
     chatmessages,
     privateMessages,
     privateRoom,
-    privateNotification
+    privateNotifyCollection
 });
 
 export default reducers;

@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import io from 'socket.io-client';
+import {teal600, teal50} from 'material-ui/styles/colors';
+import Snackbar from 'material-ui/Snackbar';
 import randomstring from'randomstring';
 import axios from 'axios';
 import {withRouter} from 'react-router-dom';
@@ -8,17 +10,21 @@ import $ from 'jquery';
 import {bindActionCreators} from 'redux';
 import {updateProfileSocket, setProfileUser, setSocketObject, setTemporaryUser,
     updateRoomList, activeRoom, joinRefreshRooms, addChatMessages, swipePage, loadSpinner,
-    insertMessage, updateMessage, addPrivateRoom, addPrivateMessages, addPrivateNotification} from '../../actions/index';
+    insertMessage, updateMessage, addPrivateRoom, addPrivateMessages, addNotifyPrivateIdCollection} from '../../actions/index';
 
 class Wrapper extends Component{
     constructor(props){
         super(props);
+        this.state = {
+            openSnackBar: false,
+            SnackBarMessage: ''
+        };
         this.updateSocketID = this.updateSocketID.bind(this);
         this.getMessage = this.getMessage.bind(this);
         this.updateMessageVote = this.updateMessageVote.bind(this);
         this.addPrivateRoom = this.addPrivateRoom.bind(this);
         this.handlePrivateMessage = this.handlePrivateMessage.bind(this);
-        this.joinRequest = this.joinRequest.bind(this);
+        this.notifyMessage = this.notifyMessage.bind(this);
     }
 
     componentDidMount(){
@@ -40,7 +46,7 @@ class Wrapper extends Component{
         this.socket.on("updateMessageVote", this.updateMessageVote);
         this.socket.on("joinPrivateRoom", this.addPrivateRoom);
         this.socket.on("handlePrivateMessage", this.handlePrivateMessage);
-        this.socket.on("joinRequest", this.joinRequest);
+        this.socket.on("notifyMessage", this.notifyMessage);
 
         this.socket.on('connect', ()=>{
             var socket = this.socket;
@@ -125,8 +131,15 @@ class Wrapper extends Component{
         });
     }
 
-    joinRequest(data){
-        this.socket.emit("acceptJoin",data.room.privateRoomID);
+
+    notifyMessage(data){
+        if(!this.props.toggleUserMenu){
+            this.setState({
+                openSnackBar: true,
+                SnackBarMessage: `Received private message from ${data.username}`
+            });
+        }
+        this.props.addNotifyPrivateIdCollection(data._id);
     }
 
     addPrivateRoom(data){
@@ -161,6 +174,21 @@ class Wrapper extends Component{
     render(){
         return(
             <div>
+                <Snackbar
+                    className='messageSnackBar'
+                    style={style.snackBar}
+                    bodyStyle={style.snackBarBody}
+                    contentStyle={style.snackBarContent}
+                    open={this.state.openSnackBar && !this.props.toggleUserMenu}
+                    message={this.state.SnackBarMessage}
+                    autoHideDuration={2000}
+                    onRequestClose={()=>{
+                        this.setState({
+                            openSnackBar: false,
+                            SnackBarMessage: ''
+                        })
+                    }}
+                />
                 {
                     this.props.children
                 }
@@ -168,6 +196,18 @@ class Wrapper extends Component{
         )
     }
 }
+
+const style = {
+    snackBarBody:{
+        backgroundColor: teal600
+    },
+    snackBarContent:{
+        color: teal50
+    },
+    snackBar: {
+        zIndex: 999
+    }
+};
 
 
 function mapDispatchToProps(dispatch) {
@@ -186,7 +226,7 @@ function mapDispatchToProps(dispatch) {
         updateMessage,
         addPrivateRoom,
         addPrivateMessages,
-        addPrivateNotification
+        addNotifyPrivateIdCollection
     }, dispatch);
 }
 
@@ -195,7 +235,8 @@ function mapStateToProps(state) {
         profileuser: state.profileuser,
         socketIO: state.socketobject,
         activeRoomState: state.activeRoom,
-        privateRoom: state.privateRoom
+        privateRoom: state.privateRoom,
+        toggleUserMenu: state.toggleUserMenu
     });
 }
 

@@ -5,6 +5,7 @@ import Send from 'material-ui/svg-icons/Content/send';
 import {connect} from 'react-redux';
 //import {bindActionCreators} from 'redux';
 import {teal800, teal700, teal600, teal400, teal50} from 'material-ui/styles/colors';
+import { find } from 'lodash';
 import '../../../../../stylesheets/less/messageForm.less';
 
 class PrivateMessageForm extends Component{
@@ -15,11 +16,13 @@ class PrivateMessageForm extends Component{
 
     sendMessage(event){
         event.preventDefault();
+        var receiver = find(this.props.privateRoom.users, (o)=>{return o._id != this.props.profileuser._id});
         var createdTime = new Date().getTime();
         if(this.refs.message.value.trim()){
             this.props.socketIO.emit("sendPrivateMessage",{
                 sender: this.props.profileuser,
                 privateRoomID: this.props.privateRoom.privateRoomID,
+                receiverID: (receiver._id) && receiver._id || '',
                 message: {
                     text: this.refs.message.value.trim(),
                     created: createdTime

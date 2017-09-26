@@ -3,6 +3,7 @@ import {ListItem} from 'material-ui/List';
 import {teal900, teal800, teal700, teal500, teal400, teal50} from 'material-ui/styles/colors';
 import Account from 'material-ui/svg-icons/Action/account-circle';
 import moment from 'moment';
+import Badge from 'material-ui/Badge';
 
 class PrivateMessage extends Component{
     constructor(props){

@@ -5,14 +5,15 @@ import {List, ListItem} from 'material-ui/List';
 import Account from 'material-ui/svg-icons/Action/account-circle';
 import ArrowBack from 'material-ui/svg-icons/Navigation/arrow-back';
 import CloseIcon from 'material-ui/svg-icons/Navigation/close';
-import Contact from 'material-ui/svg-icons/Communication/chat';
-import {connect} from 'react-redux';
 import {find} from 'lodash';
+import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {swipePage, toggleUsersMenu, addPrivateRoom} from '../../actions/index';
 import UserFormContainer from '../userForm/UserFormContainer';
 import PrivateMessagesContainer from './PrivateMessagesContainer';
 import PrivateMessageForm from './PrivateMessageForm';
+import PrivateUserListItem from './PrivateUserListItem';
+import PrivateUserBadgeListItem from './PrivateUserBadgeListItem';
 import '../../../../../stylesheets/less/userSidebarMenu.less';
 
 class RightUserSidebar extends Component{
@@ -55,34 +56,20 @@ class RightUserSidebar extends Component{
                 if(activeRoom){
                     return activeRoom.members.map((item)=>{
                         if(item._id != this.props.profileuser._id){
-                            return(
-                                <ListItem
-                                    key={item._id}
-                                    className="userListItem"
-                                    primaryText={item.username}
-                                    style={style.listItem}
-                                    innerDivStyle={style.innerDiv}
-                                    leftIcon={
-                                        <Account
-                                            style={style.avatar}
-                                        />
-                                    }
-                                    rightIconButton={
-                                        <IconButton
-                                            className="contactBtn"
-                                            iconStyle={style.contact}
-                                            tooltip="Private chat"
-                                            tooltipPosition="top-left"
-                                            onTouchTap={()=>{
-                                                this.addPrivateChat(item)
-                                                }
-                                            }
-                                        >
-                                            <Contact/>
-                                        </IconButton>
-                                    }
-                                />
-                            );
+                            var checkNotifications = [];
+                            if(this.props.privateNotifyCollection.length){
+                                checkNotifications = this.props.privateNotifyCollection.filter((userID)=>{ return userID == item._id });
+                            }
+                            if(checkNotifications.length){
+                                return(
+                                    <PrivateUserBadgeListItem key={item._id} item={item} checkNotifications={checkNotifications} />
+                                );
+                            }
+                            else{
+                                return(
+                                    <PrivateUserListItem key={item._id} item={item} />
+                                );
+                            }
                         }
                     });
                 }
@@ -252,7 +239,7 @@ function mapStateToProps(state) {
         socketIO: state.socketobject,
         privateRoom: state.privateRoom,
         rooms: state.rooms,
-        privateNotification: state.privateNotification
+        privateNotifyCollection: state.privateNotifyCollection
     });
 }
 

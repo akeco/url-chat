@@ -140,9 +140,15 @@ export const sendMessage = data => {
     }
 };
 
-export const addPrivateNotification = data => {
+export const addNotifyPrivateIdCollection = data => {
     return {
-        type: 'ADD_PRIVATE_NOTIFICATION',
+        type: 'ADD_TO_PRIVATE_NOTIFY_COLLECTION',
+        data
+    }
+};
+export const deleteFromNotifyCollection = data => {
+    return {
+        type: 'DELETE_FROM_NOTIFY_COLLECTION',
         data
     }
 };

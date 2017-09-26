@@ -10,6 +10,7 @@ var getFavicon = require('../../services/getFavicon');
 var voting = require('../../services/voting');
 var getOrCreatePrivateRoom = require('../../services/getOrCreatePrivateRoom');
 var savePrivateMessage = require('../../services/savePrivateMessage');
+var findSingleUserSocketID = require('../../services/findSingleUserSocketID');
 var {find} = require('lodash');
 
 io.sockets.on('connection', function (socket) {
@@ -99,7 +100,7 @@ io.sockets.on('connection', function (socket) {
             var result = await getOrCreatePrivateRoom(data);
             if(result) {
                 socket.join(result.room.privateRoomID);
-                io.sockets.emit("joinPrivateRoom", result);
+                socket.emit("joinPrivateRoom", result);
             }
         })();
     });
@@ -108,6 +109,12 @@ io.sockets.on('connection', function (socket) {
         (async ()=>{
             var result = await savePrivateMessage(data);
             if(result){
+                if(data.receiverID){
+                    (async()=>{
+                        var resultSocketID = await findSingleUserSocketID(data.receiverID);
+                        if(resultSocketID) socket.broadcast.to(resultSocketID).emit("notifyMessage", data.sender);
+                    })();
+                }
                 io.sockets.in(result.privateRoomID).emit("handlePrivateMessage", result);
             }
         })();
