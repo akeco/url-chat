@@ -38,6 +38,10 @@ class PrivateUserBadgeListItem extends Component{
                 primaryText={item.username}
                 style={style.listItem}
                 innerDivStyle={style.innerDiv}
+                onTouchTap={()=>{
+                    this.addPrivateChat(item)
+                    this.deleteNotification(item);
+                }}
                 leftIcon={
                     <Badge
                         badgeContent={checkNotifications.length}
@@ -56,10 +60,8 @@ class PrivateUserBadgeListItem extends Component{
                         tooltip="Private chat"
                         tooltipPosition="top-left"
                         onTouchTap={()=>{
-                            this.addPrivateChat(item)
-                            this.deleteNotification(item);
-                            }
-                        }
+                            this.addPrivateChat(item);
+                        }}
                     >
                         <Contact/>
                     </IconButton>

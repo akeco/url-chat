@@ -33,6 +33,9 @@ class PrivateUserListItem extends Component{
                 style={style.listItem}
                 innerDivStyle={style.innerDiv}
                 leftIcon={ <Account style={style.avatar} /> }
+                onTouchTap={()=>{
+                    this.addPrivateChat(item);
+                }}
                 rightIconButton={
                     <IconButton
                         className="contactBtn"
@@ -41,8 +44,7 @@ class PrivateUserListItem extends Component{
                         tooltipPosition="top-left"
                         onTouchTap={()=>{
                             this.addPrivateChat(item);
-                            }
-                        }
+                        }}
                     >
                         <Contact/>
                     </IconButton>

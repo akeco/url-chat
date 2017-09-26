@@ -10,7 +10,8 @@ import $ from 'jquery';
 import {bindActionCreators} from 'redux';
 import {updateProfileSocket, setProfileUser, setSocketObject, setTemporaryUser,
     updateRoomList, activeRoom, joinRefreshRooms, addChatMessages, swipePage, loadSpinner,
-    insertMessage, updateMessage, addPrivateRoom, addPrivateMessages, addNotifyPrivateIdCollection} from '../../actions/index';
+    insertMessage, updateMessage, addPrivateRoom, addPrivateMessages,
+    addNotifyPrivateIdCollection, toggleUsersMenu} from '../../actions/index';
 
 class Wrapper extends Component{
     constructor(props){
@@ -181,12 +182,16 @@ class Wrapper extends Component{
                     contentStyle={style.snackBarContent}
                     open={this.state.openSnackBar && !this.props.toggleUserMenu}
                     message={this.state.SnackBarMessage}
-                    autoHideDuration={2000}
+                    action="Show"
+                    autoHideDuration={2500}
+                    onActionTouchTap={()=>{
+                        this.props.toggleUsersMenu(true);
+                    }}
                     onRequestClose={()=>{
                         this.setState({
                             openSnackBar: false,
                             SnackBarMessage: ''
-                        })
+                        });
                     }}
                 />
                 {
@@ -226,7 +231,8 @@ function mapDispatchToProps(dispatch) {
         updateMessage,
         addPrivateRoom,
         addPrivateMessages,
-        addNotifyPrivateIdCollection
+        addNotifyPrivateIdCollection,
+        toggleUsersMenu
     }, dispatch);
 }
 
