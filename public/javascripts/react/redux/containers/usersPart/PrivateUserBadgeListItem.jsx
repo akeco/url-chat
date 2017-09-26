@@ -61,6 +61,7 @@ class PrivateUserBadgeListItem extends Component{
                         tooltipPosition="top-left"
                         onTouchTap={()=>{
                             this.addPrivateChat(item);
+                            this.deleteNotification(item);
                         }}
                     >
                         <Contact/>

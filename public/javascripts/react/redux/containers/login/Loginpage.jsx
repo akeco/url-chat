@@ -15,7 +15,6 @@ class Loginpage extends Component{
         this.registerRedirect = this.registerRedirect.bind(this);
     }
 
-
     homepageRedirect(){
         axios.post("/api/user/save", {
             data:{
@@ -121,7 +120,7 @@ const style = {
 
 function matchDispatchToProps(dispatch) {
     return bindActionCreators({
-        setProfileUser: setProfileUser
+        setProfileUser
     }, dispatch);
 }
 

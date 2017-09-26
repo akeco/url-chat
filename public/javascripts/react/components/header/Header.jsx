@@ -13,7 +13,7 @@ import Settings from 'material-ui/svg-icons/Action/settings';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import {bindActionCreators} from 'redux';
-import {closeActiveRoom} from '../../redux/actions/index';
+import {closeActiveRoom, setTemporaryUser} from '../../redux/actions/index';
 
 const muiTheme = getMuiTheme({
     palette: {
@@ -31,7 +31,9 @@ class Header extends Component{
     signOut(){
         this.closeAndLeaveRoom();
         localStorage.removeItem("currentUser");
-        this.props.history.push('/home');
+        this.props.setTemporaryUser(null);
+        //this.props.history.push('/home');
+        document.location = "/home";
     }
 
     closeAndLeaveRoom(){
@@ -158,7 +160,8 @@ var style = {
 
 function matchDispatchToProps(dispatch) {
     return bindActionCreators({
-        closeActiveRoom: closeActiveRoom
+        closeActiveRoom,
+        setTemporaryUser
     }, dispatch);
 }
 

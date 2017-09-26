@@ -134,13 +134,26 @@ class Wrapper extends Component{
 
 
     notifyMessage(data){
+        var findActivatedChat = null;
+        if(this.props.privateRoom){
+            findActivatedChat = this.props.privateRoom.usersID.indexOf(data._id);
+            console.info("FIND",findActivatedChat);
+        }
+
         if(!this.props.toggleUserMenu){
             this.setState({
                 openSnackBar: true,
                 SnackBarMessage: `Received private message from ${data.username}`
             });
         }
-        this.props.addNotifyPrivateIdCollection(data._id);
+
+        if(this.props.privateRoom && findActivatedChat == -1){
+            console.info("OTVOREN I NIJE JEDNAK");
+            this.props.addNotifyPrivateIdCollection(data._id);
+        }
+        else if(!this.props.privateRoom){
+            this.props.addNotifyPrivateIdCollection(data._id);
+        }
     }
 
     addPrivateRoom(data){
@@ -183,7 +196,7 @@ class Wrapper extends Component{
                     open={this.state.openSnackBar && !this.props.toggleUserMenu}
                     message={this.state.SnackBarMessage}
                     action="Show"
-                    autoHideDuration={2500}
+                    autoHideDuration={3000}
                     onActionTouchTap={()=>{
                         this.props.toggleUsersMenu(true);
                     }}

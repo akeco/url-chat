@@ -16,7 +16,13 @@ const addPrivateUser = (state = [], action) => {
                 }
             }
             else{
-                return [...state, action.data];
+                if(action.data.messages) return [...state, action.data];
+                else{
+                    return [...state, {
+                        privateRoomID: action.data.privateRoomID,
+                        messages: [action.data]
+                    }];
+                }
             }
         default:
             return state;
