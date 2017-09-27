@@ -6,7 +6,11 @@ const addPrivateUser = (state = [], action) => {
             if(state.length){
                 var index = find(state, (o)=>{ return o.privateRoomID == action.data.privateRoomID});
                 if(!index){
-                    return [...state, action.data]
+                    console.info("NOVI CHAT",action.data);
+                    return [...state, {
+                        privateRoomID: action.data.privateRoomID,
+                        messages: [action.data]
+                    }];
                 }
                 else if(!action.data.messages){
                     return state.map((item)=>{

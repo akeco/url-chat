@@ -150,7 +150,6 @@ class Wrapper extends Component{
             this.props.addNotifyPrivateIdCollection(data._id);
         }
         else if(!this.props.privateRoom){
-            console.info("no active room, should notify");
             this.props.addNotifyPrivateIdCollection(data._id);
         }
     }
