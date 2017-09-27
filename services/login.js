@@ -14,6 +14,7 @@ module.exports = async function (data) {
             };
             return userObject;
         }
+        else throw new Error("Wrong username or password");
     }
     else throw new Error("Wrong username or password");
 };

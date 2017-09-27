@@ -137,10 +137,9 @@ class Wrapper extends Component{
         var findActivatedChat = null;
         if(this.props.privateRoom){
             findActivatedChat = this.props.privateRoom.usersID.indexOf(data._id);
-            console.info("FIND",findActivatedChat);
         }
 
-        if(!this.props.toggleUserMenu){
+        if(!this.props.toggleUserMenu || this.props.pageIndex != 2){
             this.setState({
                 openSnackBar: true,
                 SnackBarMessage: `Received private message from ${data.username}`
@@ -148,10 +147,10 @@ class Wrapper extends Component{
         }
 
         if(this.props.privateRoom && findActivatedChat == -1){
-            console.info("OTVOREN I NIJE JEDNAK");
             this.props.addNotifyPrivateIdCollection(data._id);
         }
         else if(!this.props.privateRoom){
+            console.info("no active room, should notify");
             this.props.addNotifyPrivateIdCollection(data._id);
         }
     }
@@ -195,7 +194,7 @@ class Wrapper extends Component{
                     contentStyle={style.snackBarContent}
                     open={this.state.openSnackBar && !this.props.toggleUserMenu}
                     message={this.state.SnackBarMessage}
-                    action="Show"
+                    action={(this.props.activeRoomState) && 'Show'}
                     autoHideDuration={3000}
                     onActionTouchTap={()=>{
                         this.props.toggleUsersMenu(true);
@@ -255,7 +254,8 @@ function mapStateToProps(state) {
         socketIO: state.socketobject,
         activeRoomState: state.activeRoom,
         privateRoom: state.privateRoom,
-        toggleUserMenu: state.toggleUserMenu
+        toggleUserMenu: state.toggleUserMenu,
+        pageIndex: state.pageIndex
     });
 }
 

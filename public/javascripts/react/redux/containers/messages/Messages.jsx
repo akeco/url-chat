@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {List} from 'material-ui/List';
 import LinearProgress from 'material-ui/LinearProgress';
 import {teal50} from 'material-ui/styles/colors';
-import Message from '../../../components/message/Message';
+import Message from './Message';
 //import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 //import { Observable, BehaviorSubject } from 'rxjs';

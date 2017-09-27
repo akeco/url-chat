@@ -25,7 +25,7 @@ class PrivateMessagesContainer extends Component{
 
     render(){
         return(
-          <div style={style.wrapper}>
+          <div className="privateMessagesContainer" style={style.wrapper}>
               <List className="privateListContainer">
                   {
                     this.showMessages()
@@ -38,7 +38,7 @@ class PrivateMessagesContainer extends Component{
 
 const style = {
     wrapper: {
-        flexGrow: 1,
+        //flexGrow: 1,
         fontSize: 14,
         color: teal900,
         fontWeight: 300,

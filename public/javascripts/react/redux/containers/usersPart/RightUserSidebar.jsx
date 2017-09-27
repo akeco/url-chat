@@ -77,6 +77,7 @@ class RightUserSidebar extends Component{
         }
     }
 
+
     showMessagesAndForm(){
         if(this.props.privateRoom && this.props.privateRoom.users){
             var receiver = this.props.privateRoom.users.filter((item)=> item.username != this.props.profileuser.username);
@@ -115,12 +116,13 @@ class RightUserSidebar extends Component{
     }
 
     render(){
+        var existActivePrivateRoom = (!this.props.privateRoom) ? 'privateListWrapper' : 'hiddenList';
         var toggleMenuStyle = (this.props.showUserMenuValue) ? 300 : 0;
         return(
             <div className="rightUserMenu" style={ Object.assign({
                 minWidth: toggleMenuStyle
             }, style.wrapper )}>
-                <div style={{height: '100%'}}>
+                <div style={{height: '100%', overflowY:'hidden'}}>
                     <div style={style.sidebarHeader}>
                         <IconButton
                             style={style.arrowButton}
@@ -141,7 +143,10 @@ class RightUserSidebar extends Component{
                         <UserFormContainer/>
                     </div>
                     <div style={style.contentWrapper}>
-                        <List style={style.list}>
+                        <List
+                            className={existActivePrivateRoom}
+                            style={style.list}
+                        >
                             {
                                 this.showMembers()
                             }

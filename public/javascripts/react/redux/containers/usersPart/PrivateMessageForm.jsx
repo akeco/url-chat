@@ -70,7 +70,7 @@ var style = {
         backgroundColor: teal800,
         height: 90,
         width: '100%',
-        marginBottom: 101
+        //marginBottom: 101
     },
     uploadButton: {
         verticalAlign: 'middle',

@@ -5,9 +5,12 @@ import {teal900, teal800, teal700, teal400, teal100} from 'material-ui/styles/co
 import IconButton from 'material-ui/IconButton';
 import Contact from 'material-ui/svg-icons/Communication/chat';
 import Star from 'material-ui/svg-icons/Toggle/star-border';
-import HiddenControlsContainer from '../../redux/containers/messagesContainer/HiddenControlsContainer';
-import MobileRatingMenu from '../../redux/containers/messagesContainer/MobileRatingMenu';
+import HiddenControlsContainer from '../messagesContainer/HiddenControlsContainer';
+import MobileRatingMenu from '../messagesContainer/MobileRatingMenu';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 import moment from 'moment';
+import { toggleUsersMenu, addPrivateRoom, swipePage } from '../../actions/index';
 import $ from 'jquery';
 
 
@@ -19,6 +22,7 @@ class Message extends Component{
         };
         this.showMobileRatingMenu = this.showMobileRatingMenu.bind(this);
         this.showDesktopRatingMenu = this.showDesktopRatingMenu.bind(this);
+        this.addPrivateChat = this.addPrivateChat.bind(this);
     }
 
 
@@ -32,6 +36,22 @@ class Message extends Component{
             this.setState({
                 mobileRating: false
             });
+        }
+    }
+
+    addPrivateChat(){
+        var {sender} = this.props.message;
+        this.props.addPrivateRoom(sender);
+        this.props.socketIO.emit("joinPrivate", {
+            sender: this.props.profileuser._id,
+            receiver: sender._id,
+            users: [this.props.profileuser, sender]
+        });
+        if(!this.props.pageIndex){
+            this.props.toggleUsersMenu(true);
+        }
+        else{
+            this.props.swipePage(2);
         }
     }
 
@@ -80,7 +100,9 @@ class Message extends Component{
                             style={{
                                 visibility: this.state.hover && 'visible' || 'hidden'
                             }}
-                            iconStyle={style.contactIcon}>
+                            iconStyle={style.contactIcon}
+                            onTouchTap={this.addPrivateChat}
+                        >
                             <Contact/>
                         </IconButton>
                     </div>
@@ -186,4 +208,22 @@ const style = {
 };
 
 
-export default Message;
+function matchDispatchToProps(dispatch) {
+    return bindActionCreators({
+        toggleUsersMenu,
+        addPrivateRoom,
+        swipePage
+    }, dispatch);
+}
+
+function mapStateToProps(state) {
+    return ({
+        profileuser: state.profileuser,
+        privateMessages: state.privateMessages,
+        privateRoom: state.privateRoom,
+        socketIO: state.socketobject,
+        pageIndex: state.pageIndex
+    });
+}
+
+export default connect(mapStateToProps, matchDispatchToProps)(Message);
