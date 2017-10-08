@@ -12,10 +12,8 @@ class Content extends Component{
     render(){
         return(
             <div className="messagingContent" style={style.mainWrap}>
-                <ContentHeader/>
-                <SubHeader/>
-                <MessagesContainer/>
-                <MessageForm/>
+                <MessagesContainer {...this.props} />
+                <MessageForm {...this.props} />
             </div>
         );
     }

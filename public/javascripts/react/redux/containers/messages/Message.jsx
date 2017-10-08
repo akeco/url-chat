@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Account from 'material-ui/svg-icons/Action/account-circle';
 import {ListItem} from 'material-ui/List';
-import {teal900, teal800, teal700, teal400, teal100} from 'material-ui/styles/colors';
+import {teal900, teal800, teal500, teal400, teal100} from 'material-ui/styles/colors';
 import IconButton from 'material-ui/IconButton';
 import Contact from 'material-ui/svg-icons/Communication/chat';
 import Star from 'material-ui/svg-icons/Toggle/star-border';
@@ -10,7 +10,7 @@ import MobileRatingMenu from '../messagesContainer/MobileRatingMenu';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import moment from 'moment';
-import { toggleUsersMenu, addPrivateRoom, swipePage } from '../../actions/index';
+import { addPrivateRoom } from '../../actions/index';
 import $ from 'jquery';
 
 
@@ -40,30 +40,28 @@ class Message extends Component{
     }
 
     addPrivateChat(){
-        var {sender} = this.props.message;
-        this.props.addPrivateRoom(sender);
-        this.props.socketIO.emit("joinPrivate", {
-            sender: this.props.profileuser._id,
-            receiver: sender._id,
-            users: [this.props.profileuser, sender]
-        });
-        if(!this.props.pageIndex){
-            this.props.toggleUsersMenu(true);
-        }
-        else{
-            this.props.swipePage(2);
+        if(!this.props.private) {
+            var {sender} = this.props.message;
+            this.props.addPrivateRoom(sender);
+            this.props.socketIO.emit("joinPrivate", {
+                sender: this.props.profileuser._id,
+                receiver: sender._id,
+                users: [this.props.profileuser, sender]
+            });
         }
     }
 
     showMobileRatingMenu(){
         var {user} = this.props.message.message;
-        if(this.props.show && user._id != this.props.profileUserID) return <MobileRatingMenu message={this.props.message} />;
+        if (this.props.show && user._id != this.props.profileUserID) return (
+            <MobileRatingMenu message={this.props.message}/>
+        );
     }
 
     showDesktopRatingMenu(){
         var {user} = this.props.message.message;
         if(user._id != this.props.profileUserID && this.state.hover){
-          return <HiddenControlsContainer message={this.props.message} profileUserID={this.props.profileUserID} />;
+            return <HiddenControlsContainer message={this.props.message} profileUserID={this.props.profileUserID} />;
         }
     }
 
@@ -96,36 +94,44 @@ class Message extends Component{
                 >
                     <div style={style.contactBlock}>
                         <Account style={style.avatar} />
-                        <IconButton
-                            style={{
-                                visibility: this.state.hover && 'visible' || 'hidden'
-                            }}
-                            iconStyle={style.contactIcon}
-                            onTouchTap={this.addPrivateChat}
-                        >
-                            <Contact/>
-                        </IconButton>
+                        {
+                            (!this.props.private) && (
+                                <IconButton
+                                    style={{
+                                        visibility: this.state.hover && 'visible' || 'hidden'
+                                    }}
+                                    iconStyle={style.contactIcon}
+                                    onTouchTap={this.addPrivateChat}
+                                >
+                                    <Contact/>
+                                </IconButton>
+                            )
+                        }
                     </div>
                 </div>
                 <div style={style.messageContent}>
-                    <p style={style.title}>{sender.username}</p>
+                    <p style={style.title}>{(sender) && sender.username}</p>
                     <p style={style.content}>
-                        {message.text}
+                        {(message) && message.text}
                     </p>
                     <div style={style.bottomWrap}>
                         <p style={style.time}>{moment(created).fromNow()}</p>
-                        <p style={style.rating}>
-                            <Star style={style.voteStar} />
-                            <span>{rating}</span>
-                        </p>
+                        {
+                            (!this.props.private) && (
+                                <p style={style.rating}>
+                                    <Star style={style.voteStar} />
+                                    <span>{rating}</span>
+                                </p>
+                            )
+                        }
                     </div>
                 </div>
                 {
-                    this.showMobileRatingMenu()
+                    (!this.props.private) &&  this.showMobileRatingMenu()
                 }
             </li>
             {
-                this.showDesktopRatingMenu()
+                (!this.props.private) && this.showDesktopRatingMenu()
             }
         </ListItem>
         );
@@ -148,7 +154,7 @@ const style = {
     avatar: {
         width: 40,
         height: 40,
-        fill: teal700
+        fill: teal500
     },
     li:{
         display:'flex'
@@ -210,9 +216,7 @@ const style = {
 
 function matchDispatchToProps(dispatch) {
     return bindActionCreators({
-        toggleUsersMenu,
-        addPrivateRoom,
-        swipePage
+        addPrivateRoom
     }, dispatch);
 }
 
@@ -221,8 +225,7 @@ function mapStateToProps(state) {
         profileuser: state.profileuser,
         privateMessages: state.privateMessages,
         privateRoom: state.privateRoom,
-        socketIO: state.socketobject,
-        pageIndex: state.pageIndex
+        socketIO: state.socketobject
     });
 }
 

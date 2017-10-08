@@ -10,7 +10,7 @@ class MessagesContainer extends Component{
     render(){
         return(
             <div className="messagesContainer" style={style.wrapper}>
-               <Messages/>
+               <Messages {...this.props}/>
             </div>
         );
     }

@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import FlatButton from 'material-ui/FlatButton';
-import Add from 'material-ui/svg-icons/Content/add';
-import Send from 'material-ui/svg-icons/Content/send';
+import SendIcon from 'material-ui/svg-icons/content/send';
 import {connect} from 'react-redux';
 //import {bindActionCreators} from 'redux';
 import {teal800, teal700, teal600, teal400, teal50} from 'material-ui/styles/colors';
@@ -49,7 +48,7 @@ class PrivateMessageForm extends Component{
                         onTouchStart={this.sendMessage}
                         style={style.sendButtonStyle}
                         onTouchTap={this.sendMessage}
-                        icon={<Send
+                        icon={<SendIcon
                             style={style.sendIcon}
                         />}
                     >

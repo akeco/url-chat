@@ -6,7 +6,7 @@ import StarBorder from 'material-ui/svg-icons/Toggle/star-border';
 import Star from 'material-ui/svg-icons/Toggle/star';
 import Notifications from 'material-ui/svg-icons/Social/notifications';
 import NotificationsNone from 'material-ui/svg-icons/Social/notifications-none';
-import Menu from 'material-ui/svg-icons/Navigation/menu';
+import Menu from 'material-ui/svg-icons/navigation/menu';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {showHeaderSubmenu, closeActiveRoom, swipePage} from '../../actions/index';

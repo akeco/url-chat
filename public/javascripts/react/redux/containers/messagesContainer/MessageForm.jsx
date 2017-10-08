@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
-import FlatButton from 'material-ui/FlatButton';
-import Add from 'material-ui/svg-icons/Content/add';
-import Send from 'material-ui/svg-icons/Content/send';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import SendIcon from 'material-ui/svg-icons/content/send';
 import {connect} from 'react-redux';
-//import {bindActionCreators} from 'redux';
-import {teal700, teal100, teal50} from 'material-ui/styles/colors';
+import TextField from 'material-ui/TextField';
+import {teal900, teal700, teal500, teal200, teal50} from 'material-ui/styles/colors';
+import {find} from 'lodash';
 import '../../../../../stylesheets/less/messageForm.less';
 
 class MessageForm extends Component{
@@ -12,72 +12,91 @@ class MessageForm extends Component{
         super(props);
         this.sendMessage = this.sendMessage.bind(this);
         this.state = {
-            inputFocus: false
+            inputValue: ''
         };
+        this.inputOnChange = this.inputOnChange.bind(this);
+        this.submitOnEnter = this.submitOnEnter.bind(this);
     }
 
     sendMessage(event){
         event.preventDefault();
-        if(this.refs.message.value.trim()){
-            this.props.socketIO.emit("sendMessage",{
-                room: this.props.activeRoom,
-                sender: this.props.profileuser,
-                message: {
-                    user: this.props.profileuser,
-                    text: this.refs.message.value.trim(),
-                    created: new Date().getTime()
-                }
-            });
-            this.refs.message.value = "";
+        var {tab} = this.props;
+        if(tab == 0){
+            if(this.state.inputValue.trim()){
+                this.props.socketIO.emit("sendMessage",{
+                    room: this.props.activeRoom,
+                    sender: this.props.profileuser,
+                    message: {
+                        user: this.props.profileuser,
+                        text: this.state.inputValue.trim(),
+                        created: new Date().getTime()
+                    }
+                });
+            }
+        }
+        else if(tab == 1){
+            var receiver = find(this.props.privateRoom.users, (o)=>{return o._id != this.props.profileuser._id});
+            var createdTime = new Date().getTime();
+            if(this.state.inputValue.trim()){
+                this.props.socketIO.emit("sendPrivateMessage",{
+                    sender: this.props.profileuser,
+                    privateRoomID: this.props.privateRoom.privateRoomID,
+                    receiverID: (receiver._id) && receiver._id || '',
+                    message: {
+                        text: this.state.inputValue.trim(),
+                        created: createdTime
+                    },
+                    created: createdTime
+                });
+            }
+        }
+        this.setState({
+            inputValue: ''
+        })
+    }
+
+    inputOnChange(event){
+        this.setState({
+            inputValue: event.target.value
+        })
+    }
+
+    submitOnEnter(event){
+        if (event.key === 'Enter') {
+            this.sendMessage(event);
         }
     }
 
     render(){
-        var focusedForm = (this.state.inputFocus) ? 'focusFormInput' : '';
         return(
             <div style={style.wrapper}>
                 <form
                     action="javascript:void(0)"
                     className={(!this.props.activeRoom) ? 'disabledForm' : ''}
-                    style={style.form}>
-                    <FlatButton
-                        className="addButton"
-                        style={style.buttonStyle}
-                        icon={
-                            <Add
-                                style={style.addIcon}
-                            />
-                        }
-                    >
-                        <input type="file" style={style.uploadInput} />
-                    </FlatButton>
-                    <textarea
-                        className={focusedForm}
-                        style={Object.assign(style.inputText)}
-                        ref="message"
-                        placeholder="Type message..."
-                        onFocus={()=>{
-                            this.setState({
-                                inputFocus: true
-                            })
-                        }}
-
-                        onBlur={()=>{
-                            this.setState({
-                                inputFocus: false
-                            })
-                        }}
+                    style={style.form}
+                    onSubmit={this.sendMessage}
+                >
+                    <TextField
+                        value={this.state.inputValue}
+                        hintText="Type message..."
+                        multiLine={true}
+                        rowsMax={2}
+                        style={{width: '100%', fontSize: 14}}
+                        textareaStyle={{color: teal900}}
+                        underlineFocusStyle={{borderColor: teal200}}
+                        hintStyle={{color: teal200}}
+                        onChange={this.inputOnChange}
+                        onKeyPress={this.submitOnEnter}
                     />
-                    <FlatButton
-                        onTouchStart={this.sendMessage}
-                        style={style.sendButtonStyle}
+                    <FloatingActionButton
+                        type="submit"
+                        mini={true}
+                        style={{marginLeft: 15}}
+                        backgroundColor={teal500}
                         onTouchTap={this.sendMessage}
-                        icon={<Send
-                            style={style.sendIcon}
-                        />}
                     >
-                        <input type="submit" style={style.uploadInput} />
-                    </FlatButton>
+                        <SendIcon/>
+                    </FloatingActionButton>
                 </form>
             </div>
         );
@@ -90,13 +109,10 @@ var style = {
         pointerEvents: 'none'
     },
     wrapper: {
-       // position: 'absolute',
-       // bottom: 41,
-        //backgroundColor: '#D8D8D8',
-        backgroundColor: teal100,
-        height: 90,
+        backgroundColor: 'white',
+        height: 55,
         width: '100%',
-        marginBottom: 41,
+        marginBottom: 88,
         borderTop: '1px solid rgba(255,255,255,0.5)'
     },
     uploadButton: {
@@ -163,7 +179,8 @@ function mapStateToProps(state) {
     return ({
         activeRoom: state.activeRoom,
         socketIO: state.socketobject,
-        profileuser: state.profileuser
+        profileuser: state.profileuser,
+        privateRoom: state.privateRoom
     });
 }
 

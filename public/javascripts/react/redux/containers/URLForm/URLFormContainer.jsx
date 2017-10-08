@@ -1,24 +1,27 @@
 import React,{Component} from 'react';
-import IconButton from 'material-ui/IconButton';
 import {teal600, teal300, teal50} from 'material-ui/styles/colors';
-import ArrowForward from 'material-ui/svg-icons/Navigation/arrow-forward';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {swipePage, loadSpinner} from '../../actions/index';
+import {loadSpinner, showLeftSidebar} from '../../actions/index';
 import Snackbar from 'material-ui/Snackbar';
 import CircularProgress from 'material-ui/CircularProgress';
+import TextField from 'material-ui/TextField';
+import IconButton from 'material-ui/IconButton';
+import CloseIcon from 'material-ui/svg-icons/navigation/close';
 import '../../../../../stylesheets/less/urlForm.less';
+import axios from 'axios';
 
 class URLFormContainer extends Component{
     constructor(props){
         super(props);
         this.state = {
-            open: false
+            open: false,
+            inputValue: ''
         };
-        this.goForwards = this.goForwards.bind(this);
         this.handleURLSubmit = this.handleURLSubmit.bind(this);
         this.handleRequestClose = this.handleRequestClose.bind(this);
         this.showSpinner = this.showSpinner.bind(this);
+        this.inputOnChange = this.inputOnChange.bind(this);
     }
 
     handleRequestClose(){
@@ -27,30 +30,42 @@ class URLFormContainer extends Component{
         });
     }
 
-    goForwards(){
-        this.props.swipePage(1);
+    inputOnChange(event){
+        this.setState({
+            inputValue: event.target.value
+        })
     }
 
     handleURLSubmit(event){
         event.preventDefault();
-        this.props.socketIO.emit("urlInserted", {
-            url: this.refs.url.value,
-            user: this.props.profileuser,
-            activeRoom: (this.props.activeRoomState) ? this.props.activeRoomState : null
-        });
-        this.refs.url.value = '';
-        this.props.loadSpinner(true);
-        this.setState({
-            open: true
-        });
+        if(this.state.inputValue.trim()){
+            var url = this.state.inputValue.trim().split('//');
+            if(url.length <= 1){
+
+            }
+            //console.info(this.state.inputValue.trim());
+            axios.get(this.state.inputValue.trim()).then((response)=>{
+                //console.info(response);
+                this.props.socketIO.emit("urlInserted", {
+                    url: this.state.inputValue,
+                    user: this.props.profileuser,
+                    activeRoom: (this.props.activeRoomState) ? this.props.activeRoomState : null
+                });
+                this.props.loadSpinner(true);
+                this.setState({
+                    open: true,
+                    inputValue: ''
+                });
+            }).catch((err)=>{});
+        }
     }
 
     showSpinner(){
-        if(this.props.spinner) return <CircularProgress
+       if(this.props.spinner) return <CircularProgress
             className="spinner"
             size={28}
             color={teal300}
-            style={style.spinner} />;
+            style={style.spinner} />
     }
 
     render(){
@@ -66,18 +81,25 @@ class URLFormContainer extends Component{
                     onRequestClose={this.handleRequestClose}
                 />
                 <form className="formURL" style={style.form} onSubmit={this.handleURLSubmit}>
-                    <input type="text" ref="url" placeholder="Insert URL" style={style.input} />
+                    <TextField
+                        hintText="Insert URL"
+                        value={this.state.inputValue}
+                        hintStyle={{fontSize: 14, bottom: 8}}
+                        inputStyle={{fontSize: 14}}
+                        underlineShow={false}
+                        style={{height:40}}
+                        onChange={this.inputOnChange}
+                    />
                     {this.showSpinner()}
                 </form>
                 <IconButton
-                    iconStyle={style.icons}
-                    onTouchTap={this.goForwards}
-                    style={style.arrowIcon}
-                    className="messagesForward"
+                    className="mobileNavIcon"
+                    style={{marginRight: -10}}
+                    onTouchTap={()=>{ setTimeout(()=>{
+                        this.props.showLeftSidebar(false)
+                    },500) }}
                 >
-                    <ArrowForward
-                        hoverColor="white"
-                    />
+                    <CloseIcon color={teal300} />
                 </IconButton>
             </div>
         )
@@ -87,8 +109,8 @@ class URLFormContainer extends Component{
 var style = {
     spinner: {
         position: 'absolute',
-        right: 3,
-        top: 4
+        right: 5,
+        top: 6
     },
     snackBarBody:{
         backgroundColor: teal600
@@ -97,17 +119,21 @@ var style = {
         color: teal50
     },
     snackBar: {
-        bottom: 40
+        //bottom: 40
     },
     formWrapper:{
-        padding: '10px 18px',
+        padding: '10px 10px',
         height: 40,
         display: 'flex',
         alignItems: 'center'
     },
     form:{
         width: '100%',
-        position: 'relative'
+        position: 'relative',
+        backgroundColor: 'white',
+        borderRadius: 2,
+        paddingLeft: 10,
+        boxShadow: '0 0 2px 0 rgba(0,0,0,0.12), 0 2px 2px 0 rgba(0,0,0,0.24)'
     },
     input:{
         width: '100%',
@@ -129,8 +155,8 @@ var style = {
 
 function matchDispatchToProps(dispatch) {
     return bindActionCreators({
-        swipePage: swipePage,
-        loadSpinner: loadSpinner
+        loadSpinner,
+        showLeftSidebar
     }, dispatch);
 }
 

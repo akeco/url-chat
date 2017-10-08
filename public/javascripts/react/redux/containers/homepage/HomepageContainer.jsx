@@ -4,18 +4,21 @@ import LeftURLSidebar from '../../../components/homepage/LeftURLSidebar';
 import RightUserSidebar from '../usersPart/RightUserSidebar';
 import Content from '../../../components/homepage/Content';
 import Header from '../../../components/header/Header';
-import SwipeableViews from 'react-swipeable-views';
+import {teal500, lime200} from 'material-ui/styles/colors';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {swipePage} from '../../actions/index';
 import {Observable} from 'rxjs';
 import $ from 'jquery';
+import {Tabs, Tab} from 'material-ui/Tabs';
+import MobileListURLDrawer from '../URLlist/MobileListURLDrawer';
 
 class Homepage extends Component{
     constructor(props){
         super(props);
         this.state = {
-            swipeable: true
+            swipeable: true,
+            currentTab: 0
         };
         this.handleSwipe = this.handleSwipe.bind(this);
     }
@@ -62,18 +65,33 @@ class Homepage extends Component{
         return(
           <div style={style.outerDiv}>
               <Header/>
-              <div className="homepageWrapper" style={style.homepageWrapper}>
-                  <SwipeableViews
-                      enableMouseEvents={true}
-                      index={this.props.pageIndex}
-                      onChangeIndex={this.handleSwipe}
-                      disabled={(this.state.swipeable) ? false : true}
-                  >
-                      <LeftURLSidebar/>
-                      <Content/>
-                      <RightUserSidebar/>
-                  </SwipeableViews>
-              </div>
+              <Tabs
+                  className="tabsBlock"
+                  tabItemContainerStyle={{backgroundColor: teal500}}
+                  inkBarStyle={{backgroundColor: lime200}}
+                  style={{height: '100%'}}
+                  value={this.state.currentTab}
+                  onChange={(currentTab)=>{
+                      this.setState({
+                          currentTab
+                      });
+                  }}
+              >
+                  <Tab value={0} label="Url rooms & messages" buttonStyle={{fontSize: 12}}>
+                      <div className="tab" style={style.tab}>
+                          <MobileListURLDrawer tab={this.state.currentTab} />
+                          <LeftURLSidebar tab={this.state.currentTab} />
+                          <Content tab={this.state.currentTab} />
+                      </div>
+                  </Tab>
+                  <Tab value={1} label="Private messages" buttonStyle={{fontSize: 12}}>
+                      <div className="tab" style={style.tab}>
+                          <MobileListURLDrawer tab={this.state.currentTab} />
+                          <LeftURLSidebar tab={this.state.currentTab} />
+                          <Content tab={this.state.currentTab} />
+                      </div>
+                  </Tab>
+              </Tabs>
           </div>
         );
     }
@@ -101,6 +119,9 @@ var style = {
         width:'100%',
         height:'100%',
         display:'flex'
+    },
+    tab: {
+        display: 'flex'
     }
 };
 

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {teal800, teal50} from 'material-ui/styles/colors';
+import {tealA100, teal500, teal300, teal50} from 'material-ui/styles/colors';
 import IconButton from 'material-ui/IconButton';
 import Account from 'material-ui/svg-icons/Action/account-circle';
 import Contact from 'material-ui/svg-icons/Communication/chat';
@@ -29,15 +29,17 @@ class PrivateUserListItem extends Component{
             <ListItem
                 key={item._id}
                 className="userListItem"
+                hoverColor={'rgba(0,0,0,0.025)'}
                 primaryText={item.username}
                 style={style.listItem}
-                innerDivStyle={style.innerDiv}
+                innerDivStyle={Object.assign(style.innerDiv)}
                 leftIcon={ <Account style={style.avatar} /> }
                 onTouchTap={()=>{
                     this.addPrivateChat(item);
                 }}
                 rightIconButton={
                     <IconButton
+                        style={style.contactBtn}
                         className="contactBtn"
                         iconStyle={style.contact}
                         tooltip="Private chat"
@@ -57,24 +59,27 @@ class PrivateUserListItem extends Component{
 
 const style = {
     avatar: {
-        fill: teal50
+        fill: teal500
     },
     contact:{
         fill: teal50
     },
     listItem:{
-        color: teal50,
-        fontSize: 14,
+        borderBottom: `1px solid ${tealA100}`,
+        color: teal500,
         fontWeight: 300,
-        backgroundColor: teal800,
-        border: '1px solid rgba(255,255,255,0.15)',
-        marginBottom: 3,
-        position: 'relative'
+        position: 'relative',
+        fontSize: 16
     },
     innerDiv:{
         padding: '15px 16px 15px 65px',
-        textShadow: '0 1px 1px rgba(0,0,0,0.2)'
     },
+    contactBtn: {
+        width: 46,
+        height: 46,
+        marginRight: -4,
+        backgroundColor: teal300
+    }
 };
 
 function matchDispatchToProps(dispatch) {

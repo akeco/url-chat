@@ -31,7 +31,6 @@ roomSchema.pre('save', function(next) {
            // console.info("Room doesn't exist");
             next(true);
         } else {
-           // console.info("Room exist");
             next(new Error('Room exist'));
         }
     });

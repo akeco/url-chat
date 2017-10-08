@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {teal800, teal700, teal400, teal50} from 'material-ui/styles/colors';
+import {tealA400, teal500, teal200, teal300, teal50, tealA100} from 'material-ui/styles/colors';
 import {List, ListItem} from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
 import IconButton from 'material-ui/IconButton';
@@ -11,7 +11,11 @@ import LinearProgress from 'material-ui/LinearProgress';
 import axios from 'axios';
 import $ from 'jquery';
 import ReactTooltip from 'react-tooltip';
+import PrivateUserListItem from '../usersPart/PrivateUserListItem'
+import PrivateUserBadgeListItem from '../usersPart/PrivateUserBadgeListItem'
 import {primaryTextFunction} from '../../../../../../services/utils';
+import PropTypes from 'prop-types';
+import {find} from 'lodash';
 
 class ListURLContainer extends Component{
 
@@ -25,6 +29,7 @@ class ListURLContainer extends Component{
         this.addActiveRoom = this.addActiveRoom.bind(this);
         this.refreshUrlList = this.refreshUrlList.bind(this);
         this.toggleSublist = this.toggleSublist.bind(this);
+        this.showMembers = this.showMembers.bind(this);
     }
 
     componentWillMount(){
@@ -106,15 +111,44 @@ class ListURLContainer extends Component{
         });
     }
 
+    showMembers(){
+        if(this.props.activeRoomState && this.props.tab){
+            var activeRoom = find(this.props.rooms, (o)=>{ return o.name == this.props.activeRoomState.name; });
+            if(activeRoom) {
+                activeRoom = find(activeRoom.rooms, (o)=>{ return o.route == this.props.activeRoomState.route });
+                if(activeRoom){
+                    return activeRoom.members.map((item)=>{
+                        if(item._id != this.props.profileuser._id){
+                            var checkNotifications = [];
+                            if(this.props.privateNotifyCollection.length){
+                                checkNotifications = this.props.privateNotifyCollection.filter((userID)=>{ return userID == item._id });
+                            }
+                            if(checkNotifications.length){
+                                return(
+                                    <PrivateUserBadgeListItem key={item._id} item={item} checkNotifications={checkNotifications} />
+                                );
+                            }
+                            else{
+                                return(
+                                    <PrivateUserListItem key={item._id} item={item} />
+                                );
+                            }
+                        }
+                    });
+                }
+            }
+        }
+    }
 
     displayActiveRooms(){
-        if(this.props.rooms){
+        if(this.props.rooms && !this.props.tab){
             return this.props.rooms.map((room)=>{
                 var theKey = room.name;
                 var toggleElement = (this.state.toggleRooms.indexOf(room.name) >=0) ? {display:'block'} : {display:'none'};
                 return(
                     <div key={theKey} >
                         <ListItem
+                            hoverColor={'rgba(0,0,0,0.025)'}
                             className="ListItem"
                             style={style.listItem}
                             primaryText={primaryTextFunction(room.name, 23)}
@@ -160,55 +194,73 @@ class ListURLContainer extends Component{
                 );
             });
         }
-        else{
+        else if(!this.props.tab){
             return <LinearProgress color={teal50} mode="indeterminate" />
         }
     }
 
     render() {
+        var title = (this.props.tab) ? 'Room Members' : 'Available Rooms';
         return (
-            <List style={style.list}>
-                {this.displayActiveRooms()}
-            </List>
+            <div>
+                <p style={style.title}>{title}</p>
+                <List style={style.list}>
+                    {
+                        this.displayActiveRooms()
+                    }
+                </List>
+                <List style={style.list}>
+                    {
+                        this.showMembers()
+                    }
+                </List>
+            </div>
         );
     }
 }
 
+ListURLContainer.propTypes = {
+    tab: PropTypes.number.isRequired
+};
+
 var style = {
+    title: {
+        color: teal300,
+        textTransform: 'uppercase',
+        fontSize: 12,
+        marginLeft: 10,
+        marginBottom: 5
+    },
     subListItem:{
-        fontSize: 14,
-        color: teal50,
+        fontSize: 13,
+        color: 'rgba(255,255,255,0.95)',
         fontWeight: 300
     },
     subListItemInner:{
         padding: '10px 15px'
     },
-    wrapSubList: {
-        marginTop: -3
-    },
     subList: {
-        backgroundColor: teal700,
+        backgroundColor: teal200,
+        //backgroundColor: tealA400,
         padding: 0,
-        boxShadow: 'inset 0 3px 3px 0 rgba(0,0,0,0.3)'
     },
     list: {
         padding:0,
-        height: 400,
+        maxHeight: 400,
         overflowY: 'scroll',
-        overflowX: 'hidden'
+        overflowX: 'hidden',
+        backgroundColor: 'white'
     },
     listItem:{
-        backgroundColor: teal800,
-        border: '1px solid rgba(255,255,255,0.15)',
-        color: 'white',
+        borderBottom: `1px solid ${tealA100}`,
+        color: teal500,
         fontWeight: 300,
-        marginBottom: 3,
         position: 'relative',
-        fontSize: 14
+        fontSize: 16
     },
     innerWrap: {
         position: 'absolute',
-        backgroundColor: teal700,
+        backgroundColor: teal300,
         height: '100%',
         right: 0,
         top: 0
@@ -237,16 +289,13 @@ var style = {
     },
     innerDiv:{
         padding: '15px 16px 15px 65px',
-        textShadow: '0 1px 1px rgba(0,0,0,0.2)'
     },
     avatar: {
-        borderRadius: '35%',
+        borderRadius: '100%',
         objectFit:'cover',
         width: 28,
         height: 28,
-        boxShadow: '0 1px 3px 0 rgba(0,0,0,0.5)',
-        border: '1px solid',
-        borderColor: teal400,
+        boxShadow: '0 1px 1px 0 rgba(0,0,0,0.5)',
         backgroundColor: 'white'
     }
 };
@@ -254,11 +303,11 @@ var style = {
 
 function matchDispatchToProps(dispatch) {
     return bindActionCreators({
-        getRooms: getRooms,
-        activeRoom: activeRoom,
-        addChatMessages: addChatMessages,
-        swipePage: swipePage,
-        toggleUsersMenu: toggleUsersMenu,
+        getRooms,
+        activeRoom,
+        addChatMessages,
+        swipePage,
+        toggleUsersMenu,
         addPrivateRoom
     }, dispatch);
 }
@@ -271,7 +320,9 @@ function mapStateToProps(state) {
         chatMessages: state.chatmessages,
         activeRoomState: state.activeRoom,
         pageIndex: state.pageIndex,
-        profileuser: state.profileuser
+        profileuser: state.profileuser,
+        privateRoom: state.privateRoom,
+        privateNotifyCollection: state.privateNotifyCollection
     });
 }
 

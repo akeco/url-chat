@@ -12,6 +12,13 @@ export const swipePage = data => {
     }
 };
 
+export const showLeftSidebar = data => {
+    return {
+        type: 'LEFT_SIDEBAR_VISIBILITY',
+        data
+    }
+};
+
 export const showHeaderSubmenu = data => {
     return {
         type: 'HEADER_SUBMENU',

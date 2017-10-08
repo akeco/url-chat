@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
-import {teal800} from 'material-ui/styles/colors';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import {teal800, teal500} from 'material-ui/styles/colors';
+import MenuIcon from 'material-ui/svg-icons/navigation/menu';
 import List from 'material-ui/List';
 import ListItem from 'material-ui/List/ListItem';
 import IconButton from 'material-ui/IconButton';
@@ -13,13 +12,8 @@ import Settings from 'material-ui/svg-icons/Action/settings';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import {bindActionCreators} from 'redux';
-import {closeActiveRoom, setTemporaryUser} from '../../redux/actions/index';
+import {closeActiveRoom, setTemporaryUser, showLeftSidebar} from '../../redux/actions/index';
 
-const muiTheme = getMuiTheme({
-    palette: {
-        textColor: teal800,
-    }
-});
 
 class Header extends Component{
     constructor(props){
@@ -49,65 +43,75 @@ class Header extends Component{
     render(){
         return(
             <div className="mainHeader" style={style.outer}>
+                <IconButton
+                    className="mobileNavIcon"
+                    onTouchTap={()=>{
+                        this.props.showLeftSidebar(!this.props.leftSidebarVisibility)
+                    }}
+                >
+                    <MenuIcon color="white"/>
+                </IconButton>
                 <Link to="/" style={style.link}>
-                    <img style={style.logo} src="../../../images/forum_final_1.png"/>
+                    <img style={style.logo} src="../../../images/forum_final_1_white.png"/>
                 </Link>
                 <div className="userBlock" style={style.userBlock}>
-                    <MuiThemeProvider muiTheme={muiTheme}>
-                      <List style={style.list}>
-                          <p style={style.username}>{this.props.profileuser && this.props.profileuser.username}</p>
-                          <ListItem
-                              disabled={true}
-                              style={style.userList}
-                              rightIconButton={
-                                  <IconMenu
-                                      className="headerRightIcons"
-                                      style={style.headerRightIcons}
-                                      iconButtonElement={
-                                          <IconButton
-                                              style={{
-                                                  marginRight:-15
-                                              }}
-                                          >
-                                              <Account/>
-                                          </IconButton>
-                                      }
-                                      anchorOrigin={{horizontal: 'right', vertical: 'top'}}
-                                      targetOrigin={{horizontal: 'right', vertical: 'top'}}
-                                  >
-                                      <MenuItem primaryText="Profile" />
-                                      <MenuItem
-                                          primaryText="Sign out"
-                                          onTouchTap={this.signOut}
-                                      />
-                                  </IconMenu>
-                              }
-                          >
-                          </ListItem>
-                          <ListItem
-                              disabled={true}
-                              style={style.settingsList}
-                              rightIconButton={
-                                  <IconMenu
-                                      className="headerRightIcons"
-                                      style={style.headerRightIcons}
-                                      iconButtonElement={
-                                           <IconButton>
-                                             <Settings/>
-                                           </IconButton>
-                                      }
-                                      anchorOrigin={{horizontal: 'right', vertical: 'top'}}
-                                      targetOrigin={{horizontal: 'right', vertical: 'top'}}
-                                  >
-                                      <MenuItem primaryText="Refresh" />
-                                      <MenuItem primaryText="Send feedback" />
-                                      <MenuItem primaryText="Help" />
-                                  </IconMenu>
-                              }
-                          >
-                          </ListItem>
-                      </List>
-                    </MuiThemeProvider>
+                    <List style={style.list}>
+                        <p style={style.username}>{this.props.profileuser && this.props.profileuser.username}</p>
+                        <ListItem
+                            disabled={true}
+                            style={style.userList}
+                            rightIconButton={
+                                <IconMenu
+                                    className="headerRightIcons"
+                                    style={style.headerRightIcons}
+                                    iconButtonElement={
+                                        <IconButton
+                                            style={{
+                                                marginRight:-15,
+                                            }}
+                                        >
+                                            <Account
+                                                color="white"
+                                            />
+                                        </IconButton>
+                                    }
+                                    anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+                                    targetOrigin={{horizontal: 'right', vertical: 'top'}}
+                                >
+                                    <MenuItem primaryText="Profile" />
+                                    <MenuItem
+                                        primaryText="Sign out"
+                                        onTouchTap={this.signOut}
+                                    />
+                                </IconMenu>
+                            }
+                        >
+                        </ListItem>
+                        <ListItem
+                            disabled={true}
+                            style={style.settingsList}
+                            rightIconButton={
+                                <IconMenu
+                                    className="headerRightIcons"
+                                    style={style.headerRightIcons}
+                                    iconButtonElement={
+                                        <IconButton>
+                                            <Settings
+                                                color="white"
+                                            />
+                                        </IconButton>
+                                    }
+                                    anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+                                    targetOrigin={{horizontal: 'right', vertical: 'top'}}
+                                >
+                                    <MenuItem primaryText="Refresh" />
+                                    <MenuItem primaryText="Send feedback" />
+                                    <MenuItem primaryText="Help" />
+                                </IconMenu>
+                            }
+                        >
+                        </ListItem>
+                    </List>
                 </div>
             </div>
         );
@@ -118,7 +122,8 @@ var style = {
     username:{
         marginRight: -10,
         cursor: 'default',
-        fontSize: 14
+        fontSize: 14,
+        color: 'white'
     },
     headerRightIcons:{
       top: -7
@@ -127,20 +132,20 @@ var style = {
         height:40,
         overflow:'hidden',
         display:'flex',
-        borderBottom:'1px solid #E7E4E4',
-        alignItems: 'center'
+        alignItems: 'center',
+        backgroundColor: teal500
     },
     userBlock: {
         marginLeft: 'auto',
         marginRight:25
     },
     logo: {
-        width: 105,
+        width: 100,
         marginTop: 5
     },
     link: {
         textDecoration:'none',
-        marginLeft:95,
+        marginLeft: 35,
         color: teal800
     },
     list:{
@@ -161,7 +166,8 @@ var style = {
 function matchDispatchToProps(dispatch) {
     return bindActionCreators({
         closeActiveRoom,
-        setTemporaryUser
+        setTemporaryUser,
+        showLeftSidebar
     }, dispatch);
 }
 
@@ -170,7 +176,8 @@ function mapStateToProps(state) {
     return ({
         profileuser: state.profileuser,
         socketIO: state.socketobject,
-        activeRoomState: state.activeRoom
+        activeRoomState: state.activeRoom,
+        leftSidebarVisibility: state.leftSidebarVisibility
     });
 }
 

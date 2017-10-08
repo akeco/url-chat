@@ -2,7 +2,7 @@ const path = require('path');
 var webpack = require('webpack');
 
 module.exports = {
-    entry: "./public/javascripts/react/App.jsx",
+    entry: ["babel-polyfill", "./public/javascripts/react/App.jsx"],
     output: {
         path: path.resolve(__dirname, "./public/build"),
         filename: "bundle.js"
@@ -15,7 +15,6 @@ module.exports = {
                 test: /\.(js|jsx)$/,
                 //test: /\.js$/,
                 loader: 'babel-loader',
-                //loader: 'babel-loader',
                 exclude: /node_modules/,
                 query: {
                     presets: ['es2017', 'react']

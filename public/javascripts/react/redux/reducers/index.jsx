@@ -12,6 +12,7 @@ import toggleUserMenu from './toggleUsersMenu';
 import privateMessages from './addPrivateMessages';
 import privateRoom from './privateRoom';
 import privateNotifyCollection from './privateNotifyCollection';
+import leftSidebarVisibility from './leftSidebarVisibility';
 
 const reducers = combineReducers({
     toggleUserMenu,
@@ -26,7 +27,8 @@ const reducers = combineReducers({
     chatmessages,
     privateMessages,
     privateRoom,
-    privateNotifyCollection
+    privateNotifyCollection,
+    leftSidebarVisibility
 });
 
 export default reducers;
