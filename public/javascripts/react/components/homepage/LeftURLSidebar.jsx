@@ -11,7 +11,11 @@ import PropTypes from 'prop-types';
 class LeftURLSidebar extends Component{
     constructor(props){
         super(props);
+        this.state = {
+            filterVal: ''
+        };
         this.showSingleItem = this.showSingleItem.bind(this);
+        this.changeFilterVal = this.changeFilterVal.bind(this);
     }
 
     showSingleItem(){
@@ -19,17 +23,27 @@ class LeftURLSidebar extends Component{
         if(this.props.activeRoomState) return <SingleListItem title={title} {...this.props} />
     }
 
+    changeFilterVal(value){
+        this.setState({
+            filterVal: value
+        })
+    }
+
     render(){
         var leftSidebarVisibility = (!this.props.leftSidebarVisibility) ? 'hideLeftSidebar leftSidebar' : 'leftSidebar';
         return(
             <div className={leftSidebarVisibility} style={style.wrapper}>
                 {
-                    (this.props.tab) ? <UserFormContainer/> : <URLFormContainer/>
+                    (this.props.tab)
+                        ? <UserFormContainer
+                            filterVal={this.state.filterVal}
+                            changeFilterVal={this.changeFilterVal} />
+                        : <URLFormContainer/>
                 }
                 {
                     this.showSingleItem()
                 }
-                    <ListURLContainer {...this.props}/>
+                    <ListURLContainer filterVal={this.state.filterVal} {...this.props}/>
             </div>
         );
     }

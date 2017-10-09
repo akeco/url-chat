@@ -11,6 +11,7 @@ var voting = require('../../services/voting');
 var getOrCreatePrivateRoom = require('../../services/getOrCreatePrivateRoom');
 var savePrivateMessage = require('../../services/savePrivateMessage');
 var findSingleUserSocketID = require('../../services/findSingleUserSocketID');
+var urlExists = require('url-exists');
 var {find} = require('lodash');
 
 io.sockets.on('connection', function (socket) {
@@ -29,7 +30,7 @@ io.sockets.on('connection', function (socket) {
             })();
         }
 
-        (async ()=>{
+        var handleSuccess = async ()=>{
             var image = await getFavicon(roomData.url);
             if(image) roomData.image = image;
             var roomResult = await addRoom(roomData);
@@ -38,6 +39,50 @@ io.sockets.on('connection', function (socket) {
                 socket.emit("addActiveRoom", roomResult);
                 socket.join(roomResult.roomID);
             }
+        };
+
+        (async ()=>{
+            var valid = false;
+            var url = roomData.url.indexOf("http");
+            if(url == -1) {
+                urlExists(`http://${roomData.url}`, function(err, exists) {
+                    if(!exists){
+                        urlExists(`https://${roomData.url}`, function(err, exists) {
+                            if(exists){
+                                console.info("SUCCESS HTTPS");
+                                valid = true;
+                                handleSuccess(roomData);
+                                return;
+                            }
+                        });
+                    }
+                    else{
+                        console.info("SUCCESS HTTP");
+                        valid = true;
+                        handleSuccess(roomData);
+                        return;
+                    }
+                });
+            }
+            else {
+                urlExists(roomData.url, function(err, exists) {
+                    if(exists){
+                        console.info("SUCCESS DEFAULT");
+                        valid = true;
+                        handleSuccess(roomData);
+                        return;
+                    }
+                });
+            }
+
+            setTimeout(()=>{
+                if(!valid){
+                    console.info("Invalid URL");
+                    socket.emit("addActiveRoom", false);
+                }
+            },5000);
+
+
         })();
     });
 

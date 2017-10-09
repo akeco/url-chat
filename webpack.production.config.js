@@ -97,6 +97,12 @@ module.exports = {
         extensions: [".js", ".json", ".jsx", ".css"]
     },
 
+    node: {
+        console: true,
+        fs: 'empty',
+        net: 'empty',
+        tls: 'empty'
+    },
 
     context: __dirname, // string (absolute path!)
     target: "web", // enum

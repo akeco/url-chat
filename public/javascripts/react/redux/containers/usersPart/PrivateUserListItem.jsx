@@ -15,12 +15,25 @@ class PrivateUserListItem extends Component{
     }
 
     addPrivateChat(user){
-        this.props.addPrivateRoom(user);
-        this.props.socketIO.emit("joinPrivate", {
-            sender: this.props.profileuser._id,
-            receiver: user._id,
-            users: [this.props.profileuser, user]
-        });
+        if(!this.props.privateRoom){
+            this.props.addPrivateRoom(user);
+            this.props.socketIO.emit("joinPrivate", {
+                sender: this.props.profileuser._id,
+                receiver: user._id,
+                users: [this.props.profileuser, user]
+            });
+        }
+        else{
+            if(this.props.privateRoom.usersID.indexOf(user._id) == -1){
+                this.props.addPrivateRoom(user);
+                this.props.socketIO.emit("joinPrivate", {
+                    sender: this.props.profileuser._id,
+                    receiver: user._id,
+                    users: [this.props.profileuser, user]
+                });
+            }
+        }
+
     }
 
     render(){
@@ -92,6 +105,7 @@ function mapStateToProps(state) {
     return ({
         profileuser: state.profileuser,
         socketIO: state.socketobject,
+        privateRoom: state.privateRoom
     });
 }
 

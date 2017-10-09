@@ -2,8 +2,6 @@ import React,{Component} from 'react';
 import {teal500, teal300, teal50} from 'material-ui/styles/colors';
 import {connect} from 'react-redux';
 import TextField from 'material-ui/TextField';
-import IconButton from 'material-ui/IconButton';
-import CloseIcon from 'material-ui/svg-icons/navigation/close';
 import SearchIcon from 'material-ui/svg-icons/action/search';
 import '../../../../../stylesheets/less/urlForm.less';
 
@@ -11,11 +9,8 @@ class UserFormContainer extends Component{
     constructor(props){
         super(props);
         this.state = {
-            open: false,
-            inputValue: ''
+            open: false
         };
-        this.handleURLSubmit = this.handleURLSubmit.bind(this);
-        this.handleRequestClose = this.handleRequestClose.bind(this);
         this.inputOnChange = this.inputOnChange.bind(this);
     }
 
@@ -26,33 +21,17 @@ class UserFormContainer extends Component{
     }
 
     inputOnChange(event){
-        this.setState({
-            inputValue: event.target.value
-        })
+        this.props.changeFilterVal(event.target.value);
     }
-
-    handleURLSubmit(event){
-        event.preventDefault();
-        this.props.socketIO.emit("urlInserted", {
-            url: this.state.inputValue,
-            user: this.props.profileuser,
-            activeRoom: (this.props.activeRoomState) ? this.props.activeRoomState : null
-        });
-        this.setState({
-            open: true,
-            inputValue: ''
-        });
-    }
-
 
     render(){
         return(
             <div className="formWrapper" style={style.formWrapper}>
-                <form className="formURL" style={style.form} onSubmit={this.handleURLSubmit}>
+                <form className="formURL" style={style.form}>
                     <SearchIcon style={style.searchIcon} />
                     <TextField
                         hintText="Search user"
-                        value={this.state.inputValue}
+                        value={this.props.filterVal}
                         hintStyle={{fontSize: 14, bottom: 8}}
                         inputStyle={{fontSize: 14}}
                         underlineShow={false}
@@ -60,15 +39,6 @@ class UserFormContainer extends Component{
                         onChange={this.inputOnChange}
                     />
                 </form>
-                <IconButton
-                    className="mobileNavIcon"
-                    style={{marginRight: -10}}
-                    onTouchTap={()=>{ setTimeout(()=>{
-                        this.props.showLeftSidebar(false)
-                    },500) }}
-                >
-                    <CloseIcon color={teal300} />
-                </IconButton>
             </div>
         )
     }

@@ -117,7 +117,12 @@ class ListURLContainer extends Component{
             if(activeRoom) {
                 activeRoom = find(activeRoom.rooms, (o)=>{ return o.route == this.props.activeRoomState.route });
                 if(activeRoom){
-                    return activeRoom.members.map((item)=>{
+                    return activeRoom.members.filter((item)=>{
+                        if(this.props.filterVal){
+                            return (item.username.toLowerCase().indexOf(this.props.filterVal.toLowerCase()) != -1)
+                        }
+                        else return true;
+                    }).map((item)=>{
                         if(item._id != this.props.profileuser._id){
                             var checkNotifications = [];
                             if(this.props.privateNotifyCollection.length){
@@ -204,16 +209,31 @@ class ListURLContainer extends Component{
         return (
             <div>
                 <p style={style.title}>{title}</p>
-                <List style={style.list}>
-                    {
-                        this.displayActiveRooms()
-                    }
-                </List>
-                <List style={style.list}>
-                    {
-                        this.showMembers()
-                    }
-                </List>
+                {
+                    (this.props.tab == 0) && (
+                        <List style={style.list}>
+                            {
+                                this.displayActiveRooms()
+                            }
+                        </List>
+                    )
+                }
+                {
+                    (this.props.tab == 1 && this.props.activeRoomState) && (
+                        <List style={style.list}>
+                            {
+                                this.showMembers()
+                            }
+                        </List>
+                    )
+                }
+                {
+                    /*
+                    (this.props.tab == 1 && this.props.activeRoomState && !this.props.activeRoomState.members.length) && (
+                        <p>Empty members list</p>
+                    )
+                    */
+                }
             </div>
         );
     }

@@ -76,6 +76,13 @@ module.exports = {
         extensions: [".js", ".json", ".jsx", ".css"]
     },
 
+    node: {
+        console: true,
+        fs: 'empty',
+        net: 'empty',
+        tls: 'empty'
+    },
+
     devtool: "source-map", // enum
     context: __dirname, // string (absolute path!)
     target: "web", // enum

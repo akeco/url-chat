@@ -3,13 +3,12 @@ import {teal600, teal300, teal50} from 'material-ui/styles/colors';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {loadSpinner, showLeftSidebar} from '../../actions/index';
-import Snackbar from 'material-ui/Snackbar';
 import CircularProgress from 'material-ui/CircularProgress';
 import TextField from 'material-ui/TextField';
 import IconButton from 'material-ui/IconButton';
 import CloseIcon from 'material-ui/svg-icons/navigation/close';
 import '../../../../../stylesheets/less/urlForm.less';
-import axios from 'axios';
+
 
 class URLFormContainer extends Component{
     constructor(props){
@@ -39,24 +38,15 @@ class URLFormContainer extends Component{
     handleURLSubmit(event){
         event.preventDefault();
         if(this.state.inputValue.trim()){
-            var url = this.state.inputValue.trim().split('//');
-            if(url.length <= 1){
-
-            }
-            //console.info(this.state.inputValue.trim());
-            axios.get(this.state.inputValue.trim()).then((response)=>{
-                //console.info(response);
-                this.props.socketIO.emit("urlInserted", {
-                    url: this.state.inputValue,
-                    user: this.props.profileuser,
-                    activeRoom: (this.props.activeRoomState) ? this.props.activeRoomState : null
-                });
-                this.props.loadSpinner(true);
-                this.setState({
-                    open: true,
-                    inputValue: ''
-                });
-            }).catch((err)=>{});
+            this.props.socketIO.emit("urlInserted", {
+                url: this.state.inputValue,
+                user: this.props.profileuser,
+                activeRoom: (this.props.activeRoomState) ? this.props.activeRoomState : null
+            });
+            this.props.loadSpinner(true);
+            this.setState({
+                inputValue: ''
+            })
         }
     }
 
@@ -71,15 +61,6 @@ class URLFormContainer extends Component{
     render(){
         return(
             <div className="formWrapper" style={style.formWrapper}>
-                <Snackbar
-                    style={style.snackBar}
-                    bodyStyle={style.snackBarBody}
-                    contentStyle={style.snackBarContent}
-                    open={this.state.open}
-                    message={`New room created`}
-                    autoHideDuration={4000}
-                    onRequestClose={this.handleRequestClose}
-                />
                 <form className="formURL" style={style.form} onSubmit={this.handleURLSubmit}>
                     <TextField
                         hintText="Insert URL"

@@ -113,22 +113,31 @@ class Wrapper extends Component{
         });
 
         this.socket.on('addActiveRoom', (data)=>{
-            (async ()=>{
-                await this.props.activeRoom(data);
-                axios.get(`/api/messages/${data.roomID}`).then((response)=>{
-                    this.props.addChatMessages({
-                        receiver: (this.props.activeRoomState) && this.props.activeRoomState,
-                        messages: response.data
+            if(data){
+                (async ()=>{
+                    await this.props.activeRoom(data);
+                    axios.get(`/api/messages/${data.roomID}`).then((response)=>{
+                        this.props.addChatMessages({
+                            receiver: (this.props.activeRoomState) && this.props.activeRoomState,
+                            messages: response.data
+                        });
+
+                    }).catch((err)=>{
+                        // console.info("error",err);
                     });
-
-                    if($(window).innerWidth() <= 575){
-                        this.props.swipePage(1);
-                    }
-                }).catch((err)=>{
-                    // console.info("error",err);
+                })();
+                this.setState({
+                    openSnackBar: true,
+                    SnackBarMessage: 'New room created'
                 });
-            })();
-
+            }
+            else{
+                this.setState({
+                    openSnackBar: true,
+                    SnackBarMessage: 'Invalid url'
+                });
+                this.props.loadSpinner(false);
+            }
         });
     }
 
@@ -139,7 +148,7 @@ class Wrapper extends Component{
             findActivatedChat = this.props.privateRoom.usersID.indexOf(data._id);
         }
 
-        if(!this.props.toggleUserMenu || this.props.pageIndex != 2){
+        if(!this.props.toggleUserMenu){
             this.setState({
                 openSnackBar: true,
                 SnackBarMessage: `Received private message from ${data.username}`
@@ -191,9 +200,9 @@ class Wrapper extends Component{
                     style={style.snackBar}
                     bodyStyle={style.snackBarBody}
                     contentStyle={style.snackBarContent}
-                    open={this.state.openSnackBar && !this.props.toggleUserMenu}
+                    open={this.state.openSnackBar}
                     message={this.state.SnackBarMessage}
-                    action={(this.props.activeRoomState) && 'Show'}
+                    //action={(this.props.activeRoomState) && 'Show'}
                     autoHideDuration={3000}
                     onActionTouchTap={()=>{
                         this.props.toggleUsersMenu(true);
@@ -215,7 +224,8 @@ class Wrapper extends Component{
 
 const style = {
     snackBarBody:{
-        backgroundColor: teal600
+        backgroundColor: teal600,
+        opacity: '0.8'
     },
     snackBarContent:{
         color: teal50
@@ -254,7 +264,6 @@ function mapStateToProps(state) {
         activeRoomState: state.activeRoom,
         privateRoom: state.privateRoom,
         toggleUserMenu: state.toggleUserMenu,
-        pageIndex: state.pageIndex
     });
 }
 
