@@ -43,6 +43,8 @@ io.sockets.on('connection', function (socket) {
             }
         };
 
+        if(roomData.url.indexOf("http") == -1) roomData.url = "http://"+roomData.url;
+
         var options = {
             method: 'HEAD',
             host: url.parse(roomData.url).host,
