@@ -117,24 +117,26 @@ class Wrapper extends Component{
                 (async ()=>{
                     await this.props.activeRoom(data);
                     axios.get(`/api/messages/${data.roomID}`).then((response)=>{
+
                         this.props.addChatMessages({
                             receiver: (this.props.activeRoomState) && this.props.activeRoomState,
                             messages: response.data
+                        });
+
+                        this.setState({
+                            openSnackBar: true,
+                            SnackBarMessage: `You yoined ${data.name} chat room`
                         });
 
                     }).catch((err)=>{
                         // console.info("error",err);
                     });
                 })();
-                this.setState({
-                    openSnackBar: true,
-                    SnackBarMessage: 'New room created'
-                });
             }
             else{
                 this.setState({
                     openSnackBar: true,
-                    SnackBarMessage: 'Invalid url'
+                    SnackBarMessage: 'Invalid URL'
                 });
                 this.props.loadSpinner(false);
             }

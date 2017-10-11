@@ -72,7 +72,7 @@ class SingleListItem extends Component{
                                color: teal300
                            })}
                         >
-                            {primaryTextFunction(this.props.activeRoomState.route, 30)}
+                            {primaryTextFunction(this.props.activeRoomState.route, 25)}
                         </p>
                         <ReactTooltip id='headerURL' place="bottom" type="dark" effect="solid">
                             <span>{this.props.activeRoomState.route}</span>

@@ -13,6 +13,8 @@ var savePrivateMessage = require('../../services/savePrivateMessage');
 var findSingleUserSocketID = require('../../services/findSingleUserSocketID');
 var urlExists = require('url-exists');
 var {find} = require('lodash');
+var http = require('http');
+var url = require('url');
 
 io.sockets.on('connection', function (socket) {
     console.info("CONNECTED",socket.id);
@@ -41,49 +43,19 @@ io.sockets.on('connection', function (socket) {
             }
         };
 
-        (async ()=>{
-            var valid = false;
-            var url = roomData.url.indexOf("http");
-            if(url == -1) {
-                urlExists(`http://${roomData.url}`, function(err, exists) {
-                    if(!exists){
-                        urlExists(`https://${roomData.url}`, function(err, exists) {
-                            if(exists){
-                                console.info("SUCCESS HTTPS");
-                                valid = true;
-                                handleSuccess(roomData);
-                                return;
-                            }
-                        });
-                    }
-                    else{
-                        console.info("SUCCESS HTTP");
-                        valid = true;
-                        handleSuccess(roomData);
-                        return;
-                    }
-                });
-            }
-            else {
-                urlExists(roomData.url, function(err, exists) {
-                    if(exists){
-                        console.info("SUCCESS DEFAULT");
-                        valid = true;
-                        handleSuccess(roomData);
-                        return;
-                    }
-                });
-            }
-
-            setTimeout(()=>{
-                if(!valid){
-                    console.info("Invalid URL");
-                    socket.emit("addActiveRoom", false);
-                }
-            },5000);
-
-
-        })();
+        var options = {
+            method: 'HEAD',
+            host: url.parse(roomData.url).host,
+            port: 80,
+            path: url.parse(roomData.url).pathname
+        };
+        var req = http.request(options, function (r) {
+            handleSuccess(roomData);
+        }).on('error', (err)=>{
+            console.info("Invalid URL");
+            socket.emit("addActiveRoom", false);
+        });
+        req.end();
     });
 
 
