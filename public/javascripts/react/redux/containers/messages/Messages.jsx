@@ -74,12 +74,17 @@ const MessagesListWrapper = styled.div`
         background-size: contain;
         background-repeat: no-repeat;
         background-position: bottom;
+        @media (min-width: 1000px){
+            background-size: cover;
+        }
     }
 `;
 
 const CustomList = styled(List)`
     &.showHomepageInfo{
+        margin-top: -15px;
         height: 100%;
+        padding-top: 25px !important;
         padding-bottom: 150px;
         background: -moz-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 29%, rgba(255,255,255,0.64) 63%, rgba(255,255,255,0) 100%); 
         background: -webkit-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(255,255,255,1) 29%,rgba(255,255,255,0.64) 63%,rgba(255,255,255,0) 100%); 

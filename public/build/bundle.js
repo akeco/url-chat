@@ -81,10 +81,15 @@ function r(e,t){if(e===t)return 0;for(var n=e.length,r=t.length,i=0,o=Math.min(n
         background-size: contain;
         background-repeat: no-repeat;
         background-position: bottom;
+        @media (min-width: 1000px){
+            background-size: cover;
+        }
     }
 `,p=n.i(l["a"])(o["List"])`
     &.showHomepageInfo{
+        margin-top: -15px;
         height: 100%;
+        padding-top: 25px !important;
         padding-bottom: 150px;
         background: -moz-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 29%, rgba(255,255,255,0.64) 63%, rgba(255,255,255,0) 100%); 
         background: -webkit-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(255,255,255,1) 29%,rgba(255,255,255,0.64) 63%,rgba(255,255,255,0) 100%); 
