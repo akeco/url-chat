@@ -6,7 +6,7 @@ import Contact from 'material-ui/svg-icons/Communication/chat';
 import {ListItem} from 'material-ui/List';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {addPrivateRoom} from '../../actions/index';
+import {addPrivateRoom, showLeftSidebar} from '../../actions/index';
 
 class PrivateUserListItem extends Component{
     constructor(props){
@@ -49,6 +49,9 @@ class PrivateUserListItem extends Component{
                 leftIcon={ <Account style={style.avatar} /> }
                 onTouchTap={()=>{
                     this.addPrivateChat(item);
+                    setTimeout(()=>{
+                        this.props.showLeftSidebar(false);
+                    },1000);
                 }}
                 rightIconButton={
                     <IconButton
@@ -59,6 +62,9 @@ class PrivateUserListItem extends Component{
                         tooltipPosition="top-left"
                         onTouchTap={()=>{
                             this.addPrivateChat(item);
+                            setTimeout(()=>{
+                                this.props.showLeftSidebar(false);
+                            },1000);
                         }}
                     >
                         <Contact/>
@@ -80,9 +86,10 @@ const style = {
     listItem:{
         borderBottom: `1px solid ${tealA100}`,
         color: teal500,
-        fontWeight: 300,
+        fontWeight: 400,
         position: 'relative',
-        fontSize: 16
+        fontSize: 14,
+        textTransform: 'uppercase'
     },
     innerDiv:{
         padding: '15px 16px 15px 65px',
@@ -97,7 +104,8 @@ const style = {
 
 function matchDispatchToProps(dispatch) {
     return bindActionCreators({
-        addPrivateRoom
+        addPrivateRoom,
+        showLeftSidebar
     }, dispatch);
 }
 

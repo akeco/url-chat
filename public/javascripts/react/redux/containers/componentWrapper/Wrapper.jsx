@@ -125,7 +125,7 @@ class Wrapper extends Component{
 
                         this.setState({
                             openSnackBar: true,
-                            SnackBarMessage: `You yoined ${data.name} chat room`
+                            SnackBarMessage: `You joined ${data.name} chat room`
                         });
 
                     }).catch((err)=>{

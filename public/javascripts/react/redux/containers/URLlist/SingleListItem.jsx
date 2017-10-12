@@ -13,16 +13,16 @@ import IconButton from 'material-ui/IconButton';
 import CloseIcon from 'material-ui/svg-icons/navigation/close';
 import PropTypes from 'prop-types';
 
-class SingleListItem extends Component{
-    constructor(props){
+class SingleListItem extends Component {
+    constructor(props) {
         super(props);
         this.fallBack = "https://www.designfreelogoonline.com/wp-content/uploads/2016/03/00167-Abstract-spiral-globe-logo-design-free-online-logomaker-01.png";
         this.closeAndLeaveRoom = this.closeAndLeaveRoom.bind(this);
         this.showActiveSingleItem = this.showActiveSingleItem.bind(this);
     }
 
-    closeAndLeaveRoom(){
-        setTimeout(()=>{
+    closeAndLeaveRoom() {
+        setTimeout(()=> {
             this.props.socketIO.emit("leaveRoom", {
                 room: this.props.activeRoomState,
                 user: this.props.profileuser
@@ -31,8 +31,8 @@ class SingleListItem extends Component{
         }, 500);
     }
 
-    showActiveSingleItem(){
-        if(!this.props.tab){
+    showActiveSingleItem() {
+        if (!this.props.tab) {
             return (
                 <div>
                     <p style={style.title}>{this.props.title}</p>
@@ -47,7 +47,7 @@ class SingleListItem extends Component{
                                     right: 0
                                 }}
                             >
-                                <CloseIcon color={teal300} />
+                                <CloseIcon color={teal300}/>
                             </IconButton>
                         }
                         leftAvatar={
@@ -57,17 +57,19 @@ class SingleListItem extends Component{
                         }
                     >
                         <p style={{
-                            margin:0,
-                            fontSize: 16,
+                            margin: 0,
+                            fontSize: 14,
+                            fontWeight: 400,
                             marginBottom: 2,
-                            color: teal500
+                            color: teal500,
+                            textTransform: 'uppercase'
                         }}>
                             {this.props.activeRoomState.name}
                         </p>
                         <p data-tip data-for='headerURL'
                            style={Object.assign({}, style.route, {
                                margin: 0,
-                               fontSize: 13,
+                               fontSize: 12,
                                display: 'inline-block',
                                color: teal300
                            })}
@@ -81,31 +83,35 @@ class SingleListItem extends Component{
                 </div>
             );
         }
-        else if(this.props.privateRoom) {
-            if(this.props.privateRoom.users){
+        else if (this.props.privateRoom) {
+            if (this.props.privateRoom.users) {
                 var receiver = this.props.privateRoom.users.filter((item)=> item.username != this.props.profileuser.username);
                 var {username} = receiver[0];
-                return(
+                return (
                     <div>
                         <p style={style.title}>{this.props.title}</p>
                         <ListItem
                             className="singleUserListItem"
                             primaryText={username}
-                            style={Object.assign({},style.listItem,{fontSize: 16})}
+                            style={Object.assign({}, style.listItem, {
+                                fontSize: 14,
+                                fontWeight: 400,
+                                textTransform: 'uppercase'
+                            })}
                             leftIcon={ <Account/> }
                             rightIconButton={
                                 <IconButton
-                                    onTouchTap={()=>{
-                                        setTimeout(()=>{
+                                    onTouchTap={()=> {
+                                        setTimeout(()=> {
                                             this.props.addPrivateRoom(null);
-                                        },500);
+                                        }, 500);
                                     }}
                                     style={{
                                         top: 0,
                                         right: 0
                                     }}
                                 >
-                                    <CloseIcon color={teal300} />
+                                    <CloseIcon color={teal300}/>
                                 </IconButton>
                             }
                         />
@@ -115,11 +121,27 @@ class SingleListItem extends Component{
         }
     }
 
-    render(){
+    render() {
+        var {tab} = this.props;
         return(
-            <div style={{marginBottom: 30}}>
+            <div>
                 {
-                    this.showActiveSingleItem()
+                    (this.props.activeRoomState && tab == 0) && (
+                        <div style={{marginBottom: 30}}>
+                            {
+                                this.showActiveSingleItem()
+                            }
+                        </div>
+                    )
+                }
+                {
+                    (this.props.privateRoom && tab == 1) && (
+                        <div style={{marginBottom: 30}}>
+                        {
+                            this.showActiveSingleItem()
+                        }
+                        </div>
+                    )
                 }
             </div>
         );

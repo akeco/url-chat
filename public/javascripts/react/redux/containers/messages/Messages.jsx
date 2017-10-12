@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
 import {List} from 'material-ui/List';
-import PrivateMessage from '../../../components/message/PrivateMessage';
-import LinearProgress from 'material-ui/LinearProgress';
-import {teal50} from 'material-ui/styles/colors';
+//import PrivateMessage from '../../../components/message/PrivateMessage';
+//import LinearProgress from 'material-ui/LinearProgress';
+//import {teal50} from 'material-ui/styles/colors';
 import Message from './Message';
+import InfoContainer from '../../../components/homepage/InfoContainer';
 import {connect} from 'react-redux';
 import { find } from 'lodash';
+import styled from 'styled-components';
 import '../../../../../stylesheets/less/messages.less';
 
 class Messages extends Component{
@@ -46,24 +48,45 @@ class Messages extends Component{
             }
         }
         else{
-            return <LinearProgress style={style.loader} color={teal50} mode="indeterminate" />;
+            return <InfoContainer />;
         }
     }
 
 
     render(){
+        var {tab} = this.props;
+        var homepageClass = (!this.props.activeRoom || (tab == 1 && !this.props.privateRoom)) ? 'showHomepageInfo messagesListWrapper' : 'messagesListWrapper';
         return(
             <div style={style.outerDivBlock}>
-                <div className="messagesListWrapper" style={style.messagesListWrapper} >
-                    <List>
+                <MessagesListWrapper className={homepageClass} style={style.messagesListWrapper} >
+                    <CustomList className={homepageClass}>
                         {this.showMessages()}
-                    </List>
-                </div>
+                    </CustomList>
+                </MessagesListWrapper>
             </div>
         );
     }
 }
 
+const MessagesListWrapper = styled.div`
+    &.showHomepageInfo{
+        background-image: url('../../../../../images/homepage-illustration.png');
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: bottom;
+    }
+`;
+
+const CustomList = styled(List)`
+    &.showHomepageInfo{
+        height: 100%;
+        padding-bottom: 150px;
+        background: -moz-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 29%, rgba(255,255,255,0.64) 63%, rgba(255,255,255,0) 100%); 
+        background: -webkit-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(255,255,255,1) 29%,rgba(255,255,255,0.64) 63%,rgba(255,255,255,0) 100%); 
+        background: linear-gradient(to bottom, rgba(255,255,255,1) 0%,rgba(255,255,255,1) 29%,rgba(255,255,255,0.64) 63%,rgba(255,255,255,0) 100%); 
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#00ffffff',GradientType=0 );
+    }
+`;
 
 var style = {
     loader: {

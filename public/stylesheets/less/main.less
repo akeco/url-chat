@@ -1,4 +1,4 @@
-@listBorderColor: rgba(255,255,255,0.8);
+@listBorderColor: rgba(255,255,255,0.5);
 
 *{
   font-family: 'Roboto', sans-serif;
@@ -34,7 +34,7 @@ body{
   & > div{
     border-left: 1px dashed;
     margin-left: 15px;
-    border-bottom: 1px solid lighten(#1DE9B6, 20%) !important;
+    border-bottom: 1px solid @listBorderColor !important;
     border-color: @listBorderColor;
   }
   & > div:last-child{

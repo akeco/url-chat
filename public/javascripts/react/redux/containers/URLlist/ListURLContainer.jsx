@@ -6,8 +6,7 @@ import IconButton from 'material-ui/IconButton';
 import Profile from 'material-ui/svg-icons/Action/perm-identity';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import { getRooms, activeRoom, addChatMessages, swipePage, toggleUsersMenu, addPrivateRoom} from '../../actions/index';
-import LinearProgress from 'material-ui/LinearProgress';
+import { getRooms, activeRoom, addChatMessages, toggleUsersMenu, addPrivateRoom, showLeftSidebar} from '../../actions/index';
 import axios from 'axios';
 import $ from 'jquery';
 import ReactTooltip from 'react-tooltip';
@@ -187,6 +186,9 @@ class ListURLContainer extends Component{
                                                 secondaryText={item.members.length}
                                                 onTouchTap={()=>{
                                                     this.addActiveRoom(item);
+                                                    setTimeout(()=>{
+                                                        this.props.showLeftSidebar(false);
+                                                    },1000);
                                                 }}
                                             />
                                         </div>
@@ -198,9 +200,6 @@ class ListURLContainer extends Component{
                     </div>
                 );
             });
-        }
-        else if(!this.props.tab){
-            return <LinearProgress color={teal50} mode="indeterminate" />
         }
     }
 
@@ -260,7 +259,7 @@ var style = {
         padding: '10px 15px'
     },
     subList: {
-        backgroundColor: teal200,
+        backgroundColor: teal500,
         //backgroundColor: tealA400,
         padding: 0,
     },
@@ -274,9 +273,10 @@ var style = {
     listItem:{
         borderBottom: `1px solid ${tealA100}`,
         color: teal500,
-        fontWeight: 300,
+        fontWeight: 400,
         position: 'relative',
-        fontSize: 16
+        fontSize: 14,
+        textTransform: 'uppercase'
     },
     innerWrap: {
         position: 'absolute',
@@ -326,7 +326,7 @@ function matchDispatchToProps(dispatch) {
         getRooms,
         activeRoom,
         addChatMessages,
-        swipePage,
+        showLeftSidebar,
         toggleUsersMenu,
         addPrivateRoom
     }, dispatch);

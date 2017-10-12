@@ -23,9 +23,7 @@ class MobileListURLDrawer extends Component{
                 width={300}
                 open={this.props.leftSidebarVisibility}
                 onRequestChange={(open) => {
-                    if(this.props.activeRoomState){
-                        this.props.showLeftSidebar(open)
-                    }
+                    this.props.showLeftSidebar(open)
                 }}
                 containerStyle={style.drawerContainer}
                 overlayStyle={{zIndex:899}}
