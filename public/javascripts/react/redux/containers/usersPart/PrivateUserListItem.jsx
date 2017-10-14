@@ -89,7 +89,7 @@ const style = {
         fontWeight: 400,
         position: 'relative',
         fontSize: 14,
-        textTransform: 'uppercase'
+        //textTransform: 'uppercase'
     },
     innerDiv:{
         padding: '15px 16px 15px 65px',

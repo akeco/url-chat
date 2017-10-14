@@ -68,11 +68,12 @@ class MessageForm extends Component{
     }
 
     render(){
+        var {tab, privateRoom} = this.props;
         return(
             <div style={style.wrapper}>
                 <form
                     action="javascript:void(0)"
-                    className={(!this.props.activeRoom) ? 'disabledForm' : ''}
+                    className={(!this.props.activeRoom || (tab == 1 && !privateRoom)) ? 'disabledForm' : ''}
                     style={style.form}
                     onSubmit={this.sendMessage}
                 >

@@ -95,8 +95,7 @@ class SingleListItem extends Component {
                             primaryText={username}
                             style={Object.assign({}, style.listItem, {
                                 fontSize: 14,
-                                fontWeight: 400,
-                                textTransform: 'uppercase'
+                                fontWeight: 400
                             })}
                             leftIcon={ <Account/> }
                             rightIconButton={

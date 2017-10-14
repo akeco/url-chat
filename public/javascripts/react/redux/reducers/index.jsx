@@ -13,6 +13,7 @@ import privateMessages from './addPrivateMessages';
 import privateRoom from './privateRoom';
 import privateNotifyCollection from './privateNotifyCollection';
 import leftSidebarVisibility from './leftSidebarVisibility';
+import currentTab from './currentTab';
 
 const reducers = combineReducers({
     toggleUserMenu,
@@ -28,7 +29,8 @@ const reducers = combineReducers({
     privateMessages,
     privateRoom,
     privateNotifyCollection,
-    leftSidebarVisibility
+    leftSidebarVisibility,
+    currentTab
 });
 
 export default reducers;

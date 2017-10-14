@@ -12,6 +12,13 @@ export const swipePage = data => {
     }
 };
 
+export const setCurrentTab = data => {
+    return {
+        type: 'SET_TAB',
+        data
+    }
+};
+
 export const showLeftSidebar = data => {
     return {
         type: 'LEFT_SIDEBAR_VISIBILITY',

@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
 import {List} from 'material-ui/List';
-//import PrivateMessage from '../../../components/message/PrivateMessage';
-//import LinearProgress from 'material-ui/LinearProgress';
-//import {teal50} from 'material-ui/styles/colors';
+import {teal300} from 'material-ui/styles/colors';
 import Message from './Message';
+import CircularProgress from 'material-ui/CircularProgress';
 import InfoContainer from '../../../components/homepage/InfoContainer';
 import {connect} from 'react-redux';
 import { find } from 'lodash';
@@ -54,10 +53,13 @@ class Messages extends Component{
 
 
     render(){
-        var {tab} = this.props;
+        var {tab, showMessageLoader} = this.props;
         var homepageClass = (!this.props.activeRoom || (tab == 1 && !this.props.privateRoom)) ? 'showHomepageInfo messagesListWrapper' : 'messagesListWrapper';
         return(
             <div style={style.outerDivBlock}>
+                {
+                    (showMessageLoader) && <CircularProgress color={teal300} style={ style.loader } size={60} thickness={7} />
+                }
                 <MessagesListWrapper className={homepageClass} style={style.messagesListWrapper} >
                     <CustomList className={homepageClass}>
                         {this.showMessages()}
@@ -100,7 +102,8 @@ var style = {
     outerDivBlock:{
         height:'100%',
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'column',
+        position: 'relative'
     },
     messagesList: {
         lineHeight: '13px',
@@ -128,6 +131,11 @@ var style = {
         borderTopRightRadius: 0,
         backgroundColor: 'white',
         color: 'rgba(0,0,0,0.8)'
+    },
+    loader: {
+        alignSelf: 'center',
+        position: 'absolute',
+        top: '45%'
     }
 };
 

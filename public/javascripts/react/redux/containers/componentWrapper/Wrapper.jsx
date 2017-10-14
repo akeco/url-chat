@@ -11,7 +11,7 @@ import {bindActionCreators} from 'redux';
 import {updateProfileSocket, setProfileUser, setSocketObject, setTemporaryUser,
     updateRoomList, activeRoom, joinRefreshRooms, addChatMessages, swipePage, loadSpinner,
     insertMessage, updateMessage, addPrivateRoom, addPrivateMessages,
-    addNotifyPrivateIdCollection, toggleUsersMenu} from '../../actions/index';
+    addNotifyPrivateIdCollection, toggleUsersMenu, setCurrentTab, showLeftSidebar} from '../../actions/index';
 
 class Wrapper extends Component{
     constructor(props){
@@ -150,7 +150,7 @@ class Wrapper extends Component{
             findActivatedChat = this.props.privateRoom.usersID.indexOf(data._id);
         }
 
-        if(!this.props.toggleUserMenu){
+        if(!this.props.currentTab){
             this.setState({
                 openSnackBar: true,
                 SnackBarMessage: `Received private message from ${data.username}`
@@ -195,16 +195,20 @@ class Wrapper extends Component{
     }
 
     render(){
+        var {setCurrentTab, showLeftSidebar} = this.props;
         return(
             <div>
                 <Snackbar
+                    onClick={()=> {
+                        setCurrentTab(1);
+                        showLeftSidebar(true);
+                    }}
                     className='messageSnackBar'
                     style={style.snackBar}
                     bodyStyle={style.snackBarBody}
                     contentStyle={style.snackBarContent}
                     open={this.state.openSnackBar}
                     message={this.state.SnackBarMessage}
-                    //action={(this.props.activeRoomState) && 'Show'}
                     autoHideDuration={3000}
                     onActionTouchTap={()=>{
                         this.props.toggleUsersMenu(true);
@@ -255,7 +259,9 @@ function mapDispatchToProps(dispatch) {
         addPrivateRoom,
         addPrivateMessages,
         addNotifyPrivateIdCollection,
-        toggleUsersMenu
+        toggleUsersMenu,
+        setCurrentTab,
+        showLeftSidebar
     }, dispatch);
 }
 
@@ -266,6 +272,7 @@ function mapStateToProps(state) {
         activeRoomState: state.activeRoom,
         privateRoom: state.privateRoom,
         toggleUserMenu: state.toggleUserMenu,
+        currentTab: state.currentTab
     });
 }
 

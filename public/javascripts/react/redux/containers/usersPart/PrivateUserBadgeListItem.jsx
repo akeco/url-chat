@@ -105,8 +105,7 @@ const style = {
         color: teal500,
         fontWeight: 400,
         position: 'relative',
-        fontSize: 14,
-        textTransform: 'uppercase'
+        fontSize: 14
     },
     innerDiv:{
         padding: '15px 16px 15px 65px',

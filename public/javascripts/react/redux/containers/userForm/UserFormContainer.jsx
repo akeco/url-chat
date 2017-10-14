@@ -27,7 +27,7 @@ class UserFormContainer extends Component{
     render(){
         return(
             <div className="formWrapper" style={style.formWrapper}>
-                <form className="formURL" style={style.form}>
+                <form action="javascript:void(0)" className="formURL" style={style.form}>
                     <SearchIcon style={style.searchIcon} />
                     <TextField
                         hintText="Search user"

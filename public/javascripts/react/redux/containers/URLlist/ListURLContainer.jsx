@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
-import {tealA400, teal500, teal200, teal300, teal50, tealA100} from 'material-ui/styles/colors';
+import {teal500, teal300, teal50, tealA100} from 'material-ui/styles/colors';
 import {List, ListItem} from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
 import IconButton from 'material-ui/IconButton';
-import Profile from 'material-ui/svg-icons/Action/perm-identity';
+import Profile from 'material-ui/svg-icons/action/perm-identity';
+import InfoIcon from 'material-ui/svg-icons/action/info-outline';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import { getRooms, activeRoom, addChatMessages, toggleUsersMenu, addPrivateRoom, showLeftSidebar} from '../../actions/index';
@@ -71,6 +72,7 @@ class ListURLContainer extends Component{
     }
 
     addActiveRoom(room){
+        var {changeMessageLoaderState} = this.props;
         if(this.props.activeRoomState && this.props.activeRoomState._id != room._id){
             this.props.socketIO.emit("leaveRoom", {
                 room: this.props.activeRoomState,
@@ -97,7 +99,9 @@ class ListURLContainer extends Component{
             });
         }
 
+        if(changeMessageLoaderState) changeMessageLoaderState(true);
         axios.get(`/api/messages/${room.roomID}`).then((response)=>{
+            if(changeMessageLoaderState) changeMessageLoaderState(false);
             this.props.addChatMessages({
                 receiver: (this.props.activeRoomState) && this.props.activeRoomState,
                 messages: response.data
@@ -106,15 +110,17 @@ class ListURLContainer extends Component{
                 this.props.swipePage(1);
             }
         }).catch((err)=>{
+            if(changeMessageLoaderState) changeMessageLoaderState(false);
            // console.info("error",err);
         });
     }
 
     showMembers(){
-        if(this.props.activeRoomState && this.props.tab){
-            var activeRoom = find(this.props.rooms, (o)=>{ return o.name == this.props.activeRoomState.name; });
+        var {activeRoomState, tab, rooms} = this.props;
+        if(activeRoomState && tab){
+            var activeRoom = find(rooms, (o)=>{ return o.name == activeRoomState.name; });
             if(activeRoom) {
-                activeRoom = find(activeRoom.rooms, (o)=>{ return o.route == this.props.activeRoomState.route });
+                activeRoom = find(activeRoom.rooms, (o)=>{ return o.route == activeRoomState.route });
                 if(activeRoom){
                     return activeRoom.members.filter((item)=>{
                         if(this.props.filterVal){
@@ -204,6 +210,7 @@ class ListURLContainer extends Component{
     }
 
     render() {
+        var {tab, activeRoomState} = this.props;
         var title = (this.props.tab) ? 'Room Members' : 'Available Rooms';
         return (
             <div>
@@ -227,11 +234,15 @@ class ListURLContainer extends Component{
                     )
                 }
                 {
-                    /*
-                    (this.props.tab == 1 && this.props.activeRoomState && !this.props.activeRoomState.members.length) && (
-                        <p>Empty members list</p>
+                    (tab == 1 && !activeRoomState) && (
+                        <div style={{ display:'flex' }}>
+                            <InfoIcon style={ style.infoIcon } />
+                            <div>
+                                <p style={style.emptyMessage}>Empty members list</p>
+                                <p style={Object.assign({},style.emptyMessage,{marginTop: 5})}>Please insert or select available URL room</p>
+                            </div>
+                        </div>
                     )
-                    */
                 }
             </div>
         );
@@ -260,7 +271,6 @@ var style = {
     },
     subList: {
         backgroundColor: teal500,
-        //backgroundColor: tealA400,
         padding: 0,
     },
     list: {
@@ -317,6 +327,19 @@ var style = {
         height: 28,
         boxShadow: '0 1px 1px 0 rgba(0,0,0,0.5)',
         backgroundColor: 'white'
+    },
+    emptyMessage: {
+        color: teal300,
+        fontSize: 13,
+        paddingLeft: 10,
+        fontWeight: 300,
+        marginBottom: 5
+    },
+    infoIcon: {
+        position: 'relative',
+        top: 13,
+        marginLeft: 10,
+        color: teal300
     }
 };
 
