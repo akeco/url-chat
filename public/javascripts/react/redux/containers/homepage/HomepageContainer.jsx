@@ -62,7 +62,7 @@ class Homepage extends Component{
                           />
                           <Content
                               tab={currentTab}
-                              showMessageLoader={this.props.showMessageLoader}
+                              showMessageLoader={this.state.showMessageLoader}
                           />
                       </div>
                   </Tab>
@@ -71,7 +71,7 @@ class Homepage extends Component{
                           <MobileListURLDrawer tab={currentTab} />
                           <LeftURLSidebar tab={currentTab}
                           />
-                          <Content tab={currentTab} />
+                          <Content tab={currentTab}/>
                       </div>
                   </Tab>
               </Tabs>
