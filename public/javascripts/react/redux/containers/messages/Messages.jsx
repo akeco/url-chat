@@ -54,14 +54,15 @@ class Messages extends Component{
 
     render(){
         var {tab, showMessageLoader} = this.props;
-        var homepageClass = (!this.props.activeRoom || (tab == 1 && !this.props.privateRoom)) ? 'showHomepageInfo messagesListWrapper' : 'messagesListWrapper';
+        var homepageClass = (!this.props.activeRoom || (tab == 1 && !this.props.privateRoom)) ? 'showHomepageInfo messagesListWrapper' : 'messagesListWrapper privateMessageWrapper',
+            customListClass = (!this.props.activeRoom || (tab == 1 && !this.props.privateRoom)) ? 'showHomepageInfo' : '';
         return(
             <div style={style.outerDivBlock}>
                 {
                     (showMessageLoader) && <CircularProgress color={teal300} style={ style.loader } size={60} thickness={7} />
                 }
                 <MessagesListWrapper className={homepageClass} style={style.messagesListWrapper} >
-                    <CustomList className={homepageClass}>
+                    <CustomList className={customListClass}>
                         {this.showMessages()}
                     </CustomList>
                 </MessagesListWrapper>

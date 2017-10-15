@@ -15,6 +15,21 @@ class MobileListURLDrawer extends Component{
         super(props);
     }
 
+    /*
+    componentDidMount(){
+        $(window).on("beforeunload", function (event, data) {
+            event.preventDefault();
+            var direction = data.state.direction;
+            if (direction == 'back') {
+             if(this.props.leftSidebarVisibility){
+                 event.preventDefault();
+                 this.props.showLeftSidebar(false);
+             }
+            }
+        });
+    }
+    */
+
     render(){
         return(
         <Media query="(max-width: 647px)" render={() => (

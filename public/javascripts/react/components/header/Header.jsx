@@ -25,9 +25,9 @@ class Header extends Component{
     signOut(){
         this.closeAndLeaveRoom();
         localStorage.removeItem("currentUser");
-        this.props.setTemporaryUser(null);
-        //this.props.history.push('/home');
-        document.location = "/home";
+        //this.props.setTemporaryUser(null);
+        this.props.history.push('/home');
+        //document.location = "/home";
     }
 
     closeAndLeaveRoom(){
@@ -78,7 +78,15 @@ class Header extends Component{
                                     anchorOrigin={{horizontal: 'right', vertical: 'top'}}
                                     targetOrigin={{horizontal: 'right', vertical: 'top'}}
                                 >
-                                    <MenuItem primaryText="Profile" />
+                                    <MenuItem
+                                        primaryText="Profile"
+                                    />
+                                    <MenuItem
+                                        primaryText="Login"
+                                        onTouchTap={()=>{
+                                            this.props.history.push('/home');
+                                        }}
+                                    />
                                     <MenuItem
                                         primaryText="Sign out"
                                         onTouchTap={this.signOut}

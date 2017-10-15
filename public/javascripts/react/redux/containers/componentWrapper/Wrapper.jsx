@@ -57,8 +57,20 @@ class Wrapper extends Component{
             });
 
             if(!window.localStorage.getItem("currentUser")){
-                this.props.history.push("/home");
-                return;
+                //this.props.history.push("/home");
+
+                axios.post("/api/user/save", {
+                    data:{
+                        user: this.props.temporaryUser
+                    }
+                }).then((response)=>{
+                    this.props.setProfileUser(response.data);
+                    window.localStorage.setItem("currentUser", JSON.stringify(response.data));
+                    this.props.history.push("/");
+                }).catch((err)=>{
+                    console.info(err);
+                });
+
             }
             else{
                 var user = JSON.parse(window.localStorage.getItem("currentUser"));
@@ -117,17 +129,14 @@ class Wrapper extends Component{
                 (async ()=>{
                     await this.props.activeRoom(data);
                     axios.get(`/api/messages/${data.roomID}`).then((response)=>{
-
                         this.props.addChatMessages({
                             receiver: (this.props.activeRoomState) && this.props.activeRoomState,
                             messages: response.data
                         });
-
                         this.setState({
                             openSnackBar: true,
                             SnackBarMessage: `You joined ${data.name} chat room`
                         });
-
                     }).catch((err)=>{
                         // console.info("error",err);
                     });
@@ -145,12 +154,13 @@ class Wrapper extends Component{
 
 
     notifyMessage(data){
-        var findActivatedChat = null;
+        var {_id} = data,
+            findActivatedChat = null;
         if(this.props.privateRoom){
             findActivatedChat = this.props.privateRoom.usersID.indexOf(data._id);
         }
 
-        if(!this.props.currentTab){
+        if(!this.props.currentTab || (this.props.currentTab == 1 && !this.props.privateRoom) || (this.props.currentTab == 1 && this.props.privateRoom && this.props.privateRoom.usersID.indexOf(_id) == -1)){
             this.setState({
                 openSnackBar: true,
                 SnackBarMessage: `Received private message from ${data.username}`
@@ -272,7 +282,8 @@ function mapStateToProps(state) {
         activeRoomState: state.activeRoom,
         privateRoom: state.privateRoom,
         toggleUserMenu: state.toggleUserMenu,
-        currentTab: state.currentTab
+        currentTab: state.currentTab,
+        temporaryUser: state.temporaryUser
     });
 }
 
