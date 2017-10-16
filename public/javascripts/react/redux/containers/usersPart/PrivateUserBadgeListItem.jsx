@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {tealA100, teal500, teal300, teal50, orangeA700} from 'material-ui/styles/colors';
+import {amber500, tealA100, teal500, teal300, teal50, orangeA700} from 'material-ui/styles/colors';
 import IconButton from 'material-ui/IconButton';
 import Account from 'material-ui/svg-icons/Action/account-circle';
 import Contact from 'material-ui/svg-icons/Communication/chat';
@@ -91,7 +91,7 @@ const style = {
         fontSize: 10,
         width: 20,
         height:20,
-        backgroundColor: orangeA700,
+        backgroundColor: amber500,
         color: 'white'
     },
     avatar: {

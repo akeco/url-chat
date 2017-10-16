@@ -4,7 +4,8 @@ import {ListItem} from 'material-ui/List';
 import {teal900, teal800, teal500, teal400, teal100} from 'material-ui/styles/colors';
 import IconButton from 'material-ui/IconButton';
 import Contact from 'material-ui/svg-icons/Communication/chat';
-import Star from 'material-ui/svg-icons/Toggle/star-border';
+import Star from 'material-ui/svg-icons/toggle/star-border';
+import FullStar from 'material-ui/svg-icons/toggle/star';
 import HiddenControlsContainer from '../messagesContainer/HiddenControlsContainer';
 import MobileRatingMenu from '../messagesContainer/MobileRatingMenu';
 import {connect} from 'react-redux';
@@ -12,6 +13,7 @@ import {bindActionCreators} from 'redux';
 import moment from 'moment';
 import { addPrivateRoom } from '../../actions/index';
 import $ from 'jquery';
+import {find} from 'lodash';
 
 
 class Message extends Component{
@@ -66,7 +68,9 @@ class Message extends Component{
     }
 
     render(){
-        var {sender, created, message, rating} = this.props.message;
+        var {sender, created, message, rating, ratingUsers} = this.props.message,
+            matchUser = find(ratingUsers, (o)=> o._id == this.props.profileuser._id),
+            positiveFeedback = (rating >= 5) ? 'positiveFeedback' : '';
         return(
         <ListItem
             hoverColor={'#F6F6F6'}
@@ -119,8 +123,18 @@ class Message extends Component{
                         {
                             (!this.props.private) && (
                                 <p style={style.rating}>
-                                    <Star style={style.voteStar} />
-                                    <span>{rating}</span>
+                                    {
+                                        (!matchUser) &&
+                                        <Star
+                                            className={positiveFeedback}
+                                            style={style.voteStar} /> ||
+                                        <FullStar
+                                            style={style.voteStar}
+                                            className={positiveFeedback}
+                                        />
+
+                                    }
+                                    <span className={positiveFeedback}>{rating}</span>
                                 </p>
                             )
                         }

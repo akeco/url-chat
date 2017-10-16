@@ -9,7 +9,7 @@ import {connect} from 'react-redux';
 import $ from 'jquery';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import MobileListURLDrawer from '../URLlist/MobileListURLDrawer';
-import {setCurrentTab} from '../../actions/index';
+import {setCurrentTab, showLeftSidebar} from '../../actions/index';
 
 class Homepage extends Component{
     constructor(props){
@@ -27,7 +27,8 @@ class Homepage extends Component{
     }
 
     render(){
-        var {currentTab} = this.props;
+        var {currentTab, privateNotifyCollection, showLeftSidebar} = this.props;
+        var hasUnreadMessagesClass = (privateNotifyCollection.length) ? 'hasUnreadMessagesClass' : '';
         return(
           <div style={style.outerDiv}>
               <Header/>
@@ -54,7 +55,17 @@ class Homepage extends Component{
                           />
                       </div>
                   </Tab>
-                  <Tab value={1} label="Private messages" buttonStyle={{fontSize: 12}}>
+                  <Tab
+                      className={hasUnreadMessagesClass}
+                      value={1}
+                      label="Private messages"
+                      buttonStyle={{fontSize: 12}}
+                      onActive={()=>{
+                          if(privateNotifyCollection.length){
+                              showLeftSidebar(true);
+                          }
+                      }}
+                  >
                       <div className="tab" style={style.tab}>
                           <MobileListURLDrawer tab={currentTab} />
                           <LeftURLSidebar tab={currentTab}
@@ -70,13 +81,15 @@ class Homepage extends Component{
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        setCurrentTab
+        setCurrentTab,
+        showLeftSidebar
     }, dispatch);
 }
 
 function mapStateToProps(state) {
     return ({
-        currentTab: state.currentTab
+        currentTab: state.currentTab,
+        privateNotifyCollection: state.privateNotifyCollection
     });
 }
 

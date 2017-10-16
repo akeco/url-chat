@@ -1,4 +1,5 @@
 @listBorderColor: rgba(255,255,255,0.5);
+@notificationTabColor: #26A69A;
 
 *{
   font-family: 'Roboto', sans-serif;
@@ -26,6 +27,16 @@ body{
 
 .headerAvatar{
   margin-left: 10px;
+}
+
+.hasUnreadMessagesClass{
+  animation: tabAnimation 3000ms linear infinite;
+}
+
+@keyframes tabAnimation {
+  0% {background-color: transparent;}
+  50% {background-color: @notificationTabColor}
+  100% {background-color: transparent}
 }
 
 

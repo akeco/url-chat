@@ -92,10 +92,6 @@ class HiddenControlsContainer extends Component{
         });
     }
 
-    showRatingComponent(){
-
-    }
-
     render(){
         var disableUpClass = (this.state.up) ? 'disableList' : '';
         var disableDownClass = (this.state.down) ? 'disableList' : '';
@@ -194,7 +190,8 @@ function mapStateToProps(state) {
     return ({
         socketIO: state.socketobject,
         profileUser: state.profileuser,
-        activeRoomState: state.activeRoom
+        activeRoomState: state.activeRoom,
+        privateNotifyCollection: state.privateNotifyCollection
     });
 }
 

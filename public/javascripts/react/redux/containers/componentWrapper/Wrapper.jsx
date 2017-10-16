@@ -283,7 +283,7 @@ function mapStateToProps(state) {
         privateRoom: state.privateRoom,
         toggleUserMenu: state.toggleUserMenu,
         currentTab: state.currentTab,
-        temporaryUser: state.temporaryUser
+        temporaryUser: state.temporaryUser,
     });
 }
 

@@ -13,11 +13,11 @@ class Messages extends Component{
     constructor(props){
         super(props);
         this.state = {
-            messages: [],
             windowFocus: true
         };
         this.showMessages = this.showMessages.bind(this);
     }
+
 
     componentDidUpdate(){
         var containerElement = $(document.querySelector(".messagesListWrapper > div"));
@@ -147,7 +147,6 @@ function mapStateToProps(state) {
         socketIO: state.socketobject,
         profileuser: state.profileuser,
         chatMessages: state.chatmessages,
-        pageIndex: state.pageIndex,
         privateMessages: state.privateMessages,
         privateRoom: state.privateRoom
     });
