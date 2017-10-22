@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
 import {List} from 'material-ui/List';
-import {teal300} from 'material-ui/styles/colors';
+import {teal300, teal900} from 'material-ui/styles/colors';
 import Message from './Message';
 import CircularProgress from 'material-ui/CircularProgress';
 import InfoContainer from '../../../components/homepage/InfoContainer';
 import {connect} from 'react-redux';
+import { Scrollbars } from 'react-custom-scrollbars';
 import { find } from 'lodash';
 import styled from 'styled-components';
 import '../../../../../stylesheets/less/messages.less';
@@ -20,8 +21,10 @@ class Messages extends Component{
 
 
     componentDidUpdate(){
-        var containerElement = $(document.querySelector(".messagesListWrapper > div"));
-        $(document.querySelector(".messagesListWrapper")).animate({scrollTop:containerElement.height(), top}, 500);
+        /*
+        var containerElement = $(".messagesListWrapper > div:first-child > div");
+        $(".messagesListWrapper > div:first-child").animate({scrollTop:containerElement.height(), top}, 500);
+        */
     }
 
     showMessages(){
@@ -46,7 +49,7 @@ class Messages extends Component{
                 }
             }
         }
-        else{
+        else if(!this.props.showMessageLoader){
             return <InfoContainer />;
         }
     }
@@ -61,7 +64,13 @@ class Messages extends Component{
                 {
                     (showMessageLoader) && <CircularProgress color={teal300} style={ style.loader } size={60} thickness={7} />
                 }
-                <MessagesListWrapper className={homepageClass} style={style.messagesListWrapper} >
+                <MessagesListWrapper
+                    className={homepageClass}
+                    style={style.messagesListWrapper}
+                    autoHide
+                    autoHideTimeout={1000}
+                    autoHideDuration={200}
+                >
                     <CustomList className={customListClass}>
                         {this.showMessages()}
                     </CustomList>
@@ -71,7 +80,11 @@ class Messages extends Component{
     }
 }
 
-const MessagesListWrapper = styled.div`
+const MessagesListWrapper = styled(Scrollbars)`
+    & > div:last-child{
+        z-index: 999;
+    }
+    
     &.showHomepageInfo{
         background-image: url('../../../../../images/homepage-illustration.png');
         background-size: contain;
@@ -111,7 +124,7 @@ var style = {
         padding: '5px 5px 8px'
     },
     messagesListWrapper: {
-        overflowY: 'scroll',
+        //overflowY: 'scroll',
         overflowX: 'hidden',
         flexGrow: 1,
         paddingTop: 15

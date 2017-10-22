@@ -123,7 +123,9 @@ class RegisterComponent extends Component{
         var disabledForm = (this.state.disabledForm) ? 'hidden loginForm' : 'loginForm';
         return(
             <div className="loginWrapper" style={style.loginWrapper}>
-                <img style={style.websiteLogo} src="../../../../../images/forum_final_1.png"/>
+                <div style={style.imageWrapper}>
+                    <img style={style.websiteLogo} src="../../../../../images/homepage-logo.png"/>
+                </div>
                 <div style={style.centerBlock}>
                     <div style={style.elementWrapper}>
                         {
@@ -176,12 +178,24 @@ class RegisterComponent extends Component{
                         </form>
                     </div>
                 </div>
+                <div style={{flexGrow:1}}></div>
             </div>
         )
     }
 }
 
 const style = {
+    imageWrapper: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexGrow: 1
+    },
+    websiteLogo:{
+        position: 'absolute',
+        width: 200,
+        cursor: 'default'
+    },
     warning:{
         color: teal50,
         fontSize: 12,
@@ -211,15 +225,6 @@ const style = {
         borderColor: teal500,
         boxSizing: 'border-box'
     },
-    websiteLogo:{
-        position: 'absolute',
-        width: 200,
-        top: 45,
-        left: 0,
-        right: 0,
-        margin: 'auto',
-        cursor: 'default'
-    },
     buttons: {
         width: '100%',
         marginBottom: 20
@@ -233,19 +238,19 @@ const style = {
     },
     centerBlock: {
         width: '100%',
-        backgroundColor: teal700,
-        padding: '70px 0px',
+        backgroundColor: teal500,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         boxShadow: 'inset 0 2px 4px 0 rgba(0,0,0,0.3), inset 0 -2px 4px 0 rgba(0,0,0,0.3)',
         backgroundImage: 'url(\'../../../../../../images/login-back.png\')',
-        backgroundSize: 'cover'
+        flexGrow: 1
     },
     loginWrapper: {
         width: '100%',
         height: '100%',
         display: 'flex',
+        flexDirection: 'column',
         alignItems: 'center',
         backgroundColor: teal50,
         position: 'relative'

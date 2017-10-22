@@ -114,7 +114,7 @@ var style = {
         height: 55,
         width: '100%',
         marginBottom: 88,
-        borderTop: '1px solid rgba(255,255,255,0.5)'
+        borderTop: '1px solid rgba(0,0,0,0.03)'
     },
     uploadButton: {
         verticalAlign: 'middle',

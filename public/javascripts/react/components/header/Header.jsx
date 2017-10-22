@@ -51,7 +51,7 @@ class Header extends Component{
                 >
                     <MenuIcon color="white"/>
                 </IconButton>
-                <Link to="/" style={style.link}>
+                <Link to="/home" style={style.link}>
                     <img style={style.logo} src="../../../images/forum_final_1_white.png"/>
                 </Link>
                 <div className="userBlock" style={style.userBlock}>

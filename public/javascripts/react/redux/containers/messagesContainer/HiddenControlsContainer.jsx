@@ -18,6 +18,7 @@ class HiddenControlsContainer extends Component{
         this.message = this.props.message;
         this.votePositive = this.votePositive.bind(this);
         this.voteNegative = this.voteNegative.bind(this);
+        this.copyContent = this.copyContent.bind(this);
     }
 
     componentWillMount(){
@@ -92,9 +93,13 @@ class HiddenControlsContainer extends Component{
         });
     }
 
+    copyContent(){
+        var {text} = this.props.message.message;
+    }
+
     render(){
-        var disableUpClass = (this.state.up) ? 'disableList' : '';
-        var disableDownClass = (this.state.down) ? 'disableList' : '';
+        var disableUpClass = (this.state.up) ? 'disableList' : '',
+            disableDownClass = (this.state.down) ? 'disableList' : '';
         return(
             <div className="desktopRatingIcons" style={style.outerDiv}>
                 <ul className="hiddenControls" style={style.hiddenControls}>
@@ -123,17 +128,18 @@ class HiddenControlsContainer extends Component{
                     </li>
                     <li style={style.li}>
                         <IconButton
-                            tooltip="Copy content"
+                            tooltip="Copy Message Content"
                             tooltipPosition="top-center"
                             iconStyle={style.smallIcon}
                             style={style.small}
+                            onTouchTap={this.copyContent}
                         >
                             <Copy />
                         </IconButton>
                     </li>
                     <li style={style.li}>
                         <IconButton
-                            tooltip="Report comment"
+                            tooltip="Report Comment"
                             tooltipPosition="top-center"
                             iconStyle={style.smallIcon}
                             style={style.small}
@@ -143,7 +149,7 @@ class HiddenControlsContainer extends Component{
                     </li>
                     <li style={style.li}>
                         <IconButton
-                            tooltip="Block user"
+                            tooltip="Block User"
                             tooltipPosition="top-left"
                             iconStyle={style.smallIcon}
                             style={style.small}

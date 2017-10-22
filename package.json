@@ -16,6 +16,7 @@
   "dependencies": {
     "async-uglify-js-webpack-plugin": "0.0.6",
     "axios": "^0.16.2",
+    "babel-preset-stage-2": "^6.24.1",
     "body-parser": "~1.17.1",
     "bootstrap": "^3.3.7",
     "cookie-parser": "~1.4.3",
@@ -47,6 +48,7 @@
     "react-addons-css-transition-group": "^15.6.0",
     "react-collapse": "^4.0.3",
     "react-collapsible": "^2.0.0",
+    "react-custom-scrollbars": "^4.2.0",
     "react-dom": "^15.5.4",
     "react-media": "^1.6.1",
     "react-motion": "^0.5.1",
@@ -65,6 +67,7 @@
     "request": "^2.81.0",
     "rxjs": "^5.4.2",
     "save-dev": "^2.0.0",
+    "semantic-ui-react": "^0.75.1",
     "serve-favicon": "~2.4.2",
     "socket.io": "^2.0.3",
     "socket.io-client": "^2.0.3",

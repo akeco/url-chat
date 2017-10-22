@@ -15,7 +15,9 @@ import PrivateUserListItem from '../usersPart/PrivateUserListItem'
 import PrivateUserBadgeListItem from '../usersPart/PrivateUserBadgeListItem'
 import {primaryTextFunction} from '../../../../../../services/utils';
 import PropTypes from 'prop-types';
+import { Scrollbars } from 'react-custom-scrollbars';
 import {find} from 'lodash';
+import styled from 'styled-components';
 
 class ListURLContainer extends Component{
 
@@ -217,20 +219,34 @@ class ListURLContainer extends Component{
                 <p style={style.title}>{title}</p>
                 {
                     (this.props.tab == 0) && (
-                        <List style={style.list}>
-                            {
-                                this.displayActiveRooms()
-                            }
-                        </List>
+                            <CustomScroller
+                                style={{width: '100%', height:400}}
+                                autoHide
+                                autoHideTimeout={1000}
+                                autoHideDuration={200}
+                            >
+                                <List style={style.list}>
+                                {
+                                    this.displayActiveRooms()
+                                }
+                                </List>
+                            </CustomScroller>
                     )
                 }
                 {
                     (this.props.tab == 1 && this.props.activeRoomState) && (
-                        <List style={style.list}>
-                            {
-                                this.showMembers()
-                            }
-                        </List>
+                        <CustomScroller
+                            style={{width: '100%', height:400}}
+                            autoHide
+                            autoHideTimeout={1000}
+                            autoHideDuration={200}
+                        >
+                            <List style={style.list}>
+                                {
+                                    this.showMembers()
+                                }
+                            </List>
+                        </CustomScroller>
                     )
                 }
                 {
@@ -252,6 +268,14 @@ class ListURLContainer extends Component{
 ListURLContainer.propTypes = {
     tab: PropTypes.number.isRequired
 };
+
+
+const CustomScroller = styled(Scrollbars)`
+    & > div:last-child{
+        z-index: 999;
+    }
+`;
+
 
 var style = {
     title: {
@@ -275,9 +299,7 @@ var style = {
     },
     list: {
         padding:0,
-        maxHeight: 400,
-        overflowY: 'scroll',
-        overflowX: 'hidden',
+       // height: 800,
         backgroundColor: 'white'
     },
     listItem:{
