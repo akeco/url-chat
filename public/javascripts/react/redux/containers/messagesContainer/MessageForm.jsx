@@ -86,8 +86,19 @@ class MessageForm extends Component{
                         textareaStyle={{color: teal900}}
                         underlineFocusStyle={{borderColor: teal200}}
                         hintStyle={{color: teal200}}
-                        onChange={this.inputOnChange}
+                        onChange={(event)=>{
+                            this.inputOnChange(event);
+                            var containerElement = $(".messagesListWrapper > div:first-child > div").height(),
+                                scrollerElement = $(".messagesListWrapper > div:first-child"),
+                                scrollPosition = scrollerElement.scrollTop() + window.innerHeight - 160;
+
+                            if(containerElement - scrollPosition > 30) scrollerElement.animate({scrollTop:containerElement, top}, 500);
+                        }}
                         onKeyPress={this.submitOnEnter}
+                        onFocus={()=>{
+                            var containerElement = $(".messagesListWrapper > div:first-child > div").height();
+                            $(".messagesListWrapper > div:first-child").animate({scrollTop:containerElement, top}, 500);
+                        }}
                     />
                     <FloatingActionButton
                         type="submit"

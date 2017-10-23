@@ -20,7 +20,6 @@ import {find} from 'lodash';
 import styled from 'styled-components';
 
 class ListURLContainer extends Component{
-
     constructor(props){
         super(props);
         this.state = {
@@ -108,9 +107,10 @@ class ListURLContainer extends Component{
                 receiver: (this.props.activeRoomState) && this.props.activeRoomState,
                 messages: response.data
             });
-            if($(window).innerWidth() <= 575){
-                this.props.swipePage(1);
-            }
+            setTimeout(()=>{
+                var containerElement = $(".messagesListWrapper > div:first-child > div");
+                $(".messagesListWrapper > div:first-child").animate({scrollTop:containerElement.height(), top}, 500);
+            },250);
         }).catch((err)=>{
             if(changeMessageLoaderState) changeMessageLoaderState(false);
            // console.info("error",err);

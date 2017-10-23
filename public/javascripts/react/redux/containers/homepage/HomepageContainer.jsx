@@ -44,7 +44,10 @@ class Homepage extends Component{
               >
                   <Tab value={0} label="Url rooms & messages" buttonStyle={{fontSize: 12}}>
                       <div className="tab" style={style.tab}>
-                          <MobileListURLDrawer tab={currentTab} />
+                          <MobileListURLDrawer
+                              tab={currentTab}
+                              changeMessageLoaderState={this.changeMessageLoaderState}
+                          />
                           <LeftURLSidebar
                               tab={currentTab}
                               changeMessageLoaderState={this.changeMessageLoaderState}
@@ -67,10 +70,18 @@ class Homepage extends Component{
                       }}
                   >
                       <div className="tab" style={style.tab}>
-                          <MobileListURLDrawer tab={currentTab} />
-                          <LeftURLSidebar tab={currentTab}
+                          <MobileListURLDrawer
+                              tab={currentTab}
+                              changeMessageLoaderState={this.changeMessageLoaderState}
                           />
-                          <Content tab={currentTab}/>
+                          <LeftURLSidebar
+                              tab={currentTab}
+                              changeMessageLoaderState={this.changeMessageLoaderState}
+                          />
+                          <Content
+                              tab={currentTab}
+                              changeMessageLoaderState={this.changeMessageLoaderState}
+                          />
                       </div>
                   </Tab>
               </Tabs>

@@ -117,11 +117,7 @@ class Wrapper extends Component{
 
 
         this.socket.on('refreshRoomsOnJoin', (data)=>{
-                this.props.joinRefreshRooms(data);
-            /*
-                var containerElement = $(document.querySelector(".messagesListWrapper > div"));
-                $(document.querySelector(".messagesListWrapper")).animate({scrollTop:containerElement.height(), top}, 500);
-                */
+            this.props.joinRefreshRooms(data);
         });
 
         this.socket.on('addActiveRoom', (data)=>{
@@ -137,6 +133,10 @@ class Wrapper extends Component{
                             openSnackBar: true,
                             SnackBarMessage: `You joined ${data.name} chat room`
                         });
+                        setTimeout(()=>{
+                            var containerElement = $(".messagesListWrapper > div:first-child > div");
+                            $(".messagesListWrapper > div:first-child").animate({scrollTop:containerElement.height(), top}, 500);
+                        },250);
                     }).catch((err)=>{
                         // console.info("error",err);
                     });
@@ -179,20 +179,37 @@ class Wrapper extends Component{
         this.props.addPrivateRoom(data.room);
         if(data.messages) this.props.addPrivateMessages(data.messages);
         setTimeout(()=>{
-            var containerElement = $(".privateListContainer");
-            containerElement.parent("div").animate({scrollTop:containerElement.height(), top}, 250);
+            var containerElement = $(".messagesListWrapper > div:first-child > div");
+            $(".messagesListWrapper > div:first-child").animate({scrollTop:containerElement.height(), top}, 500);
         },250);
     }
 
     getMessage(data){
+        var {profileuser} = this.props;
         this.props.insertMessage(data);
+        var elementHeight = $(".messagesListWrapper > div:first-child > div").height(),
+        topPosition = parseInt($(".messagesListWrapper > div:first-child").scrollTop()) + window.innerHeight - 160;
+        if((elementHeight - topPosition) < 100){
+            setTimeout(()=>{
+                var containerElement = $(".messagesListWrapper > div:first-child > div").height();
+                $(".messagesListWrapper > div:first-child").animate({scrollTop:containerElement, top}, 500);
+            }, 250);
+        }
+        else{
+            if(data.sender.username != profileuser.username){
+                this.setState({
+                    openSnackBar: true,
+                    SnackBarMessage: `Received new public message`
+                });
+            }
+        }
     }
 
     handlePrivateMessage(data){
         this.props.addPrivateMessages(data);
         setTimeout(()=>{
-            var containerElement = $(".privateListContainer");
-            containerElement.parent("div").animate({scrollTop:containerElement.height(), top}, 250);
+            var containerElement = $(".messagesListWrapper > div:first-child > div").height();
+            $(".messagesListWrapper > div:first-child").animate({scrollTop:containerElement, top}, 500);
         },250);
     }
 

@@ -27,6 +27,7 @@ class SingleListItem extends Component {
                 room: this.props.activeRoomState,
                 user: this.props.profileuser
             });
+            $(".messagesListWrapper > div:first-child").scrollTop(0);
             this.props.closeActiveRoom();
         }, 500);
     }
