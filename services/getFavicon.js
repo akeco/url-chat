@@ -1,8 +1,7 @@
-const util = require('util');
 var axios = require('axios');
 
 module.exports = async function (url) {
-    const fallBack = "https://www.designfreelogoonline.com/wp-content/uploads/2016/03/00167-Abstract-spiral-globe-logo-design-free-online-logomaker-01.png";
+    const fallBack = "/images/list-icon.png";
 
     url = (url.indexOf("www.") != -1) ? url.split("www.")[1] : url;
     url = (url.indexOf("://") != -1) ? url.split("://")[1] : url;

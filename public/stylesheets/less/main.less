@@ -1,4 +1,4 @@
-@listBorderColor: rgba(255,255,255,0.5);
+@listBorderColor: #26A69A;
 @notificationTabColor: #26A69A;
 
 *{
@@ -43,10 +43,8 @@ body{
 .subList{
   transition: all 250ms cubic-bezier(0.4, 0.0, 0.2, 1);
   & > div{
-    border-left: 1px dashed;
-    margin-left: 15px;
-    border-bottom: 1px solid @listBorderColor !important;
-    border-color: @listBorderColor;
+    display: flex;
+    border-bottom: 1px solid @listBorderColor;
   }
   & > div:last-child{
     border-bottom: none;

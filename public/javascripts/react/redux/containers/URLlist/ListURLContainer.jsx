@@ -2,6 +2,9 @@ import React, {Component} from 'react';
 import {teal500, teal300, teal50, tealA100} from 'material-ui/styles/colors';
 import {List, ListItem} from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';
+import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import IconButton from 'material-ui/IconButton';
 import Profile from 'material-ui/svg-icons/action/perm-identity';
 import InfoIcon from 'material-ui/svg-icons/action/info-outline';
@@ -184,24 +187,42 @@ class ListURLContainer extends Component{
                         <div ref={theKey} style={Object.assign(toggleElement, style.wrapSubList)}>
                             <List className="subList" style={style.subList}>
                                 { room.rooms.map((item)=>{
-                                    return <div key={item._id}>
-                                        <div data-tip={item.route}>
-                                            <ListItem
-                                                className="urlListItem"
-                                                primaryText={primaryTextFunction(item.route, 30)}
-                                                innerDivStyle={style.subListItemInner}
-                                                style={style.subListItem}
-                                                secondaryText={item.members.length}
-                                                onTouchTap={()=>{
-                                                    this.addActiveRoom(item);
-                                                    setTimeout(()=>{
-                                                        this.props.showLeftSidebar(false);
-                                                    },1000);
-                                                }}
-                                            />
+                                    return (
+                                        <div key={item._id}>
+                                            <CustomIconMenu
+                                                iconStyle={{color: 'white'}}
+                                                iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
+                                                anchorOrigin={{horizontal: 'left', vertical: 'top'}}
+                                                targetOrigin={{horizontal: 'left', vertical: 'top'}}
+                                            >
+                                                <MenuItem
+                                                    primaryText="Open URL in new tab"
+                                                    onTouchTap={()=>{
+                                                        var httpVar = item.route.indexOf("http");
+                                                        var url = (httpVar == -1) ? `http://${item.route}` : item.route;
+                                                        var win = window.open(url, '_blank');
+                                                        win.focus();
+                                                    }}
+                                                />
+                                            </CustomIconMenu>
+                                            <CustomDiv data-tip={item.route}>
+                                                <ListItem
+                                                    className="urlListItem"
+                                                    primaryText={primaryTextFunction(item.route, 30)}
+                                                    innerDivStyle={style.subListItemInner}
+                                                    style={style.subListItem}
+                                                    secondaryText={item.members.length}
+                                                    onTouchTap={()=>{
+                                                        this.addActiveRoom(item);
+                                                        setTimeout(()=>{
+                                                            this.props.showLeftSidebar(false);
+                                                        },1000);
+                                                    }}
+                                                />
+                                            </CustomDiv>
+                                            <ReactTooltip place="top" type="dark" effect="solid"/>
                                         </div>
-                                        <ReactTooltip place="top" type="dark" effect="solid"/>
-                                    </div>
+                                    )
                                 }) }
                             </List>
                         </div>
@@ -277,6 +298,28 @@ const CustomScroller = styled(Scrollbars)`
 `;
 
 
+const CustomIconMenu = styled(IconMenu)`
+    width: 40px;
+    height: 40px;
+    button{
+        width: 40px !important;
+        height: 40px !important;
+        padding: 0px !important;
+    }
+`;
+
+const CustomDiv = styled.div`
+    flex-grow: 1;
+    & > div{
+            height: 100%;
+            span{
+                height: 100%;
+                padding-top: 2px !important;
+            }
+        }
+`;
+
+
 var style = {
     title: {
         color: teal300,
@@ -287,7 +330,7 @@ var style = {
     },
     subListItem:{
         fontSize: 13,
-        color: 'rgba(255,255,255,0.95)',
+        color: 'white',
         fontWeight: 300
     },
     subListItemInner:{

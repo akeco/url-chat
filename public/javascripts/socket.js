@@ -11,12 +11,11 @@ var voting = require('../../services/voting');
 var getOrCreatePrivateRoom = require('../../services/getOrCreatePrivateRoom');
 var savePrivateMessage = require('../../services/savePrivateMessage');
 var findSingleUserSocketID = require('../../services/findSingleUserSocketID');
-var urlExists = require('url-exists');
-var {find} = require('lodash');
 var http = require('http');
 var url = require('url');
 
 io.sockets.on('connection', function (socket) {
+
     console.info("CONNECTED",socket.id);
 
     socket.on("urlInserted", function (roomData) {
