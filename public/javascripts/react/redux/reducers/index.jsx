@@ -14,6 +14,7 @@ import privateRoom from './privateRoom';
 import privateNotifyCollection from './privateNotifyCollection';
 import leftSidebarVisibility from './leftSidebarVisibility';
 import currentTab from './currentTab';
+import enableSound from './enableSound';
 
 const reducers = combineReducers({
     toggleUserMenu,
@@ -30,7 +31,8 @@ const reducers = combineReducers({
     privateRoom,
     privateNotifyCollection,
     leftSidebarVisibility,
-    currentTab
+    currentTab,
+    enableSound
 });
 
 export default reducers;

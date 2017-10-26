@@ -26,6 +26,13 @@ export const showLeftSidebar = data => {
     }
 };
 
+export const enableSoundAction = data => {
+    return {
+        type: 'ENABLE_SOUND',
+        data
+    }
+};
+
 export const showHeaderSubmenu = data => {
     return {
         type: 'HEADER_SUBMENU',

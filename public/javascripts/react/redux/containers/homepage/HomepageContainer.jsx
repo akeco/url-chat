@@ -27,6 +27,7 @@ class Homepage extends Component{
     }
 
     render(){
+        console.info(this.props);
         var {currentTab, privateNotifyCollection, showLeftSidebar} = this.props;
         var hasUnreadMessagesClass = (privateNotifyCollection.length) ? 'hasUnreadMessagesClass' : '';
         return(

@@ -7,6 +7,7 @@ import axios from 'axios';
 import {withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
 import $ from 'jquery';
+import buzz from 'buzz';
 import {bindActionCreators} from 'redux';
 import {updateProfileSocket, setProfileUser, setSocketObject, setTemporaryUser,
     updateRoomList, activeRoom, joinRefreshRooms, addChatMessages, swipePage, loadSpinner,
@@ -18,7 +19,7 @@ class Wrapper extends Component{
         super(props);
         this.state = {
             openSnackBar: false,
-            SnackBarMessage: ''
+            SnackBarMessage: '',
         };
         this.updateSocketID = this.updateSocketID.bind(this);
         this.getMessage = this.getMessage.bind(this);
@@ -185,8 +186,11 @@ class Wrapper extends Component{
     }
 
     getMessage(data){
-        var {profileuser} = this.props;
+        var {profileuser, enableSound} = this.props;
         this.props.insertMessage(data);
+        if(data.sender.username != profileuser.username && enableSound){
+            var messageSound = new buzz.sound('../../../../../sound/ping.mp3',{autoplay: true});
+        }
         var elementHeight = $(".messagesListWrapper > div:first-child > div").height(),
         topPosition = parseInt($(".messagesListWrapper > div:first-child").scrollTop()) + window.innerHeight - 160;
         if((elementHeight - topPosition) < 100){
@@ -206,7 +210,11 @@ class Wrapper extends Component{
     }
 
     handlePrivateMessage(data){
+        var {profileuser, enableSound} = this.props;
         this.props.addPrivateMessages(data);
+        if(data.sender.username != profileuser.username && enableSound){
+            var messageSound = new buzz.sound('../../../../../sound/ping.mp3',{autoplay: true});
+        }
         setTimeout(()=>{
             var containerElement = $(".messagesListWrapper > div:first-child > div").height();
             $(".messagesListWrapper > div:first-child").animate({scrollTop:containerElement, top}, 500);
@@ -301,6 +309,7 @@ function mapStateToProps(state) {
         toggleUserMenu: state.toggleUserMenu,
         currentTab: state.currentTab,
         temporaryUser: state.temporaryUser,
+        enableSound: state.enableSound
     });
 }
 

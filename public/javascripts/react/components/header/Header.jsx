@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
-import {teal800, teal500} from 'material-ui/styles/colors';
+import {teal800, teal500, teal100} from 'material-ui/styles/colors';
+import Toggle from 'material-ui/Toggle';
 import MenuIcon from 'material-ui/svg-icons/navigation/menu';
-import List from 'material-ui/List';
-import ListItem from 'material-ui/List/ListItem';
+import {List, ListItem} from 'material-ui/List';
 import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
@@ -12,12 +12,15 @@ import Settings from 'material-ui/svg-icons/Action/settings';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import {bindActionCreators} from 'redux';
-import {closeActiveRoom, setTemporaryUser, showLeftSidebar} from '../../redux/actions/index';
+import {closeActiveRoom, setTemporaryUser, showLeftSidebar, enableSoundAction} from '../../redux/actions/index';
 
 
 class Header extends Component{
     constructor(props){
         super(props);
+        this.state = {
+            soundEnabled: true
+        };
         this.signOut = this.signOut.bind(this);
         this.closeAndLeaveRoom = this.closeAndLeaveRoom.bind(this);
     }
@@ -112,8 +115,19 @@ class Header extends Component{
                                     anchorOrigin={{horizontal: 'right', vertical: 'top'}}
                                     targetOrigin={{horizontal: 'right', vertical: 'top'}}
                                 >
-                                    <MenuItem primaryText="Refresh" />
-                                    <MenuItem primaryText="Send feedback" />
+                                    <ListItem>
+                                        <Toggle
+                                            label="Sounds"
+                                            labelPosition="left"
+                                            defaultToggled={this.state.soundEnabled}
+                                            thumbSwitchedStyle={{backgroundColor: teal500}}
+                                            trackStyle={{backgroundColor: teal100}}
+                                            trackSwitchedStyle={{backgroundColor: teal100}}
+                                            onToggle={()=>{
+                                                this.props.enableSoundAction(!this.props.enableSoundState)
+                                            }}
+                                        />
+                                    </ListItem>
                                     <MenuItem primaryText="Help" />
                                 </IconMenu>
                             }
@@ -175,7 +189,8 @@ function matchDispatchToProps(dispatch) {
     return bindActionCreators({
         closeActiveRoom,
         setTemporaryUser,
-        showLeftSidebar
+        showLeftSidebar,
+        enableSoundAction
     }, dispatch);
 }
 
@@ -185,7 +200,8 @@ function mapStateToProps(state) {
         profileuser: state.profileuser,
         socketIO: state.socketobject,
         activeRoomState: state.activeRoom,
-        leftSidebarVisibility: state.leftSidebarVisibility
+        leftSidebarVisibility: state.leftSidebarVisibility,
+        enableSoundState: state.enableSound
     });
 }
 
