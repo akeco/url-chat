@@ -21,7 +21,17 @@ class Wrapper extends Component{
             openSnackBar: false,
             SnackBarMessage: '',
         };
-        this.playSound = new buzz.sound('../../../../../sound/ping.mp3',{autoplay: true});
+
+        this.playSound = new buzz.sound([
+            '../../../../../sound/ping.mp3',
+            '../../../../../sound/ping.ogg',
+            '../../../../../sound/ping.wav'
+        ], {
+            preload: true,
+        });
+
+        this.isSafari = (!!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/)) ? true : false;
+
         this.updateSocketID = this.updateSocketID.bind(this);
         this.getMessage = this.getMessage.bind(this);
         this.updateMessageVote = this.updateMessageVote.bind(this);
@@ -29,6 +39,7 @@ class Wrapper extends Component{
         this.handlePrivateMessage = this.handlePrivateMessage.bind(this);
         this.notifyMessage = this.notifyMessage.bind(this);
     }
+
 
     componentDidMount(){
         $(window).on('beforeunload', ()=>{
@@ -189,7 +200,8 @@ class Wrapper extends Component{
     getMessage(data){
         var {profileuser, enableSound} = this.props;
         this.props.insertMessage(data);
-        if(data.sender.username != profileuser.username && enableSound){
+        if(data.sender.username != profileuser.username && enableSound && !this.isSafari) {
+
             this.playSound.play();
         }
         var elementHeight = $(".messagesListWrapper > div:first-child > div").height(),
@@ -213,7 +225,7 @@ class Wrapper extends Component{
     handlePrivateMessage(data){
         var {profileuser, enableSound} = this.props;
         this.props.addPrivateMessages(data);
-        if(data.sender.username != profileuser.username && enableSound){
+        if(data.sender.username != profileuser.username && enableSound && !this.isSafari){
             this.playSound.play();
         }
         setTimeout(()=>{
