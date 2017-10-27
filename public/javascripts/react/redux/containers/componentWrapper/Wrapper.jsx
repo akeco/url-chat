@@ -21,6 +21,7 @@ class Wrapper extends Component{
             openSnackBar: false,
             SnackBarMessage: '',
         };
+        this.playSound = new buzz.sound('../../../../../sound/ping.mp3',{autoplay: true});
         this.updateSocketID = this.updateSocketID.bind(this);
         this.getMessage = this.getMessage.bind(this);
         this.updateMessageVote = this.updateMessageVote.bind(this);
@@ -189,7 +190,7 @@ class Wrapper extends Component{
         var {profileuser, enableSound} = this.props;
         this.props.insertMessage(data);
         if(data.sender.username != profileuser.username && enableSound){
-            var messageSound = new buzz.sound('../../../../../sound/ping.mp3',{autoplay: true});
+            this.playSound.play();
         }
         var elementHeight = $(".messagesListWrapper > div:first-child > div").height(),
         topPosition = parseInt($(".messagesListWrapper > div:first-child").scrollTop()) + window.innerHeight - 160;
@@ -213,7 +214,7 @@ class Wrapper extends Component{
         var {profileuser, enableSound} = this.props;
         this.props.addPrivateMessages(data);
         if(data.sender.username != profileuser.username && enableSound){
-            var messageSound = new buzz.sound('../../../../../sound/ping.mp3',{autoplay: true});
+            this.playSound.play();
         }
         setTimeout(()=>{
             var containerElement = $(".messagesListWrapper > div:first-child > div").height();

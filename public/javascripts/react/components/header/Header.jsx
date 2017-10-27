@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
-import {teal800, teal500, teal100} from 'material-ui/styles/colors';
+import {teal800, teal500, teal100, teal200} from 'material-ui/styles/colors';
 import Toggle from 'material-ui/Toggle';
 import MenuIcon from 'material-ui/svg-icons/navigation/menu';
 import {List, ListItem} from 'material-ui/List';
@@ -122,7 +122,7 @@ class Header extends Component{
                                             defaultToggled={this.state.soundEnabled}
                                             thumbSwitchedStyle={{backgroundColor: teal500}}
                                             trackStyle={{backgroundColor: teal100}}
-                                            trackSwitchedStyle={{backgroundColor: teal100}}
+                                            trackSwitchedStyle={{backgroundColor: teal200}}
                                             onToggle={()=>{
                                                 this.props.enableSoundAction(!this.props.enableSoundState)
                                             }}
