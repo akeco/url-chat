@@ -10,6 +10,7 @@ import { find } from 'lodash';
 import styled from 'styled-components';
 import '../../../../../stylesheets/less/messages.less';
 
+
 class Messages extends Component{
     constructor(props){
         super(props);
@@ -17,14 +18,6 @@ class Messages extends Component{
             windowFocus: true
         };
         this.showMessages = this.showMessages.bind(this);
-    }
-
-
-    componentDidUpdate(){
-        /*
-        var containerElement = $(".messagesListWrapper > div:first-child > div");
-        $(".messagesListWrapper > div:first-child").animate({scrollTop:containerElement.height(), top}, 500);
-        */
     }
 
     showMessages(){
@@ -56,9 +49,11 @@ class Messages extends Component{
 
 
     render(){
-        var {tab, showMessageLoader} = this.props;
-        var homepageClass = (!this.props.activeRoom || (tab == 1 && !this.props.privateRoom)) ? 'showHomepageInfo messagesListWrapper' : 'messagesListWrapper privateMessageWrapper',
-            customListClass = (!this.props.activeRoom || (tab == 1 && !this.props.privateRoom)) ? 'showHomepageInfo' : '';
+        var {tab, showMessageLoader} = this.props,
+            homepageClass = (!this.props.activeRoom || (tab == 1 && !this.props.privateRoom)) ? 'showHomepageInfo messagesListWrapper' : 'messagesListWrapper privateMessageWrapper',
+            customListClass = (!this.props.activeRoom || (tab == 1 && !this.props.privateRoom)) ? 'showHomepageInfo' : '',
+            overflowBlock = (!this.props.activeRoom && !this.props.chatMessages.length) ? true : false;
+
         return(
             <div style={style.outerDivBlock}>
                 {
@@ -80,21 +75,23 @@ class Messages extends Component{
     }
 }
 
+
 const MessagesListWrapper = styled(Scrollbars)`
-    & > div:last-child{
-        z-index: 999;
-    }
-    
-    &.showHomepageInfo{
-        background-image: url('../../../../../images/homepage-illustration.png');
-        background-size: contain;
-        background-repeat: no-repeat;
-        background-position: bottom;
-        @media (min-width: 1000px){
-            background-size: cover;
-        }
-    }
+      & > div:last-child{
+            z-index: 999;
+      }
+            
+      &.showHomepageInfo{
+            background-image: url('../../../../../images/homepage-illustration.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: bottom;
+            @media (min-width: 1000px){
+                background-size: cover;
+            }
+      }
 `;
+
 
 const CustomList = styled(List)`
     &.showHomepageInfo{
@@ -161,7 +158,7 @@ function mapStateToProps(state) {
         profileuser: state.profileuser,
         chatMessages: state.chatmessages,
         privateMessages: state.privateMessages,
-        privateRoom: state.privateRoom
+        privateRoom: state.privateRoom,
     });
 }
 

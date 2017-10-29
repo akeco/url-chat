@@ -11,7 +11,7 @@ import MobileRatingMenu from '../messagesContainer/MobileRatingMenu';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import moment from 'moment';
-import { addPrivateRoom } from '../../actions/index';
+import { addPrivateRoom, setCurrentTab } from '../../actions/index';
 import $ from 'jquery';
 import {find} from 'lodash';
 
@@ -42,14 +42,24 @@ class Message extends Component{
     }
 
     addPrivateChat(){
+        var {activeRoom, setCurrentTab} = this.props;
         if(!this.props.private) {
             var {sender} = this.props.message;
-            this.props.addPrivateRoom(sender);
-            this.props.socketIO.emit("joinPrivate", {
-                sender: this.props.profileuser._id,
-                receiver: sender._id,
-                users: [this.props.profileuser, sender]
-            });
+            var onlineUser = find(activeRoom.members, (o)=> o.username == sender.username );
+            if(onlineUser){
+                this.props.addPrivateRoom(sender);
+                this.props.socketIO.emit("joinPrivate", {
+                    sender: this.props.profileuser._id,
+                    receiver: sender._id,
+                    users: [this.props.profileuser, sender]
+                });
+                setTimeout(()=>{
+                    setCurrentTab(1);
+                },500);
+            }
+            else{
+
+            }
         }
     }
 
@@ -230,12 +240,14 @@ const style = {
 
 function matchDispatchToProps(dispatch) {
     return bindActionCreators({
-        addPrivateRoom
+        addPrivateRoom,
+        setCurrentTab
     }, dispatch);
 }
 
 function mapStateToProps(state) {
     return ({
+        activeRoom: state.activeRoom,
         profileuser: state.profileuser,
         privateMessages: state.privateMessages,
         privateRoom: state.privateRoom,

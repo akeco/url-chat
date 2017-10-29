@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
-import {teal800, teal500, teal100, teal200} from 'material-ui/styles/colors';
+import {teal800, teal500, teal100, teal50, teal200} from 'material-ui/styles/colors';
 import Toggle from 'material-ui/Toggle';
 import MenuIcon from 'material-ui/svg-icons/navigation/menu';
 import {List, ListItem} from 'material-ui/List';
@@ -18,9 +18,6 @@ import {closeActiveRoom, setTemporaryUser, showLeftSidebar, enableSoundAction} f
 class Header extends Component{
     constructor(props){
         super(props);
-        this.state = {
-            soundEnabled: true
-        };
         this.signOut = this.signOut.bind(this);
         this.closeAndLeaveRoom = this.closeAndLeaveRoom.bind(this);
     }
@@ -119,10 +116,10 @@ class Header extends Component{
                                         <Toggle
                                             label="Sounds"
                                             labelPosition="left"
-                                            defaultToggled={this.state.soundEnabled}
-                                            thumbSwitchedStyle={{backgroundColor: teal500}}
+                                            defaultToggled={this.props.enableSoundState}
+                                            thumbSwitchedStyle={{backgroundColor: teal50}}
                                             trackStyle={{backgroundColor: teal100}}
-                                            trackSwitchedStyle={{backgroundColor: teal200}}
+                                            trackSwitchedStyle={{backgroundColor: teal500}}
                                             onToggle={()=>{
                                                 this.props.enableSoundAction(!this.props.enableSoundState)
                                             }}

@@ -38,6 +38,7 @@ class Wrapper extends Component{
         this.addPrivateRoom = this.addPrivateRoom.bind(this);
         this.handlePrivateMessage = this.handlePrivateMessage.bind(this);
         this.notifyMessage = this.notifyMessage.bind(this);
+        this.setSnackbarVal = this.setSnackbarVal.bind(this);
     }
 
 
@@ -165,7 +166,6 @@ class Wrapper extends Component{
         });
     }
 
-
     notifyMessage(data){
         var {_id} = data,
             findActivatedChat = null;
@@ -242,8 +242,16 @@ class Wrapper extends Component{
         this.props.updateMessage(data);
     }
 
+    setSnackbarVal(message){
+        this.setState({
+            openSnackBar: true,
+            SnackBarMessage: message,
+        });
+    }
+
     render(){
         var {setCurrentTab, showLeftSidebar} = this.props;
+
         return(
             <div>
                 <Snackbar

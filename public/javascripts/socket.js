@@ -105,7 +105,9 @@ io.sockets.on('connection', function (socket) {
     socket.on("sendMessage", function (data) {
         (async()=>{
             var result = await saveMessage(data);
-            if(result) io.sockets.in(data.room.roomID).emit("getMessage", result);
+            if(result){
+                io.sockets.in(data.room.roomID).emit("getMessage", result);
+            }
         })();
 
     });
