@@ -7,7 +7,6 @@ import ListURLContainer from '../URLlist/ListURLContainer';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {showLeftSidebar} from '../../actions/index';
-import Media from 'react-media'
 import PropTypes from 'prop-types';
 
 class MobileListURLDrawer extends Component{
@@ -15,24 +14,8 @@ class MobileListURLDrawer extends Component{
         super(props);
     }
 
-    /*
-    componentDidMount(){
-        $(window).on("beforeunload", function (event, data) {
-            event.preventDefault();
-            var direction = data.state.direction;
-            if (direction == 'back') {
-             if(this.props.leftSidebarVisibility){
-                 event.preventDefault();
-                 this.props.showLeftSidebar(false);
-             }
-            }
-        });
-    }
-    */
-
     render(){
         return(
-        <Media query="(max-width: 647px)" render={() => (
             <Drawer
                 docked={false}
                 width={300}
@@ -49,7 +32,6 @@ class MobileListURLDrawer extends Component{
                 }
                 <ListURLContainer {...this.props} />
             </Drawer>
-        )}/>
         )
     }
 }

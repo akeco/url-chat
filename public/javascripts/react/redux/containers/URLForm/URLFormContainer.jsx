@@ -143,7 +143,6 @@ function matchDispatchToProps(dispatch) {
 
 function mapStateToProps(state) {
     return ({
-        pageIndex: state.pageIndex,
         socketIO: state.socketobject,
         profileuser: state.profileuser,
         activeRoomState: state.activeRoom,

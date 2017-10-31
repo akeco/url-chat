@@ -9,6 +9,7 @@ import {connect} from 'react-redux';
 import $ from 'jquery';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import MobileListURLDrawer from '../URLlist/MobileListURLDrawer';
+import Media from 'react-media'
 import {setCurrentTab, showLeftSidebar} from '../../actions/index';
 
 class Homepage extends Component{
@@ -44,10 +45,16 @@ class Homepage extends Component{
               >
                   <Tab value={0} label="Url rooms & messages" buttonStyle={{fontSize: 12}}>
                       <div className="tab" style={style.tab}>
-                          <MobileListURLDrawer
-                              tab={currentTab}
-                              changeMessageLoaderState={this.changeMessageLoaderState}
-                          />
+                          {
+                              (!currentTab) && (
+                                  <Media query="(max-width: 647px)" render={() => (
+                                      <MobileListURLDrawer
+                                        tab={currentTab}
+                                        changeMessageLoaderState={this.changeMessageLoaderState}
+                                      />
+                                  )}/>
+                              )
+                          }
                           <LeftURLSidebar
                               tab={currentTab}
                               changeMessageLoaderState={this.changeMessageLoaderState}
@@ -70,10 +77,16 @@ class Homepage extends Component{
                       }}
                   >
                       <div className="tab" style={style.tab}>
-                          <MobileListURLDrawer
-                              tab={currentTab}
-                              changeMessageLoaderState={this.changeMessageLoaderState}
-                          />
+                          {
+                              (currentTab) && (
+                                  <Media query="(max-width: 647px)" render={() => (
+                                      <MobileListURLDrawer
+                                          tab={currentTab}
+                                          changeMessageLoaderState={this.changeMessageLoaderState}
+                                      />
+                                  )}/>
+                              )
+                          }
                           <LeftURLSidebar
                               tab={currentTab}
                               changeMessageLoaderState={this.changeMessageLoaderState}

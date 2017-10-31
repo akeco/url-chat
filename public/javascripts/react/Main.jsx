@@ -14,8 +14,8 @@ import Perf from 'react-addons-perf';
 import 'normalize.css/normalize.css';
 import '../../stylesheets/less/main.less';
 
-//window.Perf = Perf;
-//Perf.start();
+window.Perf = Perf;
+Perf.start();
 
 var store = createStore(reducers);
 injectTapEventPlugin();

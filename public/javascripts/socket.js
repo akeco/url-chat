@@ -86,6 +86,12 @@ io.sockets.on('connection', function (socket) {
         })();
     });
 
+    socket.on("receiveRooms", function () {
+        (async ()=>{
+            var result = await getActiveRooms();
+            if(result) socket.emit("receiveRooms", result);
+        })();
+    });
 
     socket.on("leaveRoom", function (data) {
         socket.leave(data.room.roomID);

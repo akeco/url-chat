@@ -38,14 +38,23 @@ class ListURLContainer extends Component{
 
     componentWillMount(){
         this.props.socketIO.on('refreshUrlList', this.refreshUrlList);
+        this.props.socketIO.on('receiveRooms', (data)=>{
+            this.props.getRooms(data);
+        });
     }
 
     componentDidMount(){
-        axios.get('/api/rooms').then((response)=>{
-            this.props.getRooms(response.data);
-        }).catch((err)=>{
-            console.info(err);
-        });
+        var {rooms, socketIO} = this.props;
+        if(!rooms){
+            socketIO.emit("getRooms");
+            /*
+            axios.get('/api/rooms').then((response)=>{
+                this.props.getRooms(response.data);
+            }).catch((err)=>{
+                console.info(err);
+            });
+            */
+        }
     }
 
 
@@ -427,7 +436,6 @@ function mapStateToProps(state) {
         socketIO: state.socketobject,
         chatMessages: state.chatmessages,
         activeRoomState: state.activeRoom,
-        pageIndex: state.pageIndex,
         profileuser: state.profileuser,
         privateRoom: state.privateRoom,
         privateNotifyCollection: state.privateNotifyCollection
