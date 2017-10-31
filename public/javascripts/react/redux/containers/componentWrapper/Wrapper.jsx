@@ -10,9 +10,9 @@ import $ from 'jquery';
 import buzz from 'buzz';
 import {bindActionCreators} from 'redux';
 import {updateProfileSocket, setProfileUser, setSocketObject, setTemporaryUser,
-    updateRoomList, activeRoom, joinRefreshRooms, addChatMessages, swipePage, loadSpinner,
+    updateRoomList, activeRoom, joinRefreshRooms, addChatMessages, loadSpinner,
     insertMessage, updateMessage, addPrivateRoom, addPrivateMessages,
-    addNotifyPrivateIdCollection, toggleUsersMenu, setCurrentTab, showLeftSidebar} from '../../actions/index';
+    addNotifyPrivateIdCollection, toggleUsersMenu, setCurrentTab, showLeftSidebar, getRooms} from '../../actions/index';
 
 class Wrapper extends Component{
     constructor(props){
@@ -56,12 +56,16 @@ class Wrapper extends Component{
     componentWillMount(){
         this.socket = io(document.location.host);
         this.props.setSocketObject(this.socket);
-
+        this.socket.emit("getRooms");
         this.socket.on("getMessage", this.getMessage);
         this.socket.on("updateMessageVote", this.updateMessageVote);
         this.socket.on("joinPrivateRoom", this.addPrivateRoom);
         this.socket.on("handlePrivateMessage", this.handlePrivateMessage);
         this.socket.on("notifyMessage", this.notifyMessage);
+
+        this.socket.on('receiveRooms', (data)=>{
+            this.props.getRooms(data);
+        });
 
         this.socket.on('connect', ()=>{
             var socket = this.socket;
@@ -134,10 +138,31 @@ class Wrapper extends Component{
             this.props.joinRefreshRooms(data);
         });
 
+        this.socket.on('receiveSpecificRoomMessages', (data)=>{
+            if(data){
+                var {name} = data[0].receiver;
+                this.props.addChatMessages({
+                    receiver: (this.props.activeRoomState) && this.props.activeRoomState,
+                    messages: data
+                });
+                this.setState({
+                    openSnackBar: true,
+                    SnackBarMessage: `You joined ${name} chat room`
+                });
+                setTimeout(()=>{
+                    var containerElement = $(".messagesListWrapper > div:first-child > div");
+                    $(".messagesListWrapper > div:first-child").animate({scrollTop:containerElement.height(), top}, 500);
+                },250);
+            }
+        });
+
         this.socket.on('addActiveRoom', (data)=>{
             if(data){
                 (async ()=>{
                     await this.props.activeRoom(data);
+                    this.socket.emit("getSpecificRoomMessages", data.roomID);
+
+                    /*
                     axios.get(`/api/messages/${data.roomID}`).then((response)=>{
                         this.props.addChatMessages({
                             receiver: (this.props.activeRoomState) && this.props.activeRoomState,
@@ -154,6 +179,7 @@ class Wrapper extends Component{
                     }).catch((err)=>{
                         // console.info("error",err);
                     });
+                    */
                 })();
             }
             else{
@@ -308,7 +334,6 @@ function mapDispatchToProps(dispatch) {
         activeRoom,
         joinRefreshRooms,
         addChatMessages,
-        swipePage,
         loadSpinner,
         insertMessage,
         updateMessage,
@@ -317,7 +342,8 @@ function mapDispatchToProps(dispatch) {
         addNotifyPrivateIdCollection,
         toggleUsersMenu,
         setCurrentTab,
-        showLeftSidebar
+        showLeftSidebar,
+        getRooms
     }, dispatch);
 }
 

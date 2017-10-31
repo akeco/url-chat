@@ -39,7 +39,7 @@ class URLFormContainer extends Component{
         event.preventDefault();
         if(this.state.inputValue.trim()){
             this.props.socketIO.emit("urlInserted", {
-                url: this.state.inputValue,
+                url: this.state.inputValue.toLowerCase(),
                 user: this.props.profileuser,
                 activeRoom: (this.props.activeRoomState) ? this.props.activeRoomState : null
             });

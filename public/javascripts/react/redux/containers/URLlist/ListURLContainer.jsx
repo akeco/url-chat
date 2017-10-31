@@ -28,7 +28,7 @@ class ListURLContainer extends Component{
         this.state = {
             toggleRooms: []
         };
-        this.fallBack = "https://www.designfreelogoonline.com/wp-content/uploads/2016/03/00167-Abstract-spiral-globe-logo-design-free-online-logomaker-01.png";
+        this.fallBack = "/images/list-icon.png";
         this.displayActiveRooms = this.displayActiveRooms.bind(this);
         this.addActiveRoom = this.addActiveRoom.bind(this);
         this.refreshUrlList = this.refreshUrlList.bind(this);
@@ -36,27 +36,24 @@ class ListURLContainer extends Component{
         this.showMembers = this.showMembers.bind(this);
     }
 
-    componentWillMount(){
-        this.props.socketIO.on('refreshUrlList', this.refreshUrlList);
-        this.props.socketIO.on('receiveRooms', (data)=>{
-            this.props.getRooms(data);
+    componentDidMount(){
+        var {changeMessageLoaderState, socketIO} = this.props;
+        socketIO.on("receiveSpecificMessages", (data)=>{
+            if(data){
+                if(changeMessageLoaderState) changeMessageLoaderState(false);
+                this.props.addChatMessages({
+                    receiver: (this.props.activeRoomState) && this.props.activeRoomState,
+                    messages: data
+                });
+
+                setTimeout(()=>{
+                    var containerElement = $(".messagesListWrapper > div:first-child > div");
+                    $(".messagesListWrapper > div:first-child").animate({scrollTop:containerElement.height(), top}, 500);
+                },250);
+            }
+            else if(changeMessageLoaderState) changeMessageLoaderState(false);
         });
     }
-
-    componentDidMount(){
-        var {rooms, socketIO} = this.props;
-        if(!rooms){
-            socketIO.emit("getRooms");
-            /*
-            axios.get('/api/rooms').then((response)=>{
-                this.props.getRooms(response.data);
-            }).catch((err)=>{
-                console.info(err);
-            });
-            */
-        }
-    }
-
 
     refreshUrlList(data){
         this.props.getRooms(data);
@@ -85,7 +82,7 @@ class ListURLContainer extends Component{
     }
 
     addActiveRoom(room){
-        var {changeMessageLoaderState} = this.props;
+        var {changeMessageLoaderState, socketIO} = this.props;
         if(this.props.activeRoomState && this.props.activeRoomState._id != room._id){
             this.props.socketIO.emit("leaveRoom", {
                 room: this.props.activeRoomState,
@@ -113,20 +110,7 @@ class ListURLContainer extends Component{
         }
 
         if(changeMessageLoaderState) changeMessageLoaderState(true);
-        axios.get(`/api/messages/${room.roomID}`).then((response)=>{
-            if(changeMessageLoaderState) changeMessageLoaderState(false);
-            this.props.addChatMessages({
-                receiver: (this.props.activeRoomState) && this.props.activeRoomState,
-                messages: response.data
-            });
-            setTimeout(()=>{
-                var containerElement = $(".messagesListWrapper > div:first-child > div");
-                $(".messagesListWrapper > div:first-child").animate({scrollTop:containerElement.height(), top}, 500);
-            },250);
-        }).catch((err)=>{
-            if(changeMessageLoaderState) changeMessageLoaderState(false);
-           // console.info("error",err);
-        });
+        socketIO.emit('getSpecificMessages', room.roomID);
     }
 
     showMembers(){
@@ -266,7 +250,7 @@ class ListURLContainer extends Component{
                 {
                     (this.props.tab == 1 && activeRoomState && activeRoomState.members.length > 1) && (
                         <CustomScroller
-                            style={{width: '100%', height:400}}
+                            style={{width: '100%', height:375}}
                             autoHide
                             autoHideTimeout={1000}
                             autoHideDuration={200}

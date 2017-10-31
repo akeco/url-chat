@@ -1,18 +1,19 @@
-var server = require('../../bin/www');
-var io = require('socket.io').listen(server);
-var registration = require('../../services/registration');
-var addRoom = require('../../services/addRoom');
-var saveMessage = require('../../services/saveMessage');
-var leaveRoom = require('../../services/leaveRoom');
-var joinRoom = require('../../services/joinRoom');
-var getActiveRooms = require('../../services/getActiveRooms');
-var getFavicon = require('../../services/getFavicon');
-var voting = require('../../services/voting');
-var getOrCreatePrivateRoom = require('../../services/getOrCreatePrivateRoom');
-var savePrivateMessage = require('../../services/savePrivateMessage');
-var findSingleUserSocketID = require('../../services/findSingleUserSocketID');
-var http = require('http');
-var url = require('url');
+var server = require('../../bin/www'),
+    io = require('socket.io').listen(server),
+    registration = require('../../services/registration'),
+    addRoom = require('../../services/addRoom'),
+    saveMessage = require('../../services/saveMessage'),
+    leaveRoom = require('../../services/leaveRoom'),
+    joinRoom = require('../../services/joinRoom'),
+    getActiveRooms = require('../../services/getActiveRooms'),
+    getFavicon = require('../../services/getFavicon'),
+    voting = require('../../services/voting'),
+    getOrCreatePrivateRoom = require('../../services/getOrCreatePrivateRoom'),
+    savePrivateMessage = require('../../services/savePrivateMessage'),
+    findSingleUserSocketID = require('../../services/findSingleUserSocketID'),
+    getMessages = require('../../services/getMessages'),
+    http = require('http'),
+    url = require('url');
 
 io.sockets.on('connection', function (socket) {
 
@@ -86,10 +87,26 @@ io.sockets.on('connection', function (socket) {
         })();
     });
 
-    socket.on("receiveRooms", function () {
+    socket.on("getRooms", function () {
         (async ()=>{
             var result = await getActiveRooms();
             if(result) socket.emit("receiveRooms", result);
+        })();
+    });
+
+
+    socket.on("getSpecificMessages", function(roomID){
+        (async ()=>{
+            var result = await getMessages(roomID);
+            if(result) socket.emit("receiveSpecificMessages", result);
+        })();
+    });
+
+
+    socket.on("getSpecificRoomMessages", function(roomID){
+        (async ()=>{
+            var result = await getMessages(roomID);
+            if(result) socket.emit("receiveSpecificRoomMessages", result);
         })();
     });
 
