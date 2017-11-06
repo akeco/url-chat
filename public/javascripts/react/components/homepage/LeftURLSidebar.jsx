@@ -18,6 +18,7 @@ class LeftURLSidebar extends Component{
         this.changeFilterVal = this.changeFilterVal.bind(this);
     }
 
+
     showSingleItem(){
         var title = (this.props.tab) ? 'Active private room' : 'Active Room';
         if(this.props.activeRoomState) return <SingleListItem title={title} {...this.props} />

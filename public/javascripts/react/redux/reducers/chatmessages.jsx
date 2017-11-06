@@ -1,5 +1,40 @@
 import {findIndex, find} from 'lodash';
 
+const chatmessages = (state = null, action) => {
+    switch (action.type) {
+        case 'UPDATE_MESSAGE':
+            if(state){
+                return {
+                    room: state.room,
+                    messages: state.messages.map((message)=>{
+                        if(message._id == action.data._id) {
+                            message = action.data;
+                        }
+                        return message;
+                    })
+                };
+            }
+
+        case 'CLOSE_ACTIVE_ROOM':
+            return null;
+
+        case 'ADD_MESSAGE':
+            return {
+                room: state.room,
+                messages: [...state.messages, action.data]
+            };
+
+        case 'ADD_CHAT':
+            return {
+                room: action.data.receiver,
+                messages: [...action.data.messages]
+            };
+        default:
+            return state;
+    }
+};
+
+/*
 const chatmessages = (state = [], action) => {
     switch (action.type) {
         case 'UPDATE_MESSAGE':
@@ -58,11 +93,15 @@ const chatmessages = (state = [], action) => {
     }
 };
 
+ */
+
 function concatMessage(state, action) {
     return [...state, {
         room: action.data.receiver,
         messages: [action.data]
     }];
 }
+
+
 
 export default chatmessages;

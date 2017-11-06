@@ -2,6 +2,7 @@ const path = require('path');
 var webpack = require('webpack');
 const Uglify = require("uglifyjs-webpack-plugin");
 var CompressionPlugin = require("compression-webpack-plugin");
+const BabiliPlugin = require('babili-webpack-plugin');
 
 module.exports = {
     entry: "./public/javascripts/react/App.jsx",
@@ -86,7 +87,8 @@ module.exports = {
             test: /\.(js|html)$/,
             threshold: 10240,
             minRatio: 0.8
-        })
+        }),
+        new BabiliPlugin()
     ],
 
     resolve: {

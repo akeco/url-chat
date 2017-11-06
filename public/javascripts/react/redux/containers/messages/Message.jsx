@@ -12,8 +12,8 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import moment from 'moment';
 import { addPrivateRoom, setCurrentTab } from '../../actions/index';
-import $ from 'jquery';
 import {find} from 'lodash';
+import styled from 'styled-components';
 
 
 class Message extends Component{
@@ -29,7 +29,7 @@ class Message extends Component{
 
 
     componentWillMount(){
-        if($(window).innerWidth() <= 575){
+        if(window.innerWidth <= 575){
             this.setState({
                 mobileRating: true
             });
@@ -82,22 +82,19 @@ class Message extends Component{
             matchUser = find(ratingUsers, (o)=> o._id == this.props.profileuser._id),
             positiveFeedback = (rating >= 5) ? 'positiveFeedback' : '';
         return(
-        <ListItem
-            hoverColor={'#F6F6F6'}
-            style={style.listItem}
-            innerDivStyle={style.itemListDiv}
-            onMouseEnter={()=>{
-                this.setState({
-                    hover: true
-                });
-            }}
-            onMouseLeave={()=>{
-                this.setState({
-                    hover: false
-                });
-            }}
-        >
-            <li style={style.li}>
+            <StyledList
+                style={style.li}
+                onMouseEnter={()=>{
+                    this.setState({
+                        hover: true
+                    });
+                }}
+                onMouseLeave={()=>{
+                    this.setState({
+                        hover: false
+                    });
+                }}
+            >
                 <div
                     style={
                         Object.assign(
@@ -153,14 +150,19 @@ class Message extends Component{
                 {
                     (!this.props.private) &&  this.showMobileRatingMenu()
                 }
-            </li>
-            {
-                (!this.props.private) && this.showDesktopRatingMenu()
-            }
-        </ListItem>
+                {
+                    (!this.props.private) && this.showDesktopRatingMenu()
+                }
+            </StyledList>
         );
     }
 }
+
+const StyledList = styled.li`
+    &:hover{
+        background-color: #F6F6F6 !important;
+    }
+`;
 
 const style = {
     voteStar: {
@@ -181,7 +183,9 @@ const style = {
         fill: teal500
     },
     li:{
-        display:'flex'
+        display:'flex',
+        padding: '0px 16px',
+        position: 'relative'
     },
     listItem:{
         position: 'relative'

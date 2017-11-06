@@ -1,22 +1,22 @@
 import React, {Component} from 'react';
 import {teal500, teal300, teal50, tealA100} from 'material-ui/styles/colors';
-import {List, ListItem} from 'material-ui/List';
-import Avatar from 'material-ui/Avatar';
-import IconMenu from 'material-ui/IconMenu';
-import MenuItem from 'material-ui/MenuItem';
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-import IconButton from 'material-ui/IconButton';
-import Profile from 'material-ui/svg-icons/action/perm-identity';
+import {List} from 'material-ui/List';
 import InfoIcon from 'material-ui/svg-icons/action/info-outline';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import { getRooms, activeRoom, addChatMessages, toggleUsersMenu, addPrivateRoom, showLeftSidebar} from '../../actions/index';
+import {
+    getRooms,
+    activeRoom,
+    addChatMessages,
+    toggleUsersMenu,
+    addPrivateRoom,
+    showLeftSidebar
+} from '../../actions/index';
 import axios from 'axios';
 import $ from 'jquery';
-import ReactTooltip from 'react-tooltip';
 import PrivateUserListItem from '../usersPart/PrivateUserListItem'
 import PrivateUserBadgeListItem from '../usersPart/PrivateUserBadgeListItem'
-import {primaryTextFunction} from '../../../../../../services/utils';
+import ListItemURL from './ListItemURL';
 import PropTypes from 'prop-types';
 import { Scrollbars } from 'react-custom-scrollbars';
 import {find} from 'lodash';
@@ -28,12 +28,18 @@ class ListURLContainer extends Component{
         this.state = {
             toggleRooms: []
         };
-        this.fallBack = "/images/list-icon.png";
         this.displayActiveRooms = this.displayActiveRooms.bind(this);
-        this.addActiveRoom = this.addActiveRoom.bind(this);
-        this.refreshUrlList = this.refreshUrlList.bind(this);
-        this.toggleSublist = this.toggleSublist.bind(this);
         this.showMembers = this.showMembers.bind(this);
+        this.changeToggleRoomsState = this.changeToggleRoomsState.bind(this);
+    }
+
+    componentWillReceiveProps(nextProp){
+        //console.info("OLD", this.props.rooms);
+        //console.info("NEW", nextProp);
+    }
+
+    componentDidUpdate(){
+        //console.info("MAIN updated");
     }
 
     componentDidMount(){
@@ -55,62 +61,10 @@ class ListURLContainer extends Component{
         });
     }
 
-    refreshUrlList(data){
-        this.props.getRooms(data);
-    }
-
-    toggleSublist(className){
-        var self = this;
-        $(this.refs[className]).slideToggle("fast", function () {
-            switch ($(this).css("display")){
-                case 'block':
-                    var newArray = self.state.toggleRooms;
-                    newArray.push(className);
-                    self.setState({
-                       toggleRooms: newArray
-                    });
-                    break;
-                case 'none':
-                    self.setState({
-                        toggleRooms: self.state.toggleRooms.filter((item)=>{
-                            return item != className
-                        })
-                    });
-                    break;
-            }
+    changeToggleRoomsState(value){
+        this.setState({
+            toggleRooms: value
         });
-    }
-
-    addActiveRoom(room){
-        var {changeMessageLoaderState, socketIO} = this.props;
-        if(this.props.activeRoomState && this.props.activeRoomState._id != room._id){
-            this.props.socketIO.emit("leaveRoom", {
-                room: this.props.activeRoomState,
-                user: this.props.profileuser
-            });
-            this.props.toggleUsersMenu(false);
-            this.props.addPrivateRoom(null);
-        }
-
-        if(this.props.activeRoomState){
-            if(this.props.activeRoomState._id != room._id){
-                this.props.activeRoom(room);
-                this.props.socketIO.emit("joinRoom", {
-                    room: room,
-                    user: this.props.profileuser
-                });
-            }
-        }
-        else{
-            this.props.activeRoom(room);
-            this.props.socketIO.emit("joinRoom", {
-                room: room,
-                user: this.props.profileuser
-            });
-        }
-
-        if(changeMessageLoaderState) changeMessageLoaderState(true);
-        socketIO.emit('getSpecificMessages', room.roomID);
     }
 
     showMembers(){
@@ -149,77 +103,21 @@ class ListURLContainer extends Component{
     }
 
     displayActiveRooms(){
+        var {changeMessageLoaderState} = this.props;
         if(this.props.rooms && !this.props.tab){
             return this.props.rooms.map((room)=>{
                 var theKey = room.name;
                 var toggleElement = (this.state.toggleRooms.indexOf(room.name) >=0) ? {display:'block'} : {display:'none'};
                 return(
-                    <div key={theKey} >
-                        <ListItem
-                            hoverColor={'rgba(0,0,0,0.025)'}
-                            className="ListItem"
-                            style={style.listItem}
-                            primaryText={primaryTextFunction(room.name, 23)}
-                            innerDivStyle={Object.assign(style.innerDiv)}
-                            onTouchTap={()=>{
-                                this.toggleSublist(theKey);
-                            }}
-                            leftAvatar={<Avatar style={style.avatar}
-                                                src={(room.image) ? room.image : this.fallBack}
-                            />}
-                        >
-                            <div style={style.innerWrap}>
-                                <div style={style.relativeWrap}>
-                                    <IconButton style={style.memberNumb} iconStyle={style.profileIcon}>
-                                        <Profile/>
-                                    </IconButton>
-                                    <div style={style.counter}>{ (room.membersNumber) && room.membersNumber || 0 }</div>
-                                </div>
-                            </div>
-                        </ListItem>
-                        <div ref={theKey} style={Object.assign(toggleElement, style.wrapSubList)}>
-                            <List className="subList" style={style.subList}>
-                                { room.rooms.map((item)=>{
-                                    return (
-                                        <div key={item._id}>
-                                            <CustomIconMenu
-                                                iconStyle={{color: 'white'}}
-                                                iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
-                                                anchorOrigin={{horizontal: 'left', vertical: 'top'}}
-                                                targetOrigin={{horizontal: 'left', vertical: 'top'}}
-                                            >
-                                                <MenuItem
-                                                    primaryText="Open URL in new tab"
-                                                    onTouchTap={()=>{
-                                                        var httpVar = item.route.indexOf("http");
-                                                        var url = (httpVar == -1) ? `http://${item.route}` : item.route;
-                                                        var win = window.open(url, '_blank');
-                                                        win.focus();
-                                                    }}
-                                                />
-                                            </CustomIconMenu>
-                                            <CustomDiv data-tip={item.route}>
-                                                <ListItem
-                                                    className="urlListItem"
-                                                    primaryText={primaryTextFunction(item.route, 30)}
-                                                    innerDivStyle={style.subListItemInner}
-                                                    style={style.subListItem}
-                                                    secondaryText={item.members.length}
-                                                    onTouchTap={()=>{
-                                                        this.addActiveRoom(item);
-                                                        setTimeout(()=>{
-                                                            this.props.showLeftSidebar(false);
-                                                        },1000);
-                                                    }}
-                                                />
-                                            </CustomDiv>
-                                            <ReactTooltip place="top" type="dark" effect="solid"/>
-                                        </div>
-                                    )
-                                }) }
-                            </List>
-                        </div>
-                    </div>
+                    <ListItemURL
+                        key={theKey}
+                        theKey={theKey}
+                        room={room}
+                        toggleElement={toggleElement}
+                        toggleRooms={this.state.toggleRooms}
+                        changeToggleRoomsState={this.changeToggleRoomsState}
+                        changeMessageLoaderState={changeMessageLoaderState}
+                    />
                 );
             });
         }
@@ -283,33 +181,10 @@ ListURLContainer.propTypes = {
     tab: PropTypes.number.isRequired
 };
 
-
 const CustomScroller = styled(Scrollbars)`
     & > div:last-child{
         z-index: 999;
     }
-`;
-
-
-const CustomIconMenu = styled(IconMenu)`
-    width: 40px;
-    height: 40px;
-    button{
-        width: 40px !important;
-        height: 40px !important;
-        padding: 0px !important;
-    }
-`;
-
-const CustomDiv = styled.div`
-    flex-grow: 1;
-    & > div{
-            height: 100%;
-            span{
-                height: 100%;
-                padding-top: 2px !important;
-            }
-        }
 `;
 
 
@@ -344,7 +219,7 @@ var style = {
         fontWeight: 400,
         position: 'relative',
         fontSize: 14,
-        textTransform: 'uppercase'
+        textTransform: 'uppercase',
     },
     innerWrap: {
         position: 'absolute',

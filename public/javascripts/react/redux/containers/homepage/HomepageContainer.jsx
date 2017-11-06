@@ -60,7 +60,8 @@ class Homepage extends Component{
                               changeMessageLoaderState={this.changeMessageLoaderState}
                           />
                           <Content
-                              tab={currentTab}
+                              currentTab={currentTab}
+                              tab={0}
                               showMessageLoader={this.state.showMessageLoader}
                           />
                       </div>
@@ -92,7 +93,8 @@ class Homepage extends Component{
                               changeMessageLoaderState={this.changeMessageLoaderState}
                           />
                           <Content
-                              tab={currentTab}
+                              currentTab={currentTab}
+                              tab={1}
                               changeMessageLoaderState={this.changeMessageLoaderState}
                           />
                       </div>
@@ -101,20 +103,6 @@ class Homepage extends Component{
           </div>
         );
     }
-}
-
-function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        setCurrentTab,
-        showLeftSidebar
-    }, dispatch);
-}
-
-function mapStateToProps(state) {
-    return ({
-        currentTab: state.currentTab,
-        privateNotifyCollection: state.privateNotifyCollection
-    });
 }
 
 var style = {
@@ -131,5 +119,20 @@ var style = {
         display: 'flex'
     }
 };
+
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({
+        setCurrentTab,
+        showLeftSidebar
+    }, dispatch);
+}
+
+function mapStateToProps(state) {
+    return ({
+        rooms: state.rooms,
+        currentTab: state.currentTab,
+        privateNotifyCollection: state.privateNotifyCollection
+    });
+}
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Homepage));

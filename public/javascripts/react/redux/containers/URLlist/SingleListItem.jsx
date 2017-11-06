@@ -1,9 +1,8 @@
 import React, {Component} from 'React';
-import {teal800, teal700, teal500, teal400, teal300, teal50, tealA100} from 'material-ui/styles/colors';
+import {teal700, teal500, teal300, teal50, tealA100} from 'material-ui/styles/colors';
 import {ListItem} from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
 import Account from 'material-ui/svg-icons/Action/account-circle';
-import Contact from 'material-ui/svg-icons/Communication/chat';
 import ReactTooltip from 'react-tooltip';
 import {activeRoom, closeActiveRoom, addPrivateRoom} from '../../actions/index';
 import {connect} from 'react-redux';

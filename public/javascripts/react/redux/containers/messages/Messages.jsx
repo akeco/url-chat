@@ -6,7 +6,7 @@ import CircularProgress from 'material-ui/CircularProgress';
 import InfoContainer from '../../../components/homepage/InfoContainer';
 import {connect} from 'react-redux';
 import { Scrollbars } from 'react-custom-scrollbars';
-import { find } from 'lodash';
+import { find, isEqual } from 'lodash';
 import styled from 'styled-components';
 import '../../../../../stylesheets/less/messages.less';
 
@@ -20,24 +20,32 @@ class Messages extends Component{
         this.showMessages = this.showMessages.bind(this);
     }
 
-    showMessages(){
-        var {tab} = this.props;
-        if(this.props.activeRoom && this.props.chatMessages.length && tab == 0){
-            var roomObject = find(this.props.chatMessages, (o)=>{
-                return o.room._id == this.props.activeRoom._id;
-            });
-            if(roomObject){
-                return roomObject.messages.map((item)=>{
-                    return <Message key={ item._id } message={item} show={true} profileUserID={this.props.profileuser._id} />;
-                });
-            }
+    shouldComponentUpdate(nextProps){
+        if(this.props.tab == nextProps.currentTab){
+            if(!isEqual(nextProps.activeRoom, this.props.activeRoom)) return true;
+            if(!isEqual(nextProps.privateRoom, this.props.privateRoom)) return true;
+            if(!isEqual(nextProps.showMessageLoader, this.props.showMessageLoader)) return true;
+            if(this.props.chatMessages && nextProps.chatMessages && !isEqual(this.props.chatMessages.messages, nextProps.chatMessages.messages)) return true;
+            if(nextProps.chatMessages != this.props.chatMessages) return true;
+            if(nextProps.privateRoom) return true;
+            return false;
         }
-        else if(this.props.activeRoom && this.props.privateRoom && tab == 1){
-            var activeRoom = find(this.props.privateMessages, (o)=>{ return o.privateRoomID == this.props.privateRoom.privateRoomID });
+        return false;
+    }
+
+    showMessages(){
+        var {tab, activeRoom, chatMessages, profileuser, privateRoom, privateMessages} = this.props;
+        if(activeRoom && chatMessages && tab == 0){
+            return chatMessages.messages.map((item)=>{
+                return <Message key={ item._id } message={item} show={true} profileUserID={profileuser._id} />;
+            });
+        }
+        else if(activeRoom && privateRoom && tab == 1){
+            var activeRoom = find(privateMessages, (o)=>{ return o.privateRoomID == privateRoom.privateRoomID });
             if(activeRoom){
                 if(activeRoom.messages.length){
                     return activeRoom.messages.map((item)=>{
-                        return <Message key={ item._id } private={true} message={item} profileUserID={this.props.profileuser._id} />
+                        return <Message key={ item._id } private={true} message={item} profileUserID={profileuser._id} />
                     });
                 }
             }
@@ -50,9 +58,9 @@ class Messages extends Component{
 
     render(){
         var {tab, showMessageLoader} = this.props,
-            homepageClass = (!this.props.activeRoom || (tab == 1 && !this.props.privateRoom)) ? 'showHomepageInfo messagesListWrapper' : 'messagesListWrapper privateMessageWrapper',
+            homepageClass = (!this.props.activeRoom || (tab == 1 && !this.props.privateRoom)) ? `showHomepageInfo messagesListWrapper` : `messagesListWrapper privateMessageWrapper`,
             customListClass = (!this.props.activeRoom || (tab == 1 && !this.props.privateRoom)) ? 'showHomepageInfo' : '',
-            overflowBlock = (!this.props.activeRoom && !this.props.chatMessages.length) ? true : false;
+            overflowBlock = (!this.props.activeRoom && !this.props.chatMessages) ? true : false;
 
         return(
             <div style={style.outerDivBlock}>

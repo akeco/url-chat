@@ -1,8 +1,9 @@
-var express = require('express');
-var router = express.Router();
-var registrationController = require('../controllers/registrationController');
-var loginController = require('../controllers/loginController');
-var getUser = require('../services/getUser');
+var express = require('express'),
+    router = express.Router(),
+    registrationController = require('../controllers/registrationController'),
+    loginController = require('../controllers/loginController'),
+    getUser = require('../services/getUser');
+
 
 /* GET home page. */
 
@@ -19,21 +20,26 @@ router.post('/user', function(req, res, next) {
 });
 
 
-router.get('/register', function (req, res, next) {
-  res.render('index', { title: 'Chat-project' });
+
+router.route("/register")
+    .get(function (req, res, next) {
+      res.render('index', { title: 'Chat-project' });
+})
+    .post(registrationController, function (req, res, next) {
+      if(req.result) res.status(200).json(req.result);
 });
 
-router.post('/register', registrationController, function (req, res, next) {
+
+
+router.route("/login")
+    .get(function (req, res, next) {
+  res.render('index', { title: 'Chat-project' });
+})
+    .post(loginController, function (req, res, next) {
   if(req.result) res.status(200).json(req.result);
 });
 
-router.get('/login', function (req, res, next) {
-  res.render('index', { title: 'Chat-project' });
-});
 
-router.post('/login', loginController, function (req, res, next) {
-  if(req.result) res.status(200).json(req.result);
-});
 
 router.get('/home', function (req, res, next) {
   res.render('index', { title: 'Chat-project' });

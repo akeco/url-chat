@@ -9,10 +9,25 @@ import {connect} from 'react-redux';
 import $ from 'jquery';
 import buzz from 'buzz';
 import {bindActionCreators} from 'redux';
-import {updateProfileSocket, setProfileUser, setSocketObject, setTemporaryUser,
-    updateRoomList, activeRoom, joinRefreshRooms, addChatMessages, loadSpinner,
-    insertMessage, updateMessage, addPrivateRoom, addPrivateMessages,
-    addNotifyPrivateIdCollection, toggleUsersMenu, setCurrentTab, showLeftSidebar, getRooms} from '../../actions/index';
+import {
+    updateProfileSocket,
+    setProfileUser,
+    setSocketObject,
+    setTemporaryUser,
+    updateRoomList,
+    activeRoom,
+    joinRefreshRooms,
+    addChatMessages,
+    loadSpinner,
+    insertMessage,
+    updateMessage,
+    addPrivateRoom,
+    addPrivateMessages,
+    addNotifyPrivateIdCollection,
+    toggleUsersMenu,
+    setCurrentTab,
+    showLeftSidebar,
+    getRooms} from '../../actions/index';
 
 class Wrapper extends Component{
     constructor(props){
@@ -67,6 +82,10 @@ class Wrapper extends Component{
             this.props.getRooms(data);
         });
 
+        this.socket.on('refreshUrlList', (data)=>{
+            this.props.getRooms(data);
+        });
+
         this.socket.on('connect', ()=>{
             var socket = this.socket;
             this.props.setTemporaryUser({
@@ -75,8 +94,6 @@ class Wrapper extends Component{
             });
 
             if(!window.localStorage.getItem("currentUser")){
-                //this.props.history.push("/home");
-
                 axios.post("/api/user/save", {
                     data:{
                         user: this.props.temporaryUser
@@ -92,7 +109,6 @@ class Wrapper extends Component{
             }
             else{
                 var user = JSON.parse(window.localStorage.getItem("currentUser"));
-
                 axios.post("/user",{
                     data: {
                         username: user && user.username,
@@ -161,25 +177,6 @@ class Wrapper extends Component{
                 (async ()=>{
                     await this.props.activeRoom(data);
                     this.socket.emit("getSpecificRoomMessages", data.roomID);
-
-                    /*
-                    axios.get(`/api/messages/${data.roomID}`).then((response)=>{
-                        this.props.addChatMessages({
-                            receiver: (this.props.activeRoomState) && this.props.activeRoomState,
-                            messages: response.data
-                        });
-                        this.setState({
-                            openSnackBar: true,
-                            SnackBarMessage: `You joined ${data.name} chat room`
-                        });
-                        setTimeout(()=>{
-                            var containerElement = $(".messagesListWrapper > div:first-child > div");
-                            $(".messagesListWrapper > div:first-child").animate({scrollTop:containerElement.height(), top}, 500);
-                        },250);
-                    }).catch((err)=>{
-                        // console.info("error",err);
-                    });
-                    */
                 })();
             }
             else{
@@ -255,8 +252,8 @@ class Wrapper extends Component{
             this.playSound.play();
         }
         setTimeout(()=>{
-            var containerElement = $(".messagesListWrapper > div:first-child > div").height();
-            $(".messagesListWrapper > div:first-child").animate({scrollTop:containerElement, top}, 500);
+           var containerElement = $(".messagesListWrapper > div:first-child > div").height();
+           $(".messagesListWrapper > div:first-child").animate({scrollTop:containerElement, top}, 500);
         },250);
     }
 

@@ -9,6 +9,11 @@ class Content extends Component{
         super(props);
     }
 
+    shouldComponentUpdate(nextProps){
+        if(this.props.tab == nextProps.currentTab) return true;
+        return false;
+    }
+
     render(){
         return(
             <div className="messagingContent" style={style.mainWrap}>
@@ -26,6 +31,6 @@ var style = {
         flexDirection: 'column',
         position: 'relative'
     }
-}
+};
 
 export default Content;

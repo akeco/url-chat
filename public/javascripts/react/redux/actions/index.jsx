@@ -61,6 +61,12 @@ export const updateRoomList = data => {
     }
 };
 
+export const removeActiveRoom = () => {
+    return {
+        type: 'REMOVE_ACTIVE_ROOM'
+    }
+};
+
 export const loadSpinner = data => {
     return {
         type: 'LOAD_SPINNER',
