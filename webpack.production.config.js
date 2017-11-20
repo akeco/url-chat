@@ -5,20 +5,18 @@ var CompressionPlugin = require("compression-webpack-plugin");
 const BabiliPlugin = require('babili-webpack-plugin');
 
 module.exports = {
-    entry: "./public/javascripts/react/App.jsx",
+    entry: ["babel-polyfill", "./public/javascripts/react/App.js"],
     output: {
         path: path.resolve(__dirname, "./public/build"),
         filename: "bundle.js"
     },
 
     module: {
-
         loaders: [
             {
                 test: /\.(js|jsx)$/,
                 //test: /\.js$/,
                 loader: 'babel-loader',
-                //loader: 'babel-loader',
                 exclude: /node_modules/,
                 query: {
                     presets: ['es2017', 'react']
@@ -39,28 +37,7 @@ module.exports = {
                 }]
             },
             {
-                test: /\.png$/,
-                loader: "url-loader?limit=100000"
-            },
-            {
-                test: /\.jpg$/,
-                loader: "file-loader"
-            },
-            {
-                test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
-                loader: 'url?limit=10000&mimetype=application/font-woff'
-            },
-            {
-                test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-                loader: 'url?limit=10000&mimetype=application/octet-stream'
-            },
-            {
-                test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-                loader: 'file'
-            },
-            {
-                test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-                loader: 'url?limit=10000&mimetype=image/svg+xml'
+                test: /\.(jpg|png|eot|svg|ttf|woff|woff2)$/, loader: 'file-loader?name=public/fonts/[name].[ext]'
             }
         ]
     },
@@ -75,20 +52,26 @@ module.exports = {
             $: "jquery",
             jQuery: "jquery"
         }),
-        new Uglify({
+        //new webpack.LoaderOptionsPlugin({
+          //  minimize: true,
+          //  debug: false
+        //}),
+        new webpack.optimize.UglifyJsPlugin({
             minimize: true,
             compress: {
-                warnings: false
-            }
+                unused: true,
+                dead_code: true,
+                warnings: false,
+            },
         }),
         new CompressionPlugin({
             asset: "[path].gz[query]",
             algorithm: "gzip",
-            test: /\.(js|html)$/,
+            test: /\.js$|\.css$|\.html$/,
             threshold: 10240,
             minRatio: 0.8
         }),
-        new BabiliPlugin()
+        new BabiliPlugin(),
     ],
 
     resolve: {

@@ -2,7 +2,7 @@ const path = require('path');
 var webpack = require('webpack');
 
 module.exports = {
-    entry: ["babel-polyfill", "./public/javascripts/react/App.jsx"],
+    entry: ["babel-polyfill", "./public/javascripts/react/App.js"],
     output: {
         path: path.resolve(__dirname, "./public/build"),
         filename: "bundle.js"
@@ -35,29 +35,9 @@ module.exports = {
                 }]
             },
             {
-                test: /\.png$/,
-                loader: "url-loader?limit=100000"
-            },
-            {
-                test: /\.jpg$/,
-                loader: "file-loader"
-            },
-            {
-                test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
-                loader: 'url?limit=10000&mimetype=application/font-woff'
-            },
-            {
-                test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-                loader: 'url?limit=10000&mimetype=application/octet-stream'
-            },
-            {
-                test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-                loader: 'file'
-            },
-            {
-                test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-                loader: 'url?limit=10000&mimetype=image/svg+xml'
+                test: /\.(jpg|png|eot|svg|ttf|woff|woff2)$/, loader: 'file-loader?name=public/fonts/[name].[ext]'
             }
+
         ]
     },
 

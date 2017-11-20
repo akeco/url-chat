@@ -14,4 +14,5 @@ module.exports = async function (data) {
             return room;
         }
     }
+    return result;
 };

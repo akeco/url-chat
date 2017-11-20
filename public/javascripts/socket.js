@@ -12,6 +12,7 @@ var server = require('../../bin/www'),
     savePrivateMessage = require('../../services/savePrivateMessage'),
     findSingleUserSocketID = require('../../services/findSingleUserSocketID'),
     getMessages = require('../../services/getMessages'),
+    getRoomMessagesNumber = require('../../services/getRoomMessagesNumber'),
     http = require('http'),
     url = require('url');
 
@@ -19,7 +20,18 @@ io.sockets.on('connection', function (socket) {
 
     console.info("CONNECTED",socket.id);
 
+    socket.once('disconnect', function () {
+        (async ()=>{
+            await leaveRoom(socket.id);
+            var result = await getActiveRooms();
+            if(result) io.sockets.emit("refreshUrlList", result);
+        })();
+        socket.disconnect();
+    });
+
+
     socket.on("urlInserted", function (roomData) {
+        console.info("INSERT URL");
         if(roomData.activeRoom){
             socket.leave(roomData.activeRoom.roomID);
             (async ()=>{
@@ -28,7 +40,9 @@ io.sockets.on('connection', function (socket) {
                     room: roomData.activeRoom
                 });
                 var result = await getActiveRooms();
-                if(result) io.sockets.emit("refreshUrlList", result);
+                if(result) {
+                    io.sockets.emit("refreshUrlList", result);
+                }
             })();
         }
 
@@ -38,6 +52,7 @@ io.sockets.on('connection', function (socket) {
             var roomResult = await addRoom(roomData);
             if(roomResult){
                 io.sockets.emit("updateRooms", roomResult);
+                socket.emit("resetMessageSettings");
                 socket.emit("addActiveRoom", roomResult);
                 socket.join(roomResult.roomID);
             }
@@ -61,14 +76,13 @@ io.sockets.on('connection', function (socket) {
     });
 
 
-    socket.once('disconnect', function () {
-        (async ()=>{
-            await leaveRoom(socket.id);
-            var result = await getActiveRooms();
-            if(result) io.sockets.emit("refreshUrlList", result);
-        })();
-        socket.disconnect();
+    socket.on("prependMessagesRequest", function (data) {
+      (async ()=>{
+        var result = await getMessages(data.roomID, data.messagesPart);
+        if(result) socket.emit("prependMessagesResponse", result);
+      })();
     });
+
 
     socket.on("voting", function (data) {
         (async()=>{
@@ -77,15 +91,18 @@ io.sockets.on('connection', function (socket) {
         })();
     });
 
+
     socket.on("joinRoom", function (data) {
         (async()=>{
             var result = await joinRoom(data);
             if(result) {
-                io.sockets.emit("refreshRoomsOnJoin", result);
+                io.sockets.emit("refreshRoomsOnJoin", {notifyID: data.user._id, result});
+                socket.emit("resetMessageSettings");
                 socket.join(data.room.roomID);
             }
         })();
     });
+
 
     socket.on("getRooms", function () {
         (async ()=>{
@@ -97,18 +114,26 @@ io.sockets.on('connection', function (socket) {
 
     socket.on("getSpecificMessages", function(roomID){
         (async ()=>{
-            var result = await getMessages(roomID);
-            if(result) socket.emit("receiveSpecificMessages", result);
+            var result = await getMessages(roomID),
+                messagesNumber = await getRoomMessagesNumber(roomID),
+                data = {};
+                if(messagesNumber) data.messagesNumber = messagesNumber;
+            if(result) {
+                data.result = result;
+                socket.emit("receiveSpecificMessages", data);
+            }
         })();
     });
 
 
     socket.on("getSpecificRoomMessages", function(roomID){
+        console.info("SPECIFIC");
         (async ()=>{
             var result = await getMessages(roomID);
             if(result) socket.emit("receiveSpecificRoomMessages", result);
         })();
     });
+
 
     socket.on("leaveRoom", function (data) {
         socket.leave(data.room.roomID);
@@ -120,7 +145,10 @@ io.sockets.on('connection', function (socket) {
                 console.info("ROOM LEAVE ERROR", err);
             }
             var result = await getActiveRooms();
-            if(result) io.sockets.emit("refreshUrlList", result);
+            if(result) {
+                io.sockets.emit("refreshUrlList", result);
+                socket.emit("resetMessageSettings");
+            }
         })();
     });
 
@@ -147,6 +175,7 @@ io.sockets.on('connection', function (socket) {
             }
         })();
     });
+
 
     socket.on("sendPrivateMessage", function (data) {
         (async ()=>{

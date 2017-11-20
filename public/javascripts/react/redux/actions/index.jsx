@@ -1,17 +1,3 @@
-export const toggleUsersMenu = data => {
-    return {
-        type: 'TOGGLE_USER_MENU',
-        data
-    }
-};
-
-export const swipePage = data => {
-    return {
-        type: 'SWIPE_PAGE',
-        data
-    }
-};
-
 export const setCurrentTab = data => {
     return {
         type: 'SET_TAB',
@@ -33,12 +19,6 @@ export const enableSoundAction = data => {
     }
 };
 
-export const showHeaderSubmenu = data => {
-    return {
-        type: 'HEADER_SUBMENU',
-        data
-    }
-};
 
 export const addPrivateMessages = data => {
     return {
@@ -61,11 +41,6 @@ export const updateRoomList = data => {
     }
 };
 
-export const removeActiveRoom = () => {
-    return {
-        type: 'REMOVE_ACTIVE_ROOM'
-    }
-};
 
 export const loadSpinner = data => {
     return {
@@ -116,17 +91,23 @@ export const insertMessage = data => {
     }
 };
 
+export const prependMessages = data => {
+  return{
+    type: 'PREPEND_MESSAGES',
+    data
+  }
+};
+
+export const showPrependLoader = data => {
+  return{
+    type: 'SHOW_PREPEND_LOADER',
+    data
+  }
+};
+
 export const addChatMessages = data => {
     return{
         type: 'ADD_CHAT',
-        data
-    }
-};
-
-
-export const clearConversation = data => {
-    return{
-        type: 'CLEAR_CONVERSATION',
         data
     }
 };
@@ -149,6 +130,13 @@ export const joinRefreshRooms = data => {
 export const activeRoom = data => {
     return{
         type: 'ACTIVE_ROOM',
+        data
+    }
+};
+
+export const updateActiveRoom = data => {
+    return{
+        type: 'UPDATE_ACTIVE_ROOM',
         data
     }
 };
