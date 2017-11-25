@@ -31,7 +31,7 @@ class Homepage extends Component{
         var {currentTab, privateNotifyCollection, showLeftSidebar, spinner} = this.props;
         var hasUnreadMessagesClass = (privateNotifyCollection.length) ? 'hasUnreadMessagesClass' : '';
         return(
-          <Dimmer.Dimmable blurring dimmed={spinner} style={style.outerDiv}>
+          <Dimmer.Dimmable dimmed={spinner} style={style.outerDiv}>
               <Dimmer active={spinner} inverted >
                   <div>
                       <Loader indeterminate size='large'>Please wait...</Loader>

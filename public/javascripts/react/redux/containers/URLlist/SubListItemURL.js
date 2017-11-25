@@ -6,7 +6,6 @@ import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import IconMenu from 'material-ui/IconMenu';
 import IconButton from 'material-ui/IconButton';
 import {teal500, teal300, teal50, tealA100} from 'material-ui/styles/colors';
-import {primaryTextFunction} from '../../../../../../services/utils';
 import styled from 'styled-components';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';

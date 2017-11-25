@@ -12,6 +12,27 @@ import PropTypes from 'prop-types';
 class MobileListURLDrawer extends Component{
     constructor(props){
         super(props);
+        this.state = {
+            scrollable: false
+        };
+    }
+
+    componentDidMount(){
+        const checkHeight = (x) => {
+            if (x.matches && !this.state.scrollable) {
+                this.setState({
+                    scrollable: true
+                });
+            } else {
+                this.setState({
+                    scrollable: false
+                });
+            }
+        };
+
+        var x = window.matchMedia("(max-height: 525px)");
+        checkHeight(x);
+        x.addListener(checkHeight);
     }
 
     render(){
@@ -23,7 +44,12 @@ class MobileListURLDrawer extends Component{
                 onRequestChange={(open) => {
                     this.props.showLeftSidebar(open)
                 }}
-                containerStyle={style.drawerContainer}
+                containerStyle={Object.assign(
+                    {},
+                    style.drawerContainer,
+                    {
+                        oveflowY: (this.state.scrollable) ? 'scroll' : 'hidden'
+                    })}
                 overlayStyle={{zIndex:899}}
             >
                 <URLFormContainer {...this.props} />
@@ -45,7 +71,6 @@ const style = {
         backgroundColor: teal50,
         zIndex: 900,
         paddingTop: 88,
-        overflow: 'hidden'
     }
 };
 

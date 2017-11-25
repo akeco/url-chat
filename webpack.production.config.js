@@ -3,6 +3,7 @@ var webpack = require('webpack');
 const Uglify = require("uglifyjs-webpack-plugin");
 var CompressionPlugin = require("compression-webpack-plugin");
 const BabiliPlugin = require('babili-webpack-plugin');
+var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
     entry: ["babel-polyfill", "./public/javascripts/react/App.js"],
@@ -56,6 +57,7 @@ module.exports = {
           //  minimize: true,
           //  debug: false
         //}),
+        new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
         new webpack.optimize.UglifyJsPlugin({
             minimize: true,
             compress: {
@@ -72,6 +74,7 @@ module.exports = {
             minRatio: 0.8
         }),
         new BabiliPlugin(),
+        //new BundleAnalyzerPlugin()
     ],
 
     resolve: {

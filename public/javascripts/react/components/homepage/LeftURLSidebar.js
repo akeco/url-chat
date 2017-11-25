@@ -11,7 +11,8 @@ class LeftURLSidebar extends Component{
     constructor(props){
         super(props);
         this.state = {
-            filterVal: ''
+            filterVal: '',
+            scrollable: false
         };
         this.showSingleItem = this.showSingleItem.bind(this);
         this.changeFilterVal = this.changeFilterVal.bind(this);
@@ -29,10 +30,37 @@ class LeftURLSidebar extends Component{
         })
     }
 
+    componentDidMount(){
+        const checkHeight = (x) => {
+            if (x.matches && !this.state.scrollable) {
+                this.setState({
+                    scrollable: true
+                });
+            } else {
+                this.setState({
+                    scrollable: false
+                });
+            }
+        };
+
+        var x = window.matchMedia("(max-height: 525px)");
+        checkHeight(x);
+        x.addListener(checkHeight);
+    }
+
     render(){
         var leftSidebarVisibility = (!this.props.leftSidebarVisibility) ? 'hideLeftSidebar leftSidebar' : 'leftSidebar';
         return(
-            <div className={leftSidebarVisibility} style={style.wrapper}>
+            <div
+                className={leftSidebarVisibility}
+                style={Object.assign(
+                    {},
+                    style.wrapper,
+                    {
+                        oveflowY: (this.state.scrollable) ? 'scroll' : 'hidden'
+                    }
+                    )}
+            >
                 {
                     (this.props.tab)
                         ? <UserFormContainer
