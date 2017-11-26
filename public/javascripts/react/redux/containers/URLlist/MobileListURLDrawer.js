@@ -15,24 +15,29 @@ class MobileListURLDrawer extends Component{
         this.state = {
             scrollable: false
         };
+        this.checkHeight = this.checkHeight.bind(this);
     }
 
     componentDidMount(){
-        const checkHeight = (x) => {
-            if (x.matches && !this.state.scrollable) {
-                this.setState({
-                    scrollable: true
-                });
-            } else {
-                this.setState({
-                    scrollable: false
-                });
-            }
-        };
+        this.x = window.matchMedia("(max-height: 525px)");
+        this.checkHeight(this.x);
+        this.x.addListener(this.checkHeight);
+    }
 
-        var x = window.matchMedia("(max-height: 525px)");
-        checkHeight(x);
-        x.addListener(checkHeight);
+    componentWillUnmount(){
+        this.x.removeListener(this.checkHeight);
+    }
+
+    checkHeight(x){
+        if (x.matches && !this.state.scrollable) {
+            this.setState({
+                scrollable: true
+            });
+        } else {
+            this.setState({
+                scrollable: false
+            });
+        }
     }
 
     render(){
@@ -48,7 +53,7 @@ class MobileListURLDrawer extends Component{
                     {},
                     style.drawerContainer,
                     {
-                        oveflowY: (this.state.scrollable) ? 'scroll' : 'hidden'
+                        overflowY: (this.state.scrollable) ? 'scroll' : 'hidden'
                     })}
                 overlayStyle={{zIndex:899}}
             >

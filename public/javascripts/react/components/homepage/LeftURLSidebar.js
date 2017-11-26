@@ -16,8 +16,18 @@ class LeftURLSidebar extends Component{
         };
         this.showSingleItem = this.showSingleItem.bind(this);
         this.changeFilterVal = this.changeFilterVal.bind(this);
+        this.checkHeight = this.checkHeight.bind(this);
     }
 
+    componentDidMount(){
+        this.x = window.matchMedia("(max-height: 525px)");
+        this.checkHeight(this.x);
+        this.x.addListener(this.checkHeight);
+    }
+
+    componentWillUnmount(){
+        this.x.removeListener(this.checkHeight);
+    }
 
     showSingleItem(){
         var title = (this.props.tab) ? 'Active private room' : 'Active Room';
@@ -30,22 +40,16 @@ class LeftURLSidebar extends Component{
         })
     }
 
-    componentDidMount(){
-        const checkHeight = (x) => {
-            if (x.matches && !this.state.scrollable) {
-                this.setState({
-                    scrollable: true
-                });
-            } else {
-                this.setState({
-                    scrollable: false
-                });
-            }
-        };
-
-        var x = window.matchMedia("(max-height: 525px)");
-        checkHeight(x);
-        x.addListener(checkHeight);
+    checkHeight(x){
+        if (x.matches && !this.state.scrollable) {
+            this.setState({
+                scrollable: true
+            });
+        } else {
+            this.setState({
+                scrollable: false
+            });
+        }
     }
 
     render(){
@@ -57,7 +61,7 @@ class LeftURLSidebar extends Component{
                     {},
                     style.wrapper,
                     {
-                        oveflowY: (this.state.scrollable) ? 'scroll' : 'hidden'
+                        overflowY: (this.state.scrollable) ? 'scroll' : 'hidden'
                     }
                     )}
             >
