@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import {List} from 'material-ui/List';
-import {teal300, teal900} from 'material-ui/styles/colors';
+import {teal300, teal600} from 'material-ui/styles/colors';
 import Message from './Message';
 import CircularProgress from 'material-ui/CircularProgress';
 import { Loader } from 'semantic-ui-react'
@@ -87,7 +87,12 @@ class Messages extends Component{
             }
         }
         else if(activeRoom && !chatMessages && tab == 0 && !this.props.showMessageLoader){
-            return <div>Write first messaege</div>
+            return (
+                <EmptyDivMessage>
+                    Write first messaege in {activeRoom.name} room<br/>
+                    Ask question or just share your thoughts
+                </EmptyDivMessage>
+            )
         }
         else if(!this.props.showMessageLoader){
             return <InfoContainer />;
@@ -157,6 +162,20 @@ const CustomList = styled(List)`
         filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#00ffffff',GradientType=0 );
     }
 `;
+
+const EmptyDivMessage = styled.div`
+        position: absolute;
+        color: ${teal600};
+        left: 0;
+        right: 0;
+        margin: auto;
+        text-align: center;
+        justify-content: center;
+        align-self: center;
+        top: 45%;
+        cursor: default;
+`;
+
 
 var style = {
     loader: {

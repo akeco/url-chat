@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import Drawer from 'material-ui/Drawer';
 import {teal50} from 'material-ui/styles/colors';
 import URLFormContainer from '../URLForm/URLFormContainer';
+import UserForm from '../userForm/UserFormContainer';
 import SingleListItem from './SingleListItem';
 import ListURLContainer from './ListURLContainer';
 import {connect} from 'react-redux';
@@ -13,9 +14,11 @@ class MobileListURLDrawer extends Component{
     constructor(props){
         super(props);
         this.state = {
+            filterVal: '',
             scrollable: false
         };
         this.checkHeight = this.checkHeight.bind(this);
+        this.changeFilterVal = this.changeFilterVal.bind(this);
     }
 
     componentDidMount(){
@@ -40,6 +43,12 @@ class MobileListURLDrawer extends Component{
         }
     }
 
+    changeFilterVal(value){
+        this.setState({
+            filterVal: value
+        })
+    }
+
     render(){
         return(
             <Drawer
@@ -57,11 +66,19 @@ class MobileListURLDrawer extends Component{
                     })}
                 overlayStyle={{zIndex:899}}
             >
-                <URLFormContainer {...this.props} />
+                {
+                    this.props.tab == 0 && <URLFormContainer {...this.props} /> || (
+                        <UserForm
+                            {...this.props}
+                            filterVal={this.state.filterVal}
+                            changeFilterVal={this.changeFilterVal}
+                        />
+                    )
+                }
                 {
                     (this.props.activeRoomState) && <SingleListItem {...this.props} title="Active Room" />
                 }
-                <ListURLContainer {...this.props} />
+                <ListURLContainer filterVal={this.state.filterVal} {...this.props} />
             </Drawer>
         )
     }

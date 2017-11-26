@@ -3,7 +3,6 @@ import {teal600, teal300, teal50} from 'material-ui/styles/colors';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {loadSpinner, showLeftSidebar} from '../../actions/index';
-import { Loader } from 'semantic-ui-react'
 import TextField from 'material-ui/TextField';
 import IconButton from 'material-ui/IconButton';
 import CloseIcon from 'material-ui/svg-icons/navigation/close';

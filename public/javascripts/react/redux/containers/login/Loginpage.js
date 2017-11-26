@@ -41,7 +41,7 @@ class Loginpage extends Component{
         return(
             <div className="loginWrapper" style={style.loginWrapper}>
                 <div style={style.imageWrapper}>
-                    <img style={style.websiteLogo} src="../../../../../images/homepage-logo.png"/>
+                    <img style={style.websiteLogo} src="../../../../../images/forum_final_1_white.png"/>
                 </div>
                 <div style={style.centerBlock}>
                    <div style={style.elementWrapper}>
@@ -49,21 +49,21 @@ class Loginpage extends Component{
                            label={`Continue as ${ (this.props.temporaryUser) && this.props.temporaryUser.username }`}
                            onTouchTap={this.homepageRedirect}
                            style={style.guestButton}
-                           backgroundColor={teal900}
-                           labelColor={teal100}
+                           backgroundColor={'white'}
+                           labelColor={teal500}
                        />
                        <RaisedButton
                            label="Login"
                            style={style.buttons}
-                           labelColor={teal700}
-                           backgroundColor={teal50}
+                           labelColor={teal50}
+                           backgroundColor={teal500}
                            onTouchTap={this.loginRedirect}
                        />
                        <RaisedButton
                            label="Register"
                            style={{width:'100%'}}
-                           labelColor={teal700}
-                           backgroundColor={teal50}
+                           labelColor={teal50}
+                           backgroundColor={teal500}
                            onTouchTap={this.registerRedirect}
                        />
                    </div>
@@ -83,13 +83,10 @@ const style = {
     },
     websiteLogo:{
         position: 'absolute',
-        width: 200,
+        width: 160,
         cursor: 'default'
     },
     guestButton: {
-        border: '1px solid',
-        borderColor: teal500,
-        backgroundColor: teal900,
         width: '100%',
         marginBottom: 20
     },
@@ -106,12 +103,11 @@ const style = {
     },
     centerBlock: {
         width: '100%',
-        backgroundColor: teal500,
+        backgroundColor: teal50,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        boxShadow: 'inset 0 2px 4px 0 rgba(0,0,0,0.3), inset 0 -2px 4px 0 rgba(0,0,0,0.3)',
-        backgroundImage: 'url(\'../../../../../../images/login-back.png\')',
+        //boxShadow: 'inset 0 2px 4px 0 rgba(0,0,0,0.3), inset 0 -2px 4px 0 rgba(0,0,0,0.3)',
         flexGrow: 1
     },
     loginWrapper: {
@@ -120,7 +116,7 @@ const style = {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        backgroundColor: teal50,
+        backgroundColor: teal500,
         position: 'relative'
     }
 };

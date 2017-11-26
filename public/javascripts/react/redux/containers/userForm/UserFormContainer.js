@@ -1,8 +1,13 @@
 import React,{Component} from 'react';
 import {teal500, teal300, teal50} from 'material-ui/styles/colors';
 import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 import TextField from 'material-ui/TextField';
 import SearchIcon from 'material-ui/svg-icons/action/search';
+import IconButton from 'material-ui/IconButton';
+import CloseIcon from 'material-ui/svg-icons/navigation/close';
+import {showLeftSidebar} from '../../actions/index';
+import styled from 'styled-components';
 import '../../../../../stylesheets/less/urlForm.less';
 
 class UserFormContainer extends Component{
@@ -27,7 +32,7 @@ class UserFormContainer extends Component{
     render(){
         return(
             <div className="formWrapper" style={style.formWrapper}>
-                <form action="javascript:void(0)" className="formURL" style={style.form}>
+                <CustomForm action="javascript:void(0)" className="formURL" style={style.form}>
                     <SearchIcon style={style.searchIcon} />
                     <TextField
                         hintText="Search user"
@@ -38,11 +43,26 @@ class UserFormContainer extends Component{
                         style={{height:40}}
                         onChange={this.inputOnChange}
                     />
-                </form>
+                </CustomForm>
+                <IconButton
+                    className="mobileNavIcon"
+                    style={{marginRight: -10}}
+                    onTouchTap={()=>{
+                        this.props.showLeftSidebar(false)
+                    }}
+                >
+                    <CloseIcon color={teal300} />
+                </IconButton>
             </div>
         )
     }
 }
+
+const CustomForm = styled.form`
+    @media (max-width:647px){
+        width: 242px !important;
+    }
+`;
 
 var style = {
     searchIcon: {
@@ -82,6 +102,11 @@ var style = {
     }
 };
 
+function matchDispatchToProps(dispatch) {
+    return bindActionCreators({
+        showLeftSidebar
+    }, dispatch);
+}
 
 function mapStateToProps(state) {
     return ({
@@ -91,4 +116,4 @@ function mapStateToProps(state) {
     });
 }
 
-export default connect(mapStateToProps)(UserFormContainer);
+export default connect(mapStateToProps, matchDispatchToProps)(UserFormContainer);
