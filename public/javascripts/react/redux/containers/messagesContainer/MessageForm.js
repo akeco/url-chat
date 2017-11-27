@@ -5,6 +5,7 @@ import {connect} from 'react-redux';
 import TextField from 'material-ui/TextField';
 import {teal900, teal700, teal500, teal200, teal50} from 'material-ui/styles/colors';
 import {find} from 'lodash';
+import {scrollTo} from '../../../../../../services/utils';
 import '../../../../../stylesheets/less/messageForm.less';
 
 class MessageForm extends Component{
@@ -88,16 +89,16 @@ class MessageForm extends Component{
                         hintStyle={{color: teal200}}
                         onChange={(event)=>{
                             this.inputOnChange(event);
-                            var containerElement = $(".messagesListWrapper > div:first-child > div").height(),
-                                scrollerElement = $(".messagesListWrapper > div:first-child"),
-                                scrollPosition = scrollerElement.scrollTop() + window.innerHeight - 160;
 
-                            if(containerElement - scrollPosition > 30) scrollerElement.animate({scrollTop:containerElement, top}, 500);
+                            let scrollerElement = document.querySelectorAll(".messagesListWrapper")[tab].querySelector("div:first-child"),
+                            containerElement =  scrollerElement.querySelector("div").offsetHeight, scrollPosition = scrollerElement.scrollTop + window.innerHeight - 160;
+
+                            if(containerElement - scrollPosition > 30) scrollTo(scrollerElement, scrollerElement.querySelector("div").offsetHeight, 250);
                         }}
                         onKeyPress={this.submitOnEnter}
                         onFocus={()=>{
-                            var containerElement = $(".messagesListWrapper > div:first-child > div").height();
-                            $(".messagesListWrapper > div:first-child").animate({scrollTop:containerElement, top}, 500);
+                            let scrollerElement = document.querySelectorAll(".messagesListWrapper")[tab].querySelector("div:first-child");
+                            scrollTo(scrollerElement, scrollerElement.querySelector("div").offsetHeight, 250);
                         }}
                     />
                     <FloatingActionButton

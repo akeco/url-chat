@@ -12,7 +12,7 @@ const activeuser = (state = null, action) => {
                     if(matchRoom) return matchRoom;
                 }
             }
-            else if(action.data.roomID == state.roomID) return action.data;
+            else if(state && action.data && action.data.roomID == state.roomID) return action.data;
             return state;
         case 'CLOSE_ACTIVE_ROOM':
             return null;

@@ -47,8 +47,10 @@ class PrivateUserBadgeListItem extends Component{
                 }
                 rightIcon={
                     <div style={style.notificationRightBlock}>
-                        <MessageIcon style={style.messageIcon}/>
-                        <span style={style.notificationNumber}>{checkNotifications.length}</span>
+                        <div style={style.notificationBlockWrapper}>
+                            <MessageIcon style={style.messageIcon}/>
+                            <span style={style.notificationNumber}>{checkNotifications.length}</span>
+                        </div>
                     </div>
                 }
             />
@@ -107,14 +109,26 @@ const style = {
     },
     notificationNumber: {
         position: 'absolute',
-        top: 13,
+        top: 5,
         fontSize: 11,
         color: 'white',
+        alignSelf: 'center',
+        justifySelf: 'center',
+        textAlign: 'center',
+        display: 'block',
+        left: 0,
+        right: 0,
     },
     messageIcon: {
         fill: lime500,
         height: 30,
         width: 30,
+    },
+    notificationBlockWrapper: {
+        position: 'relative',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
     }
 };
 

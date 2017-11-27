@@ -8,6 +8,7 @@ import {withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
 import buzz from 'buzz';
 import {bindActionCreators} from 'redux';
+import { scrollTo } from '../../../../../../services/utils';
 import {
     updateProfileSocket,
     setProfileUser,
@@ -183,8 +184,8 @@ class Wrapper extends Component{
                     SnackBarMessage: `You joined ${name} chat room`
                 });
                 setTimeout(()=>{
-                    var containerElement = $(".messagesListWrapper > div:first-child > div");
-                    $(".messagesListWrapper > div:first-child").animate({scrollTop:containerElement.height(), top}, 500);
+                    let containerElement = document.querySelectorAll(".messagesListWrapper")[0].querySelector("div:first-child");
+                    scrollTo(containerElement, containerElement.querySelector("div").offsetHeight, 250);
                 },250);
             }
             else {
@@ -241,8 +242,8 @@ class Wrapper extends Component{
         this.props.addPrivateRoom(data.room);
         if(data.messages) this.props.addPrivateMessages(data.messages);
         setTimeout(()=>{
-            var containerElement = $(".messagesListWrapper > div:first-child > div");
-            $(".messagesListWrapper > div:first-child").animate({scrollTop:containerElement.height(), top}, 500);
+            let containerElement = document.querySelectorAll(".messagesListWrapper")[1].querySelector("div:first-child");
+            scrollTo(containerElement, containerElement.querySelector("div").offsetHeight, 250);
         },250);
     }
 
@@ -250,15 +251,15 @@ class Wrapper extends Component{
         var {profileuser, enableSound} = this.props;
         this.props.insertMessage(data);
         if(data.sender.username != profileuser.username && enableSound && !this.isSafari) {
-
             this.playSound.play();
         }
-        var elementHeight = $(".messagesListWrapper > div:first-child > div").height(),
-        topPosition = parseInt($(".messagesListWrapper > div:first-child").scrollTop()) + window.innerHeight - 160;
-        if((elementHeight - topPosition) < 100){
+        var elementParent = document.querySelectorAll(".messagesListWrapper"),
+        elementHeight = elementParent[0].querySelector("div:first-child > div").offsetHeight;
+        var topPosition = parseInt(elementParent[0].querySelector("div:first-child").scrollTop) + window.innerHeight - 160;
+        if((elementHeight - topPosition) < 150){
             setTimeout(()=>{
-                var containerElement = $(".messagesListWrapper > div:first-child > div").height();
-                $(".messagesListWrapper > div:first-child").animate({scrollTop:containerElement, top}, 500);
+                let containerElement = document.querySelectorAll(".messagesListWrapper")[0].querySelector("div:first-child");
+                scrollTo(containerElement, containerElement.querySelector("div").offsetHeight, 250);
             }, 250);
         }
         else{
@@ -278,8 +279,8 @@ class Wrapper extends Component{
             this.playSound.play();
         }
         setTimeout(()=>{
-           var containerElement = $(".messagesListWrapper > div:first-child > div").height();
-           $(".messagesListWrapper > div:first-child").animate({scrollTop:containerElement, top}, 500);
+            let containerElement = document.querySelectorAll(".messagesListWrapper")[1].querySelector("div:first-child");
+            scrollTo(containerElement, containerElement.querySelector("div").offsetHeight, 250);
         },250);
     }
 

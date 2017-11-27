@@ -103,8 +103,7 @@ class Messages extends Component{
     render(){
         var {tab, showMessageLoader, prependLoader} = this.props,
             homepageClass = (!this.props.activeRoom || (tab == 1 && !this.props.privateRoom)) ? `showHomepageInfo messagesListWrapper` : `messagesListWrapper privateMessageWrapper`,
-            customListClass = (!this.props.activeRoom || (tab == 1 && !this.props.privateRoom)) ? 'showHomepageInfo' : '',
-            overflowBlock = (!this.props.activeRoom && !this.props.chatMessages) ? true : false;
+            customListClass = (!this.props.activeRoom || (tab == 1 && !this.props.privateRoom)) ? 'showHomepageInfo' : '';
 
         return(
             <div style={style.outerDivBlock}>
