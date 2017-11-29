@@ -139,7 +139,7 @@ class ListURLContainer extends Component{
                 {
                     (this.props.tab == 1 && activeRoomState && activeRoomState.members.length > 1) && (
                         <CustomScroller
-                            style={{width: '100%', height:375}}
+                            style={{width: '100%', height:329}}
                             autoHide
                             autoHideTimeout={1000}
                             autoHideDuration={200}

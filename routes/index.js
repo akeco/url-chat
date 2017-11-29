@@ -1,14 +1,20 @@
+//require('babel-core/register');
+//require('babel-polyfill');
 var express = require('express'),
     router = express.Router(),
     registrationController = require('../controllers/registrationController'),
     loginController = require('../controllers/loginController'),
     getUser = require('../services/getUser');
 
+//var ReactDOM = require('react-dom/server');
+//var App = require('../public/javascripts/react/Main');
+
 
 /* GET home page. */
 
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Chat-project' });
+    //var appString = ReactDOM.renderToString(App);
+    res.render('index', { title: 'Chat-project' });
 });
 
 

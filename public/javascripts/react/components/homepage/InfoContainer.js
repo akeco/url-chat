@@ -8,7 +8,7 @@ const InfoContainer = (props) => {
             <P>This is a space where you can meet and talk with people who are viewing the same website as you.</P>
             <P>Start by typing or copying in a website address (URL) into the 'Insert URL' box.</P>
             <P>If someone has already created a chat room for that website, and they are in the chat room, you can join the discussion. Enjoy!</P>
-            <P>If you are the first person to create the chat room, others will be able to see that it has been created and can join. Note that rooms disappear after 5 minutes with no users.</P>
+            <P>If you are the first person to create the chat room, others will be able to see that it has been created and can join. Note that rooms disappear after 5 minutes with no users, but the chat room history will remain.</P>
         </Wrapper>
     );
 }
