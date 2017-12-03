@@ -1,0 +1,37 @@
+{
+  "presets": [
+    ["es2015", {
+      "es2015": {
+        "loose": true,
+        "modules": false
+      }
+    }], "react"
+  ],
+  "plugins": [
+    "transform-react-jsx",
+    [
+      "direct-import",
+      [
+        "material-ui",
+        "react-router",
+        "react-router-dom"
+      ]
+    ],
+    [
+      "transform-semantic-ui-react-imports",
+      {
+        "convertMemberImports": false,
+        "addCssImports": true
+      }
+    ],
+    [
+      "lodash",
+      {
+        "id": [
+          "lodash",
+          "semantic-ui-react"
+        ]
+      },
+    ]
+  ]
+}
