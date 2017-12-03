@@ -18,7 +18,6 @@ module.exports = async (data)=>{
         if(result) return ({
             _id: result._id,
             username: result.username,
-            savedSettings: result.savedSettings,
             socketID: result.socketID
         });
     }

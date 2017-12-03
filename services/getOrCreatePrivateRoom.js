@@ -5,7 +5,11 @@ var randomstring = require('randomstring');
 var { sortBy } = require('lodash');
 
 module.exports = async function (data) {
-    var result = await privateRoomModel.findOne({usersID: {$all: [data.sender, data.receiver]}});
+    var result = await privateRoomModel.findOne({usersID: {$all: [data.sender, data.receiver]}}, {
+        'sender.password': 0,
+        'sender.email': 0,
+        'sender.savedSettings': 0,
+    });
     if(!result){
         var newRoom = new privateRoomModel({
             usersID: [data.sender, data.receiver],
@@ -23,7 +27,11 @@ module.exports = async function (data) {
     }
     else {
         console.info("Room exist");
-        var messages = await privateMessageModel.find({privateRoomID: result.privateRoomID});
+        var messages = await privateMessageModel.find({privateRoomID: result.privateRoomID}, {
+            'sender.password': 0,
+            'sender.email': 0,
+            'sender.savedSettings': 0,
+        });
         return {
             room: result,
             messages: {

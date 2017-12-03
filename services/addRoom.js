@@ -4,7 +4,12 @@ var randomstring = require('randomstring');
 
 module.exports = async function (data) {
     try {
-        var room = await roomModel.findOne({route: data.url});
+        var room = await roomModel.findOne({route: data.url}, {
+            'members.password': 0,
+            'members.savedSettings': 0,
+            'members.email': 0,
+            'members.created': 0
+        });
         if (!room) {
             var newRoom = new roomModel({
                 name: data.url,
@@ -18,14 +23,20 @@ module.exports = async function (data) {
             if (room) return room;
         }
         else {
-            room = await roomModel.findOneAndUpdate({route: data.url}, {$push: {members: data.user}}, {new: true});
+            room = await roomModel.findOneAndUpdate({route: data.url}, {$push: {members: data.user}}, {
+                fields: {'members.password': 0, 'members.savedSettings': 0, 'members.email': 0, 'members.created': 0},
+                new: true
+            });
             if (room) {
                 return room;
             }
         }
     }
     catch(err){
-        room = await roomModel.findOneAndUpdate({route: data.url.toLowerCase()}, {$push: {members: data.user}}, {new: true});
+        room = await roomModel.findOneAndUpdate({route: data.url.toLowerCase()}, {$push: {members: data.user}}, {
+            fields: {'members.password': 0, 'members.savedSettings': 0, 'members.email': 0, 'members.created': 0},
+            new: true
+        });
         if (room) {
             return room;
         }

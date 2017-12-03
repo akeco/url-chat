@@ -6,7 +6,12 @@ const util = require('util');
 
 module.exports = async function () {
 
-    var result = await roomModel.find({members: {$not: {$size: 0}}});
+    var result = await roomModel.find({members: {$not: {$size: 0}}}, {
+        'members.password': 0,
+        'members.savedSettings': 0,
+        'members.email': 0,
+        'members.created': 0
+    });
 
     if(result){
         result = result.sort(sort_by('members', false, function(a){return a.length}));

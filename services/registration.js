@@ -17,7 +17,6 @@ module.exports = async function (data) {
             _id: user._id,
             username: user.username,
             socketID: user.socketID,
-            savedSettings: user.savedSettings
         };
         return userObject;
     }
