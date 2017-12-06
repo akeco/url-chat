@@ -21,6 +21,10 @@ import '../../stylesheets/less/main.less';
 var store = createStore(reducers);
 injectTapEventPlugin();
 
+if (typeof window === 'undefined') {
+    global.window = {}
+}
+
 const Main = (props) => {
     return(
         <Provider store={store}>

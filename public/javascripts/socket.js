@@ -12,6 +12,7 @@ var server = require('../../bin/www'),
     savePrivateMessage = require('../../services/savePrivateMessage'),
     findSingleUserSocketID = require('../../services/findSingleUserSocketID'),
     getMessages = require('../../services/getMessages'),
+    getPrivateMessages = require('../../services/getPrivateMessages'),
     getRoomMessagesNumber = require('../../services/getRoomMessagesNumber'),
     http = require('http'),
     url = require('url');
@@ -112,25 +113,27 @@ io.sockets.on('connection', function (socket) {
     });
 
 
-    socket.on("getSpecificMessages", function(roomID){
+    socket.on("getSpecificPublicRoomMessages", function(roomID){
         (async ()=>{
             var result = await getMessages(roomID),
-                messagesNumber = await getRoomMessagesNumber(roomID),
+                messagesNumber = await getRoomMessagesNumber({ roomID }, 'public'),
                 data = {};
                 if(messagesNumber) data.messagesNumber = messagesNumber;
             if(result) {
                 data.result = result;
-                socket.emit("receiveSpecificMessages", data);
+                socket.emit("receiveSpecificPublicRoomMessages", data);
             }
         })();
     });
 
 
-    socket.on("getSpecificRoomMessages", function(roomID){
-        console.info("SPECIFIC");
+    /*
+    * Make response when url is inserted and tries to fetch messages history
+    * */
+    socket.on("getInsertedRoomMessages", function(roomID){
         (async ()=>{
             var result = await getMessages(roomID);
-            if(result) socket.emit("receiveSpecificRoomMessages", result);
+            if(result) socket.emit("receiveInsertedRoomMessages", result);
         })();
     });
 
@@ -167,11 +170,17 @@ io.sockets.on('connection', function (socket) {
     // PRIVATE CHAT PART
 
     socket.on("joinPrivate", function (data) {
+        const {sender, receiver} = data;
         (async()=>{
-            var result = await getOrCreatePrivateRoom(data);
+            var result = await getOrCreatePrivateRoom(data),
+                messagesNumber = await getRoomMessagesNumber({sender, receiver}, 'private'),
+                responseData = {};
+            if(messagesNumber) responseData.messagesNumber = messagesNumber;
             if(result) {
+                responseData.result = result;
                 socket.join(result.room.privateRoomID);
-                socket.emit("joinPrivateRoom", result);
+                socket.emit("resetPrivateMessageSettings");
+                socket.emit("joinPrivateRoom", responseData);
             }
         })();
     });
@@ -191,6 +200,17 @@ io.sockets.on('connection', function (socket) {
             }
         })();
     });
+
+
+    socket.on("prependPrivateMessagesRequest", function (data) {
+        if(data.roomID && data.messagesPart){
+            (async()=>{
+                var result = await getPrivateMessages(data.roomID, data.messagesPart);
+                if(result) socket.emit("prependPrivateMessagesResponse", result);
+            })();
+        }
+    });
+
 });
 
 

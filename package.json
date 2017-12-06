@@ -11,7 +11,8 @@
     "poststart-copy": "node ./bin/www",
     "dev-start": "nodemon ./bin/www",
     "webpack": "webpack --colors --progress --watch",
-    "webpack-prod": "webpack --config webpack.production.config.js"
+    "webpack-prod": "webpack --config webpack.production.config.js",
+    "webpack-server": "webpack --config webpack.server.config.js"
   },
   "dependencies": {
     "async-uglify-js-webpack-plugin": "0.0.6",
@@ -27,6 +28,7 @@
     "express": "~4.15.2",
     "firebase": "^4.3.1",
     "http": "0.0.0",
+    "import-export": "^1.0.1",
     "jquery": "^3.2.1",
     "jsonwebtoken": "^7.4.1",
     "lodash": "^4.17.4",

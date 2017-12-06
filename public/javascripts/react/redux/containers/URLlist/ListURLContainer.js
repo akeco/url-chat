@@ -33,9 +33,8 @@ class ListURLContainer extends Component{
 
     componentDidMount(){
         var {changeMessageLoaderState, socketIO} = this.props;
-        socketIO.on("receiveSpecificMessages", (data)=>{
+        socketIO.on("receiveSpecificPublicRoomMessages", (data)=>{
             if(data){
-                //if(changeMessageLoaderState) changeMessageLoaderState(false);
                 this.props.loadSpinner(false);
                 this.props.addChatMessages({
                     receiver: (this.props.activeRoomState) && this.props.activeRoomState,

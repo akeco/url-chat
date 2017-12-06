@@ -29,7 +29,6 @@ class SubListItemURL extends Component{
 
     addActiveRoom(room){
         var {
-            changeMessageLoaderState,
             socketIO,
             activeRoomState,
             profileuser,
@@ -60,9 +59,9 @@ class SubListItemURL extends Component{
             });
         }
 
-        //if(changeMessageLoaderState) changeMessageLoaderState(true);
+
         this.props.loadSpinner(true);
-        socketIO.emit('getSpecificMessages', room.roomID);
+        socketIO.emit('getSpecificPublicRoomMessages', room.roomID);
     }
 
     render(){

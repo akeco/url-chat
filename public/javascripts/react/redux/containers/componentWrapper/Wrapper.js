@@ -6,7 +6,6 @@ import randomstring from'randomstring';
 import axios from 'axios';
 import {withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
-import buzz from 'buzz';
 import {bindActionCreators} from 'redux';
 import { scrollTo } from '../../../../../../services/utils';
 import {
@@ -29,7 +28,8 @@ import {
     getRooms,
     prependMessages,
     showPrependLoader,
-    updateActiveRoom
+    updateActiveRoom,
+    prependPrivateMessages
 } from '../../actions/index';
 
 class Wrapper extends Component{
@@ -171,7 +171,14 @@ class Wrapper extends Component{
             }
         });
 
-        this.socket.on('receiveSpecificRoomMessages', (data)=>{
+        this.socket.on("prependPrivateMessagesResponse", (data)=>{
+            if(data) {
+                this.props.prependPrivateMessages(data);
+                this.props.showPrependLoader(false);
+            }
+        });
+
+        this.socket.on('receiveInsertedRoomMessages', (data)=>{
             var {showLeftSidebar, leftSidebarVisibility} = this.props;
             if(data.length){
                 var {name} = data[0].receiver;
@@ -199,11 +206,12 @@ class Wrapper extends Component{
             if(leftSidebarVisibility) showLeftSidebar(false);
         });
 
+
         this.socket.on('addActiveRoom', (data)=>{
             if(data){
                 (async ()=>{
                     await this.props.activeRoom(data);
-                    this.socket.emit("getSpecificRoomMessages", data.roomID);
+                    this.socket.emit("getInsertedRoomMessages", data.roomID);
                 })();
             }
             else{
@@ -239,8 +247,11 @@ class Wrapper extends Component{
     }
 
     addPrivateRoom(data){
-        this.props.addPrivateRoom(data.room);
-        if(data.messages) this.props.addPrivateMessages(data.messages);
+        let {result, messagesNumber} = data;
+        if(!messagesNumber) messagesNumber = null;
+
+        this.props.addPrivateRoom({...result.room, messagesNumber});
+        if(result && messagesNumber) this.props.addPrivateMessages({...result.messages, messagesNumber});
         setTimeout(()=>{
             let containerElement = document.querySelectorAll(".messagesListWrapper")[1].querySelector("div:first-child");
             scrollTo(containerElement, containerElement.querySelector("div").offsetHeight, 250);
@@ -366,7 +377,8 @@ function mapDispatchToProps(dispatch) {
         getRooms,
         prependMessages,
         showPrependLoader,
-        updateActiveRoom
+        updateActiveRoom,
+        prependPrivateMessages
     }, dispatch);
 }
 

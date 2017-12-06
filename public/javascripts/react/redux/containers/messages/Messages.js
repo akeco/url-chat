@@ -20,11 +20,14 @@ class Messages extends Component{
         super(props);
         this.state = {
             windowFocus: true,
-            currentMessagesPart: 1
+            currentMessagesPart: 1,
+            currentPrivateMessagesPart: 1
         };
         this.showMessages = this.showMessages.bind(this);
-        this.scrollFunction = this.scrollFunction.bind(this);
+        this.infiniteScrollPublic = this.infiniteScrollPublic.bind(this);
+        this.infiniteScrollPrivate = this.infiniteScrollPrivate.bind(this);
         this.resetMessageSettingsState = this.resetMessageSettingsState.bind(this);
+        this.resetPrivateMessageSettings = this.resetPrivateMessageSettings.bind(this);
     }
 
     shouldComponentUpdate(nextProps){
@@ -43,25 +46,37 @@ class Messages extends Component{
 
     componentDidMount(){
         this.props.socketIO.on("resetMessageSettings", this.resetMessageSettingsState);
+        this.props.socketIO.on("resetPrivateMessageSettings", this.resetPrivateMessageSettings);
         if(this.props.tab == 0){
             var scroller = ReactDOM.findDOMNode(this.scrollElement);
-            scroller.firstChild.addEventListener("scroll", this.scrollFunction);
+            scroller.firstChild.addEventListener("scroll", this.infiniteScrollPublic);
+        }
+        else if(this.props.tab == 1){
+            var scroller = ReactDOM.findDOMNode(this.scrollElement);
+            scroller.firstChild.addEventListener("scroll", this.infiniteScrollPrivate);
         }
     }
 
     componentWillUnmount(){
         var scroller = ReactDOM.findDOMNode(this.scrollElement);
-        scroller.firstChild.removeEventListener("scroll", this.scrollFunction);
+        scroller.firstChild.removeEventListener("scroll", this.infiniteScrollPublic);
         this.props.socketIO.removeListener("resetMessageSettings", this.resetMessageSettingsState);
     }
 
     resetMessageSettingsState(){
         this.setState({
-            currentMessagesPart: 1
+            currentMessagesPart: 1,
+            currentPrivateMessagesPart: 1
         });
     }
 
-    scrollFunction(event){
+    resetPrivateMessageSettings(){
+        this.setState({
+            currentPrivateMessagesPart: 1
+        });
+    }
+
+    infiniteScrollPublic(event){
         var {activeRoom, chatMessages, socketIO, showPrependLoader, prependLoader} = this.props;
         if(event.target.scrollTop == 0){
             var updatedMessagePart = this.state.currentMessagesPart + 1;
@@ -81,6 +96,26 @@ class Messages extends Component{
         }
     }
 
+    infiniteScrollPrivate(event){
+        var {activeRoom, privateRoom, privateMessages, socketIO, showPrependLoader, prependLoader} = this.props;
+        if(event.target.scrollTop == 0){
+            var updatedMessagePart = this.state.currentPrivateMessagesPart + 1;
+            if(activeRoom && privateRoom && privateMessages.messages.length != privateMessages.messagesNumber){
+                socketIO.emit("prependPrivateMessagesRequest", {
+                    messagesPart: updatedMessagePart,
+                    roomID: privateRoom.privateRoomID
+                });
+
+                if(!prependLoader) {
+                    showPrependLoader(true);
+                    this.setState({
+                        currentPrivateMessagesPart: updatedMessagePart
+                    });
+                }
+            }
+        }
+    }
+
     showMessages(){
         var {tab, activeRoom, chatMessages, profileuser, privateRoom, privateMessages} = this.props;
         if(activeRoom && chatMessages && tab == 0){
@@ -89,13 +124,10 @@ class Messages extends Component{
             });
         }
         else if(activeRoom && privateRoom && tab == 1){
-            let activePrivateRoom = find(privateMessages, (o)=>{ return o.privateRoomID == privateRoom.privateRoomID });
-            if(activePrivateRoom){
-                if(activePrivateRoom.messages.length){
-                    return activePrivateRoom.messages.map((item)=>{
-                        return <Message key={ item._id } private={true} message={item} profileUserID={profileuser._id} />
-                    });
-                }
+            if(privateMessages && privateMessages.messages && privateMessages.messages.length){
+                return privateMessages.messages.map((item)=>{
+                    return <Message key={ item._id } private={true} message={item} profileUserID={profileuser._id} />
+                });
             }
         }
         else if(activeRoom && !chatMessages && tab == 0 && !this.props.showMessageLoader){

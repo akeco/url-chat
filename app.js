@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 require('dotenv').config();
 
+//var index = require('./routes/isomorphic/index');
 var index = require('./routes/index');
 var api = require('./routes/api/index');
 

@@ -1,37 +1,33 @@
 import {find, uniqWith, isEqual} from 'lodash';
 
-const addPrivateUser = (state = [], action) => {
+const addPrivateMessages = (state = null, action) => {
     switch (action.type) {
         case 'ADD_PRIVATE_MESSAGES':
-            if(state.length){
-                var index = find(state, (o)=>{ return o.privateRoomID == action.data.privateRoomID});
-                if(!index){
-                    return uniqWith([...state, {
-                        privateRoomID: action.data.privateRoomID,
-                        messages: [...action.data.messages]
-                    }], isEqual);
-                }
-                else if(!action.data.messages){
-                    return state.map((item)=>{
-                        if(item.privateRoomID == action.data.privateRoomID) item.messages = uniqWith([...item.messages, action.data], isEqual)
-                        return item;
-                    });
+            if(action.data == null) return null;
+
+            if(!state) {
+                return {
+                    privateRoomID: action.data.privateRoomID,
+                    messagesNumber: action.data.messagesNumber,
+                    messages: action.data.messages
                 }
             }
             else{
-                if(action.data.messages) {
-                    return uniqWith([...state, action.data], isEqual);
-                }
-                else{
-                    return uniqWith([...state, {
-                        privateRoomID: action.data.privateRoomID,
-                        messages: [action.data]
-                    }], isEqual);
-                }
+                return {
+                    privateRoomID: state.privateRoomID,
+                    messagesNumber: state.messagesNumber + 1,
+                    messages: uniqWith([...state.messages, action.data], isEqual)
+                };
             }
+        case 'PREPEND_PRIVATE_MESSAGES':
+            return {
+                privateRoomID: state.privateRoomID,
+                messagesNumber: state.messagesNumber,
+                messages: uniqWith([...action.data, ...state.messages], isEqual)
+            };
         default:
             return state;
     }
 };
 
-export default addPrivateUser;
+export default addPrivateMessages;

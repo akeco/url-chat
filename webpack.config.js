@@ -13,7 +13,6 @@ module.exports = {
         loaders: [
             {
                 test: /\.(js|jsx)$/,
-                //test: /\.js$/,
                 loader: 'babel-loader',
                 exclude: /node_modules/,
                 query: {
@@ -46,7 +45,8 @@ module.exports = {
     plugins: [
         new webpack.ProvidePlugin({
             $: "jquery",
-            jQuery: "jquery"
+            jQuery: "jquery",
+            buzz: "buzz"
         }),
     ],
 

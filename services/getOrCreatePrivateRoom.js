@@ -4,7 +4,7 @@ var privateMessageModel = require('../models/privateMessage');
 var randomstring = require('randomstring');
 var { sortBy } = require('lodash');
 
-module.exports = async function (data) {
+module.exports = async function (data, messagesPart = 1) {
     var result = await privateRoomModel.findOne({usersID: {$all: [data.sender, data.receiver]}}, {
         'sender.password': 0,
         'sender.email': 0,
@@ -31,13 +31,16 @@ module.exports = async function (data) {
             'sender.password': 0,
             'sender.email': 0,
             'sender.savedSettings': 0,
-        });
-        return {
-            room: result,
-            messages: {
-                privateRoomID: result.privateRoomID,
-                messages: sortBy(messages, [function(o) { return o.created; }])
-            }
-        };
+        }).sort({created: -1}).skip(messagesPart*10 - 10).limit(10);
+
+        if(messages){
+            return {
+                room: result,
+                messages: {
+                    privateRoomID: result.privateRoomID,
+                    messages: sortBy(messages, [function(o) { return o.created; }])
+                }
+            };
+        }
     }
 };

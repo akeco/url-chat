@@ -5,7 +5,12 @@ import MessageIcon from 'material-ui/svg-icons/Editor/mode-comment';
 import {ListItem} from 'material-ui/List';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {addPrivateRoom, deleteFromNotifyCollection, showLeftSidebar} from '../../actions/index';
+import {
+    addPrivateRoom,
+    addPrivateMessages,
+    deleteFromNotifyCollection,
+    showLeftSidebar
+} from '../../actions/index';
 
 class PrivateUserBadgeListItem extends Component{
     constructor(props){
@@ -28,7 +33,7 @@ class PrivateUserBadgeListItem extends Component{
     }
 
     render(){
-        var {item, checkNotifications} = this.props;
+        var {item, checkNotifications, showLeftSidebar, addPrivateMessages} = this.props;
         return(
             <ListItem
                 key={item._id}
@@ -38,9 +43,10 @@ class PrivateUserBadgeListItem extends Component{
                 style={style.listItem}
                 innerDivStyle={style.innerDiv}
                 onTouchTap={()=>{
+                    addPrivateMessages(null);
                     this.addPrivateChat(item);
                     this.deleteNotification(item);
-                    this.props.showLeftSidebar(false);
+                    showLeftSidebar(false);
                 }}
                 leftIcon={
                     <Account style={style.avatar}/>
@@ -135,6 +141,7 @@ const style = {
 function matchDispatchToProps(dispatch) {
     return bindActionCreators({
         addPrivateRoom,
+        addPrivateMessages,
         deleteFromNotifyCollection,
         showLeftSidebar
     }, dispatch);

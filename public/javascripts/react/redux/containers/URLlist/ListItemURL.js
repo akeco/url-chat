@@ -21,7 +21,6 @@ class ListItemURL extends Component{
         super(props);
         this.fallBack = "/images/list-icon.png";
         this.toggleSublist = this.toggleSublist.bind(this);
-        this.addActiveRoom = this.addActiveRoom.bind(this);
     }
 
     shouldComponentUpdate(nextProps){
@@ -29,47 +28,6 @@ class ListItemURL extends Component{
         if(this.props.toggleElement.room.membersNumber != nextProps.room.membersNumber) return true;
         if(!isEqual(this.props.toggleRooms, nextProps.toggleRooms)) return true;
         return false;
-    }
-
-    addActiveRoom(room){
-        var {
-            changeMessageLoaderState,
-            socketIO,
-            activeRoomState,
-            profileuser,
-            addPrivateRoom,
-            activeRoom,
-        } = this.props;
-        if(activeRoomState && activeRoomState._id == room._id) return;
-
-        if(activeRoomState && activeRoomState._id != room._id){
-            this.props.socketIO.emit("leaveRoom", {
-                room: activeRoomState,
-                user: profileuser
-            });
-            addPrivateRoom(null);
-        }
-
-        if(activeRoomState){
-            if(activeRoomState._id != room._id){
-                this.props.activeRoom(room);
-                this.props.socketIO.emit("joinRoom", {
-                    room: room,
-                    user: this.props.profileuser
-                });
-            }
-        }
-        else{
-            activeRoom(room);
-            socketIO.emit("joinRoom", {
-                room: room,
-                user: profileuser
-            });
-        }
-
-        //if(changeMessageLoaderState) changeMessageLoaderState(true);
-        this.props.loadSpinner(true);
-        socketIO.emit('getSpecificMessages', room.roomID);
     }
 
     toggleSublist(className){

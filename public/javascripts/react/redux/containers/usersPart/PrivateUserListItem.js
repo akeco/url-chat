@@ -4,7 +4,11 @@ import Account from 'material-ui/svg-icons/Action/account-circle';
 import {ListItem} from 'material-ui/List';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {addPrivateRoom, showLeftSidebar} from '../../actions/index';
+import {
+    addPrivateRoom,
+    addPrivateMessages,
+    showLeftSidebar
+} from '../../actions/index';
 
 class PrivateUserListItem extends Component{
     constructor(props){
@@ -35,7 +39,7 @@ class PrivateUserListItem extends Component{
     }
 
     render(){
-        var {item} = this.props;
+        var {item, addPrivateMessages} = this.props;
         return(
             <ListItem
                 key={item._id}
@@ -46,6 +50,7 @@ class PrivateUserListItem extends Component{
                 innerDivStyle={Object.assign(style.innerDiv)}
                 leftIcon={ <Account style={style.avatar} /> }
                 onTouchTap={()=>{
+                    addPrivateMessages(null);
                     this.addPrivateChat(item);
                     this.props.showLeftSidebar(false);
                 }}
@@ -80,6 +85,7 @@ const style = {
 function matchDispatchToProps(dispatch) {
     return bindActionCreators({
         addPrivateRoom,
+        addPrivateMessages,
         showLeftSidebar
     }, dispatch);
 }

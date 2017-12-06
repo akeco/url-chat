@@ -16,11 +16,10 @@ module.exports = {
         loaders: [
             {
                 test: /\.(js|jsx)$/,
-                //test: /\.js$/,
                 loader: 'babel-loader',
                 exclude: /node_modules/,
                 query: {
-                    presets: ['es2017', 'react']
+                    presets: ['es2017', 'react', 'stage-2']
                 }
             },
             {
@@ -35,6 +34,8 @@ module.exports = {
                     loader: "css-loader" // translates CSS into CommonJS
                 }, {
                     loader: "less-loader" // compiles Less to CSS
+                }, {
+                    loader: "postcss-loader"
                 }]
             },
             {
@@ -51,7 +52,8 @@ module.exports = {
         }),
         new webpack.ProvidePlugin({
             $: "jquery",
-            jQuery: "jquery"
+            jQuery: "jquery",
+            buzz: "buzz"
         }),
         //new webpack.LoaderOptionsPlugin({
           //  minimize: true,

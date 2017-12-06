@@ -98,6 +98,13 @@ export const prependMessages = data => {
   }
 };
 
+export const prependPrivateMessages = data => {
+  return{
+    type: 'PREPEND_PRIVATE_MESSAGES',
+    data
+  }
+};
+
 export const showPrependLoader = data => {
   return{
     type: 'SHOW_PREPEND_LOADER',

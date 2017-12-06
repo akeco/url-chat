@@ -8,6 +8,7 @@ import {
     activeRoom,
     closeActiveRoom,
     addPrivateRoom,
+    addPrivateMessages,
     showPrependLoader
 } from '../../actions/index';
 import {connect} from 'react-redux';
@@ -92,8 +93,10 @@ class SingleListItem extends Component {
                             leftIcon={ <Account style={style.accountIcon} /> }
                             rightIconButton={
                                 <IconButton
+                                    style={{ right: 0 }}
                                     onTouchTap={()=> {
                                         this.props.addPrivateRoom(null);
+                                        this.props.addPrivateMessages(null);
                                     }}
                                 >
                                     <CloseIcon color={teal300}/>
@@ -239,6 +242,7 @@ function matchDispatchToProps(dispatch) {
         activeRoom,
         closeActiveRoom,
         addPrivateRoom,
+        addPrivateMessages,
         showPrependLoader
     }, dispatch);
 }
