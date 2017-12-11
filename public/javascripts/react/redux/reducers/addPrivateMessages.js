@@ -8,8 +8,8 @@ const addPrivateMessages = (state = null, action) => {
             if(!state) {
                 return {
                     privateRoomID: action.data.privateRoomID,
-                    messagesNumber: action.data.messagesNumber,
-                    messages: action.data.messages
+                    messagesNumber: action.data.messagesNumber || 1,
+                    messages: action.data.messages || [action.data]
                 }
             }
             else{

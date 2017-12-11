@@ -1,5 +1,6 @@
-const path = require('path');
-var webpack = require('webpack');
+const path = require('path'),
+      webpack = require('webpack'),
+      CompressionPlugin = require("compression-webpack-plugin");
 
 module.exports = {
     entry: ["babel-polyfill", "./public/javascripts/react/App.js"],
@@ -37,8 +38,8 @@ module.exports = {
             },
             {
                 test: /\.(jpg|png|eot|svg|ttf|woff|woff2)$/, loader: 'file-loader?name=public/fonts/[name].[ext]'
-            }
-
+            },
+            { test: require.resolve("react-addons-perf"), loader: "expose-loader?Perf" }
         ]
     },
 
@@ -48,6 +49,13 @@ module.exports = {
             jQuery: "jquery",
             buzz: "buzz"
         }),
+        new CompressionPlugin({
+            asset: "[path].gz[query]",
+            algorithm: "gzip",
+            test: /\.js$|\.css$|\.html$/,
+            threshold: 10240,
+            minRatio: 0.8
+        })
     ],
 
     resolve: {

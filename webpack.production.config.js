@@ -1,9 +1,9 @@
-const path = require('path');
-var webpack = require('webpack');
-const Uglify = require("uglifyjs-webpack-plugin");
-var CompressionPlugin = require("compression-webpack-plugin");
-const BabiliPlugin = require('babili-webpack-plugin');
-var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const path = require('path'),
+      webpack = require('webpack'),
+      Uglify = require("uglifyjs-webpack-plugin"),
+      CompressionPlugin = require("compression-webpack-plugin"),
+      BabiliPlugin = require('babili-webpack-plugin'),
+      BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
     entry: ["babel-polyfill", "./public/javascripts/react/App.js"],
