@@ -21,11 +21,6 @@ window.Perf = Perf;
 var store = createStore(reducers);
 injectTapEventPlugin();
 
-/*
-if (typeof window === 'undefined') {
-    global.window = {}
-}
-*/
 
 const Main = (props) => {
     return(

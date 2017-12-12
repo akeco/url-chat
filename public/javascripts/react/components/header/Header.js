@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import {Link} from 'react-router-dom';
 import {teal800, teal500, teal100, teal50, teal200} from 'material-ui/styles/colors';
 import Toggle from 'material-ui/Toggle';
@@ -13,9 +13,10 @@ import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import {bindActionCreators} from 'redux';
 import {closeActiveRoom, setTemporaryUser, showLeftSidebar, enableSoundAction} from '../../redux/actions/index';
+import styled from 'styled-components';
 
 
-class Header extends Component{
+class Header extends PureComponent{
     constructor(props){
         super(props);
         this.signOut = this.signOut.bind(this);
@@ -56,7 +57,7 @@ class Header extends Component{
                 </Link>
                 <div className="userBlock" style={style.userBlock}>
                     <List style={style.list}>
-                        <p style={style.username}>{this.props.profileuser && this.props.profileuser.username}</p>
+                        <UsernameTitle style={style.username}>{this.props.profileuser && this.props.profileuser.username}</UsernameTitle>
                         <ListItem
                             disabled={true}
                             style={style.userList}
@@ -137,9 +138,19 @@ class Header extends Component{
     }
 }
 
+
+const UsernameTitle = styled.p`
+    @media (max-width: 767px){
+        max-width: 100px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;                        
+    }
+`;
+
 var style = {
     username:{
-        marginRight: -10,
+        marginRight: -12,
         cursor: 'default',
         fontSize: 14,
         color: 'white',

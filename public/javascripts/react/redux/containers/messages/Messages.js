@@ -100,7 +100,7 @@ class Messages extends Component{
         var {activeRoom, privateRoom, privateMessages, socketIO, showPrependLoader, prependLoader} = this.props;
         if(event.target.scrollTop == 0){
             var updatedMessagePart = this.state.currentPrivateMessagesPart + 1;
-            if(activeRoom && privateRoom && privateMessages.messages.length != privateMessages.messagesNumber){
+            if(activeRoom && privateRoom && privateMessages && privateMessages.messages && privateMessages.messages.length != privateMessages.messagesNumber){
                 socketIO.emit("prependPrivateMessagesRequest", {
                     messagesPart: updatedMessagePart,
                     roomID: privateRoom.privateRoomID
@@ -174,13 +174,15 @@ class Messages extends Component{
 
 
 const MessagesListWrapper = styled(Scrollbars)`
-      & > div:first-child{
-        margin-bottom: -16px !important;
-      }
+      @media screen and (-webkit-min-device-pixel-ratio:0), @media screen and(-webkit-min-device-pixel-ratio:0){
+        & > div:first-child{
+            margin-bottom: -16px !important;
+        }       
+    }
       & > div:last-child{
             z-index: 999;
       }
-            
+         
       &.showHomepageInfo{
             background-image: url('../../../../../images/homepage-illustration.png');
             background-size: contain;
@@ -188,6 +190,9 @@ const MessagesListWrapper = styled(Scrollbars)`
             background-position: bottom;
             @media (min-width: 1000px){
                 background-size: cover;
+            }
+            @media (max-height: 515px){
+                background-size: cover !important; 
             }
       }
 `;

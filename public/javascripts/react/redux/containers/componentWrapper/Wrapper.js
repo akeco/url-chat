@@ -97,7 +97,7 @@ class Wrapper extends Component{
             var socket = this.socket;
             this.props.setTemporaryUser({
                 socketID: this.socket.id,
-                username: `Guest-${ randomstring.generate(5) }`
+                username: `Guest-${ randomstring.generate(10) }`
             });
 
             if(!window.localStorage.getItem("currentUser")){

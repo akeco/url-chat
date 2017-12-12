@@ -35,7 +35,6 @@ class URLFormContainer extends Component{
 
     handleURLSubmit(event){
         event.preventDefault();
-        console.info("HANDLED");
         if(this.state.inputValue.trim()){
             this.props.socketIO.emit("urlInserted", {
                 url: this.state.inputValue.toLowerCase(),

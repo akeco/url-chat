@@ -102,7 +102,7 @@ class RegisterComponent extends Component{
                 style={style.progress}
                 size={60}
                 thickness={7}
-                color={teal50}
+                color={teal500}
             />;
         }
     }
@@ -124,8 +124,9 @@ class RegisterComponent extends Component{
         return(
             <div className="loginWrapper" style={style.loginWrapper}>
                 <div style={style.imageWrapper}>
-                    <img style={style.websiteLogo} src="../../../../../images/homepage-logo.png"/>
+                    <img style={style.websiteLogo} src="../../../../../images/forum_final_1_white.png"/>
                 </div>
+
                 <div style={style.centerBlock}>
                     <div style={style.elementWrapper}>
                         {
@@ -171,8 +172,8 @@ class RegisterComponent extends Component{
                             <RaisedButton
                                 label="Register"
                                 style={{width:'100%'}}
-                                labelColor={teal700}
-                                backgroundColor={teal50}
+                                labelColor={teal50}
+                                backgroundColor={teal500}
                                 type="submit"
                             />
                         </form>
@@ -193,7 +194,7 @@ const style = {
     },
     websiteLogo:{
         position: 'absolute',
-        width: 200,
+        width: 160,
         cursor: 'default'
     },
     warning:{
@@ -202,27 +203,25 @@ const style = {
         alignSelf: 'flex-end',
         cursor: 'default'
     },
-    progress: {
-        position:'absolute'
-    },
     form:{
         width: '100%'
     },
+    progress: {
+        position:'absolute'
+    },
     input: {
-        backgroundColor: teal900,
+        backgroundColor: 'white',
         display: 'block',
         borderRadius: 2,
         marginBottom: 20,
         height: 36,
-        border: 'none',
         outline: 'none',
-        width: '100%',
+        width:'100%',
         fontSize: 14,
         paddingLeft: 10,
         boxSizing: 'border',
-        color: teal50,
-        border: '1px solid',
-        borderColor: teal500,
+        color: teal500,
+        border: '1px solid rgba(0, 0, 0, 0.2)',
         boxSizing: 'border-box'
     },
     buttons: {
@@ -238,12 +237,10 @@ const style = {
     },
     centerBlock: {
         width: '100%',
-        backgroundColor: teal500,
+        backgroundColor: teal50,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        boxShadow: 'inset 0 2px 4px 0 rgba(0,0,0,0.3), inset 0 -2px 4px 0 rgba(0,0,0,0.3)',
-        backgroundImage: 'url(\'../../../../../../images/login-back.png\')',
         flexGrow: 1
     },
     loginWrapper: {
@@ -252,7 +249,7 @@ const style = {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        backgroundColor: teal50,
+        backgroundColor: teal500,
         position: 'relative'
     }
 };

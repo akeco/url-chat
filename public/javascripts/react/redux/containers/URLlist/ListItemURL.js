@@ -159,7 +159,8 @@ var style = {
         width: 28,
         height: 28,
         boxShadow: '0 1px 1px 0 rgba(0,0,0,0.5)',
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        border: '1px solid rgba(0,0,0,0.05)'
     },
     emptyMessage: {
         color: teal300,

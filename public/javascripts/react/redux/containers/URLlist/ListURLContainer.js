@@ -114,15 +114,25 @@ class ListURLContainer extends Component{
     }
 
     render() {
-        var {tab, activeRoomState} = this.props;
+        var {tab, activeRoomState, rooms} = this.props;
         var title = (this.props.tab) ? 'Room Members' : 'Available Rooms';
         return (
-            <div>
+            <div style={style.mainWrapper}>
                 <p style={style.title}>{title}</p>
+                {
+                    (!this.props.filterVal && this.props.tab == 1 && activeRoomState && activeRoomState.members.length > 7) && (
+                        <div className="emptyGradient" style={style.emptyGradientScrollBlock}></div>
+                    )
+                }
+                {
+                    (this.props.tab == 0 && rooms && rooms.length > 7) && (
+                        <div className="emptyGradient" style={style.emptyGradientScrollBlock}></div>
+                    )
+                }
                 {
                     (this.props.tab == 0) && (
                             <CustomScroller
-                                style={{width: '100%', height:400}}
+                                style={{width: '100%', height:350}}
                                 autoHide
                                 autoHideTimeout={1000}
                                 autoHideDuration={200}
@@ -138,7 +148,7 @@ class ListURLContainer extends Component{
                 {
                     (this.props.tab == 1 && activeRoomState && activeRoomState.members.length > 1) && (
                         <CustomScroller
-                            style={{width: '100%', height:329}}
+                            style={style.customScroller}
                             autoHide
                             autoHideTimeout={1000}
                             autoHideDuration={200}
@@ -173,8 +183,10 @@ ListURLContainer.propTypes = {
 
 const CustomScroller = styled(Scrollbars)`
     border-right: 1px solid rgb(224, 242, 241);
-    & > div:first-child{
-        margin-bottom: -16px !important;
+    @media screen and (-webkit-min-device-pixel-ratio:0), @media screen and(-webkit-min-device-pixel-ratio:0){
+        & > div:first-child{
+            margin-bottom: -16px !important;
+        }       
     }
     & > div:last-child{
         z-index: 999;
@@ -183,6 +195,24 @@ const CustomScroller = styled(Scrollbars)`
 
 
 var style = {
+    mainWrapper: {
+        position: 'relative',
+        overflow: 'hidden'
+    },
+    emptyGradientScrollBlock: {
+        width: '100%',
+        height: 25,
+        position: 'absolute',
+        bottom: -18,
+        borderRadius: '100%',
+        zIndex: 999,
+        background: 'linear-gradient(to bottom, rgba(0,0,0,0) 0%,rgba(0,0,0,0.65) 100%)',
+        pointerEvents: 'all'
+    },
+    customScroller: {
+        width: '100%',
+        height:329
+    },
     title: {
         color: teal300,
         textTransform: 'uppercase',

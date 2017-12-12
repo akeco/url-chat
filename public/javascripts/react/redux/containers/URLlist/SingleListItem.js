@@ -115,7 +115,7 @@ class SingleListItem extends Component {
             <div>
                 {
                     (this.props.activeRoomState && tab == 0) && (
-                        <div style={{marginBottom: 30}}>
+                        <div style={style.activeItemStyle}>
                             {
                                 this.showActiveSingleItem()
                             }
@@ -124,7 +124,7 @@ class SingleListItem extends Component {
                 }
                 {
                     (this.props.privateRoom && tab == 1) && (
-                        <div style={{marginBottom: 30}}>
+                        <div style={style.activeItemStyle}>
                         {
                             this.showActiveSingleItem()
                         }
@@ -142,6 +142,9 @@ SingleListItem.propTypes = {
 };
 
 var style = {
+    activeItemStyle: {
+        marginBottom: 15
+    },
     accountIcon: {
         fill: teal500,
         width: 30,
@@ -210,7 +213,8 @@ var style = {
         height: 28,
         boxShadow: '0 1px 1px 0 rgba(0,0,0,0.5)',
         top: 10,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        border: '1px solid rgba(0,0,0,0.05)'
     },
     overflowRouteText: {
         margin: 0,

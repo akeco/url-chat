@@ -63,7 +63,7 @@ class LoginComponent extends Component{
                 style={style.progress}
                 size={60}
                 thickness={7}
-                color={teal50}
+                color={teal500}
             />;
         }
     }
@@ -176,7 +176,7 @@ const style = {
         fontSize: 14,
         paddingLeft: 10,
         boxSizing: 'border',
-        color: teal50,
+        color: teal500,
         border: '1px solid rgba(0, 0, 0, 0.2)',
         boxSizing: 'border-box'
     },

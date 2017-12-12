@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import {teal50} from 'material-ui/styles/colors';
 import URLFormContainer from '../../redux/containers/URLForm/URLFormContainer';
 import ListURLContainer from '../../redux/containers/URLlist/ListURLContainer';
@@ -7,7 +7,7 @@ import UserFormContainer from '../../redux/containers/userForm/UserFormContainer
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
-class LeftURLSidebar extends Component{
+class LeftURLSidebar extends PureComponent{
     constructor(props){
         super(props);
         this.state = {
@@ -20,7 +20,7 @@ class LeftURLSidebar extends Component{
     }
 
     componentDidMount(){
-        this.x = window.matchMedia("(max-height: 525px)");
+        this.x = window.matchMedia("(max-height: 615px)");
         this.checkHeight(this.x);
         this.x.addListener(this.checkHeight);
     }
@@ -61,7 +61,8 @@ class LeftURLSidebar extends Component{
                     {},
                     style.wrapper,
                     {
-                        overflowY: (this.state.scrollable) ? 'scroll' : 'hidden'
+                        overflowY: (this.state.scrollable) ? 'scroll' : 'hidden',
+                        paddingBottom: (this.state.scrollable) ? 100 : 0
                     }
                     )}
             >

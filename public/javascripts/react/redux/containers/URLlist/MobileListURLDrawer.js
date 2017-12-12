@@ -22,7 +22,7 @@ class MobileListURLDrawer extends Component{
     }
 
     componentDidMount(){
-        this.x = window.matchMedia("(max-height: 525px)");
+        this.x = window.matchMedia("(max-height: 615px)");
         this.checkHeight(this.x);
         this.x.addListener(this.checkHeight);
     }
@@ -62,23 +62,26 @@ class MobileListURLDrawer extends Component{
                     {},
                     style.drawerContainer,
                     {
-                        overflowY: (this.state.scrollable) ? 'scroll' : 'hidden'
+                        overflowY: (this.state.scrollable) ? 'scroll' : 'hidden',
+                        overflowX: 'hidden'
                     })}
                 overlayStyle={{zIndex:899}}
             >
-                {
-                    this.props.tab == 0 && <URLFormContainer {...this.props} /> || (
-                        <UserForm
-                            {...this.props}
-                            filterVal={this.state.filterVal}
-                            changeFilterVal={this.changeFilterVal}
-                        />
-                    )
-                }
-                {
-                    (this.props.activeRoomState) && <SingleListItem {...this.props} title="Active Room" />
-                }
-                <ListURLContainer filterVal={this.state.filterVal} {...this.props} />
+                <div>
+                    {
+                        this.props.tab == 0 && <URLFormContainer {...this.props} /> || (
+                            <UserForm
+                                {...this.props}
+                                filterVal={this.state.filterVal}
+                                changeFilterVal={this.changeFilterVal}
+                            />
+                        )
+                    }
+                    {
+                        (this.props.activeRoomState) && <SingleListItem {...this.props} title="Active Room" />
+                    }
+                    <ListURLContainer filterVal={this.state.filterVal} {...this.props} />
+                </div>
             </Drawer>
         )
     }
