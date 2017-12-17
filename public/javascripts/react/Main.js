@@ -10,12 +10,11 @@ import Homepage from './redux/containers/homepage/HomepageContainer';
 import Loginpage from './redux/containers/login/Loginpage';
 import LoginComponent from './redux/containers/login/LoginComponent';
 import RegisterComponent from './redux/containers/login/RegisterComponent';
-import Perf from 'react-addons-perf';
-//import 'semantic-ui-css/semantic.min.css'
+//import Perf from 'react-addons-perf';
 import 'normalize.css/normalize.css';
 import '../../stylesheets/less/main.less';
 
-window.Perf = Perf;
+//window.Perf = Perf;
 //Perf.start();
 
 var store = createStore(reducers);

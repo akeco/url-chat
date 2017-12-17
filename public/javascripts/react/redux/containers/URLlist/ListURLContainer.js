@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import {teal500, teal300, teal50, tealA100} from 'material-ui/styles/colors';
 import {List} from 'material-ui/List';
 import InfoIcon from 'material-ui/svg-icons/action/info-outline';
@@ -20,7 +20,7 @@ import { Scrollbars } from 'react-custom-scrollbars';
 import {find} from 'lodash';
 import styled from 'styled-components';
 
-class ListURLContainer extends Component{
+class ListURLContainer extends PureComponent{
     constructor(props){
         super(props);
         this.state = {
@@ -51,6 +51,7 @@ class ListURLContainer extends Component{
         });
     }
 
+
     changeToggleRoomsState(value){
         this.setState({
             toggleRooms: value
@@ -58,22 +59,40 @@ class ListURLContainer extends Component{
     }
 
     showMembers(){
-        var {activeRoomState, tab, rooms} = this.props;
+        var {activeRoomState, tab, rooms, privateNotifyCollection, profileuser} = this.props;
         if(activeRoomState && tab){
             var activeRoom = find(rooms, (o)=>{ return o.name == activeRoomState.name; });
             if(activeRoom) {
                 activeRoom = find(activeRoom.rooms, (o)=>{ return o.route == activeRoomState.route });
                 if(activeRoom){
-                    return activeRoom.members.filter((item)=>{
+                    var filteredMembersArray = activeRoom.members.filter((item)=>{
                         if(this.props.filterVal){
                             return (item.username.toLowerCase().indexOf(this.props.filterVal.toLowerCase()) != -1)
                         }
                         else return true;
-                    }).map((item)=>{
-                        if(item._id != this.props.profileuser._id){
+                    });
+
+                    var sortedMembersByNotification = [];
+                    for(var i=0; i < filteredMembersArray.length; i++){
+                        if(privateNotifyCollection.length){
+                            var hasNotification = privateNotifyCollection.indexOf(filteredMembersArray[i]._id);
+                            if(hasNotification != -1){
+                                sortedMembersByNotification = [filteredMembersArray[i], ...sortedMembersByNotification];
+                            }
+                            else{
+                                sortedMembersByNotification = [...sortedMembersByNotification, filteredMembersArray[i]];
+                            }
+                        }
+                        else sortedMembersByNotification = filteredMembersArray;
+                    }
+
+
+                    return sortedMembersByNotification.map((item)=>{
+                        /* Check if current user from the loop is not currently loggedin user */
+                        if(item._id != profileuser._id){
                             var checkNotifications = [];
-                            if(this.props.privateNotifyCollection.length){
-                                checkNotifications = this.props.privateNotifyCollection.filter((userID)=>{ return userID == item._id });
+                            if(privateNotifyCollection.length){
+                                checkNotifications = privateNotifyCollection.filter((userID)=>{ return userID == item._id });
                             }
                             if(checkNotifications.length){
                                 return(
@@ -148,6 +167,7 @@ class ListURLContainer extends Component{
                 {
                     (this.props.tab == 1 && activeRoomState && activeRoomState.members.length > 1) && (
                         <CustomScroller
+                            className="privateUsersList"
                             style={style.customScroller}
                             autoHide
                             autoHideTimeout={1000}

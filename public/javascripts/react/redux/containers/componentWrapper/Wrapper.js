@@ -240,9 +240,17 @@ class Wrapper extends Component{
 
         if(this.props.privateRoom && findActivatedChat == -1){
             this.props.addNotifyPrivateIdCollection(data._id);
+            setTimeout(()=>{
+                let containerElement = document.querySelectorAll(".privateUsersList")[1].querySelector("div:first-child");
+                scrollTo(containerElement, 0, 250);
+            },250);
         }
         else if(!this.props.privateRoom){
             this.props.addNotifyPrivateIdCollection(data._id);
+            setTimeout(()=>{
+                let containerElement = document.querySelectorAll(".privateUsersList")[1].querySelector("div:first-child");
+                scrollTo(containerElement, 0, 250);
+            },250);
         }
     }
 
