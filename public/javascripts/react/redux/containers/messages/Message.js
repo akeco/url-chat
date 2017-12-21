@@ -169,6 +169,16 @@ const StyledList = styled.li`
     }
 `;
 
+const OnlineDiv = styled.div`
+    width: 42,
+        height: 42,
+        position: 'absolute',
+        borderRadius: '100%',
+        border: \`2px dotted $\{lime500}\`,
+        left: -1,
+        top: -1,
+`;
+
 const style = {
     voteStar: {
         color: teal400,

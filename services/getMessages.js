@@ -13,7 +13,7 @@ module.exports = async function (roomID, messagesPart = 1) {
         'ratingUsers.password': 0,
         'ratingUsers.savedSettings': 0,
         'ratingUsers.email': 0,
-    }).sort({created: -1}).skip(messagesPart*10 - 10).limit(10);
+    }).sort({created: -1}).skip(messagesPart*100 - 100).limit(100);
     if(result) return sortBy(result, [function(o) { return o.created; }]);
     return;
 };
