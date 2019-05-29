@@ -8,21 +8,23 @@ module.exports = {
         path: path.resolve(__dirname, "./public/build"),
         filename: "bundle.js"
     },
-
+    devServer: {
+        contentBase: path.join(__dirname, "public"),
+        port: 9000
+    },
     module: {
-
         loaders: [
             {
                 test: /\.(js|jsx)$/,
                 loader: 'babel-loader',
                 exclude: /node_modules/,
                 query: {
-                    presets: ['es2017', 'react', 'stage-2']
+                    presets: ["env", 'react', 'stage-2']
                 }
             },
             {
                 test: /\.css$/,
-                loader: "style-loader!css-loader"
+                loader: "style-loader!css-loader?postcss-loader"
             },
             {
                 test: /\.less$/,
@@ -37,7 +39,7 @@ module.exports = {
                 }]
             },
             {
-                test: /\.(jpg|png|eot|svg|ttf|woff|woff2)$/, loader: 'file-loader?name=public/fonts/[name].[ext]'
+                test: /\.(jpg|png|eot|svg|ttf|woff|woff2)$/, loader: 'url-loader?file-loader?name=public/fonts/[name].[ext]'
             },
             { test: require.resolve("react-addons-perf"), loader: "expose-loader?Perf" }
         ]

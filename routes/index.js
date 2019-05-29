@@ -1,6 +1,9 @@
-//require('babel-core/register');
-//require('babel-polyfill');
-//require('import-export');
+/*require('babel-core/register')({
+    presets: ['env', 'react']
+});
+require('babel-polyfill');
+require('import-export');
+*/
 var express = require('express'),
     router = express.Router(),
     registrationController = require('../controllers/registrationController'),
@@ -14,7 +17,7 @@ var express = require('express'),
 /* GET home page. */
 
 router.get('/', function(req, res, next) {
-  //  var appString = ReactDOM.renderToString(<ReactApp />);
+    //var appString = ReactDOM.renderToString(<ReactApp />);
     res.render('index', { title: 'Chat-project' });
 });
 

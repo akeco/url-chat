@@ -13,6 +13,7 @@ import RegisterComponent from './redux/containers/login/RegisterComponent';
 //import Perf from 'react-addons-perf';
 import 'normalize.css/normalize.css';
 import '../../stylesheets/less/main.less';
+//import 'semantic-ui-css/semantic.min.css';
 
 //window.Perf = Perf;
 //Perf.start();
